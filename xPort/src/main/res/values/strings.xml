@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">BaseBuild</string>
+    <string name="GlobalConfig">GlobalConfig</string>
+
+    <string name="empty_data"></string>
+    <string name="error_data"></string>
+
+    <string name="titlebar_search_hint">Search</string>
+</resources>

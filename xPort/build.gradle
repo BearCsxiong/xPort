@@ -1,0 +1,121 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'
+android {
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        versionCode rootProject.ext.android.versionCode
+        versionName rootProject.ext.android.versionName
+        multiDexEnabled true
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [moduleName: project.getName()]
+            }
+        }
+    }
+
+    buildTypes {
+        debug {
+//            buildConfigField "String", "BUGLY_APPID", BUGLY_DEBUG
+        }
+        release {
+            minifyEnabled false
+//            buildConfigField "String", "BUGLY_APPID", BUGLY_RELEASE
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']//将so文件目录指向libs目录
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    //base
+    api(rootProject.ext.dependencies["appcompat-v7"]) {
+        exclude module: 'support-v4'
+        exclude module: 'support-annotations'
+    }
+    api(rootProject.ext.dependencies["design"]) {
+        exclude module: 'support-v4'
+        exclude module: 'appcompat-v7'
+        exclude module: 'support-annotations'
+    }
+    api rootProject.ext.dependencies["recyclerview-v7"]
+    api rootProject.ext.dependencies["cardview-v7"]
+    //rx
+    api rootProject.ext.dependencies["rxjava"]
+    api rootProject.ext.dependencies["rxandroid"]
+    api rootProject.ext.dependencies["rxpermissions"]
+    api rootProject.ext.dependencies["rxbus"]
+    //network
+    api rootProject.ext.dependencies["gson"]
+    api rootProject.ext.dependencies["retrofit"]
+    api rootProject.ext.dependencies["retrofit-converter-gson"]
+    api rootProject.ext.dependencies["retrofit-adapter-rxjava2"]
+    api rootProject.ext.dependencies["okhttp"]
+    api rootProject.ext.dependencies["okhttp-logging-interceptor"]
+    api rootProject.ext.dependencies["jsoup"]
+    //api rootProject.ext.dependencies["glide"]//按需添加
+    //annotationProcessor rootProject.ext.dependencies["glide-compiler"]//按需添加
+
+    //di
+    api rootProject.ext.dependencies["dagger"]
+    annotationProcessor rootProject.ext.dependencies["dagger-compiler"]
+    api rootProject.ext.dependencies["butterknife"]
+    annotationProcessor rootProject.ext.dependencies["butterknife-compiler"]
+    provided rootProject.ext.dependencies["annotation"]
+
+    //fragmentation
+    api rootProject.ext.dependencies["fragmentation"]
+
+    //router
+    //api rootProject.ext.dependencies["arouter"]//按需添加
+    //annotationProcessor rootProject.ext.dependencies["arouter-compiler"]//按需添加
+
+    //api rootProject.ext.dependencies["RxCache"]//按需添加
+    //api rootProject.ext.dependencies["RxCache-gson"]//按需添加
+
+    //生命周期
+    api rootProject.ext.dependencies["rxlifecycle"]
+    api rootProject.ext.dependencies["rxlifecycle-android"]
+    api rootProject.ext.dependencies["rxlifecycle-components"]
+
+    //androidUtils
+    api rootProject.ext.dependencies["android-utils"]
+    api rootProject.ext.dependencies["logger"]
+
+    //
+    api rootProject.ext.dependencies["barlibrary"]
+
+    //
+    api rootProject.ext.dependencies["BaseRecyclerViewAdapterHelper"]
+
+    //
+    api rootProject.ext.dependencies["switchbutton"]
+
+}
+
+//与android、dependencies在同一级
+publish {
+    userOrg = 'csxiong'// 组织名
+    groupId = 'me.csxiong'// 包名、
+    artifactId = 'XPort'// library的名字
+    version = '1.0.0'// 版本
+    description = 'help build apps quickly!'
+    website = "https://github.com/Walten55/Fastgo-MVP-Integration-Master"
+    repoName = 'XPort'//repository name
+//upload your bintray ./gradlew clean build bintrayUpload -PbintrayUser=名字 -PbintrayKey=KEY -PdryRun=false
+}
