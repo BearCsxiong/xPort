@@ -7,9 +7,14 @@ import android.view.View;
 
 import javax.inject.Inject;
 
-/**
- * MVP Fragment基类
- */
+/**-------------------------------------------------------------------------------
+*|
+*| desc : MVP-Fragment基本使用和使用dagger2注入Presenter,实现PV加解绑
+*|
+*|--------------------------------------------------------------------------------
+*| on 2018/8/14 created by csxiong
+*|--------------------------------------------------------------------------------
+*/
 public abstract class MVPFragment<T extends IPresenter> extends SimpleFragment {
 
     private boolean isInjected;

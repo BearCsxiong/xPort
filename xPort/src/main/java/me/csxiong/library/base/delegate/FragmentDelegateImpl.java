@@ -8,15 +8,14 @@ import android.view.View;
 
 import me.csxiong.library.base.IPage;
 
-/*
- * -----------------------------------------------------------------
- * Copyright by Walten, All rights reserved.
- * -----------------------------------------------------------------
- * desc：
- * -----------------------------------------------------------------
- * 2018/5/24 : Create FragmentDelegateImpl.java (Walten);
- * -----------------------------------------------------------------
- */
+/**-------------------------------------------------------------------------------
+*| 
+*| desc : Fragment实现部分回调内容
+*| 
+*|--------------------------------------------------------------------------------
+*| on 2018/8/20 created by csxiong 
+*|--------------------------------------------------------------------------------
+*/
 public class FragmentDelegateImpl implements IFragmentDelegate {
     private android.support.v4.app.FragmentManager mFragmentManager;
     private android.support.v4.app.Fragment mFragment;

@@ -6,9 +6,14 @@ import android.support.annotation.Nullable;
 
 import javax.inject.Inject;
 
-/**
- * MVP activity基类
- */
+/**-------------------------------------------------------------------------------
+*|
+*| desc : MVP-Activity基本使用和使用dagger2注入Presenter,实现PV加解绑
+*|
+*|--------------------------------------------------------------------------------
+*| on 2018/8/14 created by csxiong
+*|--------------------------------------------------------------------------------
+*/
 public abstract class MVPActivity<T extends IPresenter> extends SimpleActivity {
 
     @Inject

@@ -20,9 +20,14 @@ import me.csxiong.library.utils.XPreconditions;
 import me.yokeyword.fragmentation.SupportFragment;
 import me.yokeyword.fragmentation.anim.FragmentAnimator;
 
-/**
- * 无MVP的Fragment基类
- */
+/**-------------------------------------------------------------------------------
+*| 
+*| desc : 基础Fragment实现,基于Fragmentation
+*| 
+*|--------------------------------------------------------------------------------
+*| on 2018/8/20 created by csxiong 
+*|--------------------------------------------------------------------------------
+*/
 public abstract class SimpleFragment extends SupportFragment implements IView, IPage, IFragmentLifecycle {
 
     private final BehaviorSubject<FragmentEvent> mSubject = BehaviorSubject.create();

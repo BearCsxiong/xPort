@@ -24,15 +24,17 @@ import me.csxiong.library.di.module.GlobalConfigModule;
 import me.csxiong.library.integration.ManifestParser;
 import me.csxiong.library.utils.XPreconditions;
 
-/*
- * -----------------------------------------------------------------
- * Copyright by Walten, All rights reserved.
- * -----------------------------------------------------------------
- * desc：
- * -----------------------------------------------------------------
- * 2018/5/24 : Create AppDelegateManager.java (Walten);
- * -----------------------------------------------------------------
- */
+/**---------------------------------------------------
+*|
+*|  Des : Application生命周期的管理类，管理所有注册的IAppDelegate
+*|
+*|----------------------------------------------------
+*|
+*|  Author : csxiong
+*|  Date : 2018/8/14
+*|
+*|----------------------------------------------------
+*/
 public class AppDelegateManager implements IApp, IAppDelegate {
     private Application mApplication;
 
@@ -118,7 +120,7 @@ public class AppDelegateManager implements IApp, IAppDelegate {
     }
 
 
-    private GlobalConfigModule handlerGlobalConfigModule(GlobalConfigModule.Builder builder){
+    private GlobalConfigModule handlerGlobalConfigModule(GlobalConfigModule.Builder builder) {
         //遍历 GlobalConfig 集合, 给全局配置 GlobalConfigModule 添加参数
         for (GlobalConfig module : mModules) {
             module.applyOptions(mApplication, builder);
@@ -155,7 +157,6 @@ public class AppDelegateManager implements IApp, IAppDelegate {
     }
 
 
-
     @NonNull
     @Override
     public AppComponent getAppComponent() {
@@ -164,8 +165,6 @@ public class AppDelegateManager implements IApp, IAppDelegate {
                 AppComponent.class.getName(), getClass().getName(), Application.class.getName());
         return mAppComponent;
     }
-
-
 
 
 }

@@ -16,9 +16,14 @@ import me.csxiong.library.di.component.AppComponent;
 import me.csxiong.library.integration.lifecycle.IActivityLifecycle;
 import me.yokeyword.fragmentation.SupportActivity;
 
-/**
- * 无MVP的Activity基类
- */
+/**-------------------------------------------------------------------------------
+*| 
+*| desc : 基础Activity实现类,基于Fragmentation
+*|
+*|--------------------------------------------------------------------------------
+*| on 2018/8/20 created by csxiong
+*|--------------------------------------------------------------------------------
+*/
 public abstract class SimpleActivity extends SupportActivity implements IView, IPage, IActivityLifecycle {
 
     private final BehaviorSubject<ActivityEvent> mSubject = BehaviorSubject.create();

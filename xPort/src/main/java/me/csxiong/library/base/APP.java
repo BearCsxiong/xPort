@@ -5,8 +5,6 @@ import android.app.Application;
 import android.content.Context;
 import android.text.TextUtils;
 
-import me.csxiong.library.base.delegate.AppDelegateManager;
-import me.csxiong.library.di.component.AppComponent;
 import com.blankj.utilcode.util.Utils;
 
 import java.io.BufferedReader;
@@ -14,9 +12,17 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * Application
- */
+import me.csxiong.library.base.delegate.AppDelegateManager;
+import me.csxiong.library.di.component.AppComponent;
+
+/**-------------------------------------------------------------------------------
+*|
+*| desc : Application,实现dagger2注入配置,并初始化交由AppDelegateManager管理生命周期
+*|
+*|--------------------------------------------------------------------------------
+*| on 2018/8/14 created by csxiong
+*|--------------------------------------------------------------------------------
+*/
 public class APP extends Application {
 
     protected static APP _INSTANCE;

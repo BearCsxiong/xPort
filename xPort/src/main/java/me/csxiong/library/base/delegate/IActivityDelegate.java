@@ -4,16 +4,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-
-/*
- * -----------------------------------------------------------------
- * Copyright by Walten, All rights reserved.
- * -----------------------------------------------------------------
- * desc：
- * -----------------------------------------------------------------
- * 2018/5/24 : Create IActivityDelegate.java (Walten);
- * -----------------------------------------------------------------
- */
+/**-------------------------------------------------------------------------------
+*|
+*| desc : Activity生命周期回调
+*|
+*|--------------------------------------------------------------------------------
+*| on 2018/8/20 created by csxiong
+*|--------------------------------------------------------------------------------
+*/
 public interface IActivityDelegate {
     void onCreate(@Nullable Bundle savedInstanceState);
 

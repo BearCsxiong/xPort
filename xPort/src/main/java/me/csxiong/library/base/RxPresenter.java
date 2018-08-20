@@ -3,11 +3,14 @@ package me.csxiong.library.base;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
-/**
- * 控制生命周期订阅操作
- *
- * @param <T>
- */
+/**-------------------------------------------------------------------------------
+*| 
+*| desc : 基本Presenter帮助控制订阅事件生命周期
+*| 
+*|--------------------------------------------------------------------------------
+*| on 2018/8/20 created by csxiong
+*|--------------------------------------------------------------------------------
+*/
 public class RxPresenter<T extends IView> implements IPresenter<T> {
 
     protected T mView;
