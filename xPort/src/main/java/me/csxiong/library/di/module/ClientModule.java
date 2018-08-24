@@ -29,6 +29,14 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/**-------------------------------------------------------------------------------
+*|
+*| desc : dagger2 + retrofit + glide
+*|
+*|--------------------------------------------------------------------------------
+*| on 2018/8/21 created by csxiong
+*|--------------------------------------------------------------------------------
+*/
 @Module
 public class ClientModule {
 
@@ -157,6 +165,7 @@ public class ClientModule {
         return new OkHttpClient.Builder();
     }
 
+//    logger
     @Singleton
     @Provides
     PrettyFormatStrategy.Builder provideFormatStrategyBuilder() {

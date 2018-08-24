@@ -29,6 +29,13 @@
             android:name="com.base.multi.config.TestGlobalConfig"
             android:value="ConfigModule" />
 
+        <activity android:name="com.base.multi.business.test.TestActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>
