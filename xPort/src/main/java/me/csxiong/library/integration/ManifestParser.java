@@ -24,6 +24,14 @@ import java.util.List;
 
 import me.csxiong.library.base.delegate.GlobalConfig;
 
+/**-------------------------------------------------------------------------------
+*| 
+*| desc : ManifestParser解析器,帮助获取manifest中的注册的配置类
+*| 
+*|--------------------------------------------------------------------------------
+*| on 2018/9/26 created by csxiong 
+*|--------------------------------------------------------------------------------
+*/
 public final class ManifestParser<T> {
     private static final String MODULE_VALUE = "GlobalConfig";
 

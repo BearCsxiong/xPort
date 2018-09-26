@@ -76,6 +76,7 @@ public class APP extends Application {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
+        mAppDelegate.attachBaseContext(base);
     }
 
     /**
@@ -105,6 +106,12 @@ public class APP extends Application {
             }
         }
         return null;
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        mAppDelegate.onTerminate(this);
     }
 
     public AppComponent getAppComponent() {

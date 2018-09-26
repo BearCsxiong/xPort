@@ -18,12 +18,11 @@ package me.csxiong.library.integration;
 import android.app.Application;
 import android.content.Context;
 
-import me.csxiong.library.cache.LruCache;
-import me.csxiong.library.utils.XPreconditions;
-
 import javax.inject.Inject;
 
 import dagger.Lazy;
+import me.csxiong.library.cache.LruCache;
+import me.csxiong.library.utils.XPreconditions;
 import retrofit2.Retrofit;
 
 /*
@@ -61,7 +60,6 @@ public class ServiceProvider {
         if(mCache.get().get(CACHE_KEY_RETROFIT+service.getCanonicalName())==null){
             mCache.get().put(CACHE_KEY_RETROFIT+service.getCanonicalName(),mRetrofit.get().create(service));
         }
-
         return (T) mCache.get().get(CACHE_KEY_RETROFIT+service.getCanonicalName());
     }
 

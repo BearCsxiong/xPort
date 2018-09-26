@@ -11,7 +11,7 @@ import io.reactivex.disposables.Disposable;
 *| on 2018/8/20 created by csxiong
 *|--------------------------------------------------------------------------------
 */
-public class RxPresenter<T extends IView> implements IPresenter<T> {
+public class XPresenter<T extends IView> implements IPresenter<T> {
 
     protected T mView;
     protected CompositeDisposable mCompositeDisposable;

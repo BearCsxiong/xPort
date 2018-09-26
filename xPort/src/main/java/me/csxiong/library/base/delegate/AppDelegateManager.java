@@ -4,8 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.orhanobut.logger.AndroidLogAdapter;
-import com.orhanobut.logger.Logger;
 import com.orhanobut.logger.PrettyFormatStrategy;
 
 import java.util.ArrayList;
@@ -24,17 +22,18 @@ import me.csxiong.library.di.module.GlobalConfigModule;
 import me.csxiong.library.integration.ManifestParser;
 import me.csxiong.library.utils.XPreconditions;
 
-/**---------------------------------------------------
-*|
-*|  Des : Application生命周期的管理类，管理所有注册的IAppDelegate
-*|
-*|----------------------------------------------------
-*|
-*|  Author : csxiong
-*|  Date : 2018/8/14
-*|
-*|----------------------------------------------------
-*/
+/**
+ * ---------------------------------------------------
+ * |
+ * |  Des : Application生命周期的管理类，管理所有注册的IAppDelegate
+ * |
+ * |----------------------------------------------------
+ * |
+ * |  Author : csxiong
+ * |  Date : 2018/8/14
+ * |
+ * |----------------------------------------------------
+ */
 public class AppDelegateManager implements IApp, IAppDelegate {
     private Application mApplication;
 
@@ -62,7 +61,7 @@ public class AppDelegateManager implements IApp, IAppDelegate {
         //用反射, 将 AndroidManifest.xml 中带有 GlobalConfig 标签的 class 转成对象集合（List<GlobalConfig>）
         this.mModules = new ManifestParser<GlobalConfig>(context).parse(context.getResources().getString(R.string.GlobalConfig));
 
-        //遍历之前获得的集合, 执行每一个 GlobalConfig 实现类的某些方法
+        //遍历之前获得的集合, 执行每一个 GlobalConfig 实现类的内部所有代理注册方法
         for (GlobalConfig module : mModules) {
 
             //将框架外部, 开发者实现的 Application 的生命周期回调 (IAppDelegate) 存入 mIAppLifecycles 集合 (此时还未注册回调)
@@ -113,9 +112,6 @@ public class AppDelegateManager implements IApp, IAppDelegate {
         for (IAppDelegate lifecycle : mIAppLifecycles) {
             lifecycle.onCreate(mApplication);
         }
-
-        //初始化日志打印
-        Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy));
 
     }
 
