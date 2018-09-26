@@ -34,6 +34,12 @@ import javax.xml.transform.stream.StreamResult;
 
 public class AndroidSWGenerator {
 
+    // ldpi——120dpi—-1dp=0.75px
+    // mdpi—-160dpi—-1dp=1px
+    // hdpi——240dpi—-1dp=1.5px
+    // xhdpi—-320dpi—-1dp=2px
+    // xxhdpi—480dpi—-1dp=3px
+
     //生成最大dp内容
     static int MAX_DP = 1000;
     // 生成dimen前缀名称
@@ -49,7 +55,7 @@ public class AndroidSWGenerator {
     static String GENATATOR_PATH = "/Users/csxiong/Desktop/Android适配基于" + ((int) BASE_DP) + "像素密度dp-px";
 
     public static void main(String[] args) {
-        int[] j = {160, 240, 320, 360, 420, 480, 500, 520, 560, 600};
+        int[] j = {120, 160, 240, 320, 360, 420, 480, 500, 520, 560, 600};
 
         for (int m = 0; m < j.length; m++) {
             System.out.println(" \n适配大小" + j[m] + "\n");
