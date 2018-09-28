@@ -2,11 +2,10 @@ package me.csxiong.library.utils;
 
 import org.jsoup.helper.StringUtil;
 
-import io.reactivex.BackpressureStrategy;
-import io.reactivex.Flowable;
-import io.reactivex.FlowableEmitter;
-import io.reactivex.FlowableOnSubscribe;
-import io.reactivex.FlowableTransformer;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -39,14 +38,14 @@ public class RxUtils {
      * @param <T>
      * @return
      */
-    public static <T> FlowableTransformer<Response<T>, T> doDefaultHttpTransformer(final IView view,Class<T> dataClass) {
-        return new FlowableTransformer<Response<T>, T>() {
+    public static <T> ObservableTransformer<Response<T>, T> doDefaultHttpTransformer(final IView view,Class<T> classes) {
+        return new ObservableTransformer<Response<T>, T>() {
             @Override
-            public Flowable<T> apply(Flowable<Response<T>> observable) {
+            public Observable<T> apply(Observable<Response<T>> observable) {
                 return observable
-                        .compose(RxUtils.onRxThread())
+                        .compose(RxUtils.onHandleResult(new DefaultApiHandleResult()))
                         .compose(RxLifecycleUtil.bindUntilEvent(view))
-                        .compose(RxUtils.onHandleResult(new DefaultApiHandleResult()));
+                        .compose(RxUtils.onRxThread());
             }
         };
     }
@@ -57,10 +56,10 @@ public class RxUtils {
      * @param <T>
      * @return
      */
-    public static <T> FlowableTransformer<T, T> onRxThread() {    //compose简化线程
-        return new FlowableTransformer<T, T>() {
+    public static <T> ObservableTransformer<T, T> onRxThread() {
+        return new ObservableTransformer<T, T>() {
             @Override
-            public Flowable<T> apply(Flowable<T> observable) {
+            public Observable<T> apply(Observable<T> observable) {
                 return observable.subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread());
             }
@@ -74,18 +73,13 @@ public class RxUtils {
      * @param <T>
      * @return
      */
-    private static <T> Flowable<T> formatData(final T t) {
-        return Flowable.create(new FlowableOnSubscribe<T>() {
+    private static <T> Observable<T> formatData(final T t) {
+        return Observable.create(new ObservableOnSubscribe<T>() {
             @Override
-            public void subscribe(FlowableEmitter<T> emitter) throws Exception {
-                try {
-                    emitter.onNext(t);
-                } catch (Exception e) {
-                    emitter.onError(e);
-                }
-                emitter.onComplete();
+            public void subscribe(ObservableEmitter<T> emitter) throws Exception {
+                emitter.onNext(t);
             }
-        }, BackpressureStrategy.BUFFER);
+        });
     }
 
     /**
@@ -95,25 +89,8 @@ public class RxUtils {
      * @param <T>
      * @return
      */
-    public static <T> FlowableTransformer<Response<T>, T> onHandleResult(FlowableTransformer<Response<T>, T> transformer) {
+    public static <T> ObservableTransformer<Response<T>, T> onHandleResult(ObservableTransformer<Response<T>, T> transformer) {
         return transformer;
-    }
-
-    /**
-     * 获取结果转换
-     *
-     * @param flatMap
-     * @param <R>
-     * @param <T>
-     * @return
-     */
-    public static <R, T> FlowableTransformer<R, T> getHandleResultDefault(final Function<R, Flowable<T>> flatMap) {
-        return new FlowableTransformer<R, T>() {
-            @Override
-            public Flowable<T> apply(Flowable<R> httpResponseFlowable) {
-                return httpResponseFlowable.flatMap(flatMap);
-            }
-        };
     }
 
     /**
@@ -125,16 +102,16 @@ public class RxUtils {
      *
      * @param <T>
      */
-    public static class DefaultApiHandleResult<T> implements FlowableTransformer<Response<T>, T> {
+    public static class DefaultApiHandleResult<T> implements ObservableTransformer<Response<T>, T> {
         @Override
-        public Flowable<T> apply(Flowable<Response<T>> httpResponseFlowable) {
-            return httpResponseFlowable.flatMap(new Function<Response<T>, Flowable<T>>() {
+        public Observable<T> apply(Observable<Response<T>> httpResponseFlowable) {
+            return httpResponseFlowable.flatMap(new Function<Response<T>, Observable<T>>() {
                 @Override
-                public Flowable<T> apply(Response<T> response) {
+                public Observable<T> apply(Response<T> response) {
                     if (response.getErrcode() == 200) {
                         return formatData(response.getData());
                     } else {
-                        return Flowable.error(new ApiException(StringUtil.isBlank(response.getMessage())
+                        return Observable.error(new ApiException(StringUtil.isBlank(response.getMessage())
                                 ? "服务器错误" : response.getMessage()));
                     }
                 }

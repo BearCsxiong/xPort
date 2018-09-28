@@ -12,21 +12,21 @@ import com.kehua.pile.R;
 import com.kehua.pile.R2;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
-import org.reactivestreams.Subscriber;
-
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Flowable;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.ResourceObserver;
 import io.reactivex.subscribers.ResourceSubscriber;
 import me.csxiong.library.base.IView;
 import me.csxiong.library.base.MVPActivity;
 import me.csxiong.library.integration.http.Response;
 import me.csxiong.library.utils.RxLifecycleUtil;
 import me.csxiong.library.utils.RxUtils;
-import me.csxiong.library.utils.XToast;
 import me.csxiong.library.utils.XUtils;
 
 /**
@@ -64,9 +64,9 @@ public class TestActivity extends MVPActivity<TestPresenter> implements TestCont
                     @Override
                     public void onNext(Object o) {
                         startLoading("加载中");
-                        Flowable<Response<String>> flowable = new Flowable<Response<String>>() {
+                        Observable<Response<String>> observable = new Observable<Response<String>>() {
                             @Override
-                            protected void subscribeActual(Subscriber<? super Response<String>> s) {
+                            protected void subscribeActual(Observer<? super Response<String>> observer) {
                                 Response<String> response = new Response<>();
                                 response.setErrcode(199);
                                 response.setMessage("失败");
@@ -76,21 +76,20 @@ public class TestActivity extends MVPActivity<TestPresenter> implements TestCont
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
-                                s.onNext(response);
+                                observer.onNext(response);
                             }
                         };
 
-                        flowable.compose(RxUtils.doDefaultHttpTransformer(TestActivity.this, String.class))
-                                .subscribeWith(new ResourceSubscriber<String>() {
+                        observable.compose(RxUtils.doDefaultHttpTransformer(TestActivity.this, String.class))
+                                .subscribeWith(new ResourceObserver<String>() {
                                     @Override
                                     public void onNext(String s) {
-                                        XToast.success(s);
+
                                     }
 
                                     @Override
-                                    public void onError(Throwable t) {
-                                        XToast.error(t.getMessage());
-                                        stopLoading();
+                                    public void onError(Throwable e) {
+
                                     }
 
                                     @Override
@@ -98,6 +97,7 @@ public class TestActivity extends MVPActivity<TestPresenter> implements TestCont
 
                                     }
                                 });
+
                     }
 
                     @Override
