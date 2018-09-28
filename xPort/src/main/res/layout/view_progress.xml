@@ -6,6 +6,6 @@
     android:background="#ffffff"
     android:gravity="center"
     android:layout_gravity="center"
-    android:padding="@dimen/grid_30">
+    android:padding="@dimen/x30">
 
 </FrameLayout>

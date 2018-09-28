@@ -32,7 +32,15 @@ import android.view.View;
 
 import me.csxiong.library.R;
 
-
+/**
+ * -------------------------------------------------------------------------------
+ * |
+ * | desc : 一个简单的edittext,带密码显示等默认模式
+ * |
+ * |--------------------------------------------------------------------------------
+ * | on 2018/9/28 created by csxiong
+ * |--------------------------------------------------------------------------------
+ */
 public class XEditText extends AppCompatEditText {
 
     private String mSeparator; //mSeparator，default is "".

@@ -4,18 +4,26 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 
+import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import javax.inject.Inject;
 
-/**-------------------------------------------------------------------------------
-*|
-*| desc : MVP-Fragment基本使用和使用dagger2注入Presenter,实现PV加解绑
-*|
-*|--------------------------------------------------------------------------------
-*| on 2018/8/14 created by csxiong
-*|--------------------------------------------------------------------------------
-*/
-public abstract class MVPFragment<T extends IPresenter> extends SimpleFragment {
+import io.reactivex.subjects.BehaviorSubject;
+import io.reactivex.subjects.Subject;
+import me.csxiong.library.integration.lifecycle.IFragmentLifecycle;
+
+/**
+ * -------------------------------------------------------------------------------
+ * |
+ * | desc : MVP-Fragment基本使用和使用dagger2注入Presenter,实现PV加解绑
+ * |
+ * |--------------------------------------------------------------------------------
+ * | on 2018/8/14 created by csxiong
+ * |--------------------------------------------------------------------------------
+ */
+public abstract class MVPFragment<T extends IPresenter> extends SimpleFragment implements IFragmentLifecycle {
+
+    private final BehaviorSubject<FragmentEvent> mLifecycleSubject = BehaviorSubject.create();
 
     private boolean isInjected;
 
@@ -38,4 +46,8 @@ public abstract class MVPFragment<T extends IPresenter> extends SimpleFragment {
         super.onDestroyView();
     }
 
+    @Override
+    public Subject<FragmentEvent> provideLifecycle() {
+        return mLifecycleSubject;
+    }
 }

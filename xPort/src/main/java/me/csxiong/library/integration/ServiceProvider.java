@@ -25,14 +25,14 @@ import me.csxiong.library.cache.LruCache;
 import me.csxiong.library.utils.XPreconditions;
 import retrofit2.Retrofit;
 
-/*
- * -----------------------------------------------------------------
- * Copyright by Walten, All rights reserved.
- * -----------------------------------------------------------------
- * desc：
- * -----------------------------------------------------------------
- * 2018/5/24 : Create ServiceProvider.java (Walten);
- * -----------------------------------------------------------------
+/**
+ * -------------------------------------------------------------------------------
+ * |
+ * | desc : retrofit中service缓存
+ * |
+ * |--------------------------------------------------------------------------------
+ * | on 2018/9/27 created by csxiong
+ * |--------------------------------------------------------------------------------
  */
 public class ServiceProvider {
     @Inject
@@ -40,7 +40,7 @@ public class ServiceProvider {
     @Inject
     Application mApplication;
     @Inject
-    Lazy<LruCache<String,Object>> mCache;
+    Lazy<LruCache<String, Object>> mCache;
 
     private final String CACHE_KEY_RETROFIT = "RETROFIT";
 
@@ -56,11 +56,11 @@ public class ServiceProvider {
      * @return
      */
     public synchronized <T> T get(Class<T> service) {
-        XPreconditions.checkNotNull(service,"retrofit service不允许为空");
-        if(mCache.get().get(CACHE_KEY_RETROFIT+service.getCanonicalName())==null){
-            mCache.get().put(CACHE_KEY_RETROFIT+service.getCanonicalName(),mRetrofit.get().create(service));
+        XPreconditions.checkNotNull(service, "retrofit service不允许为空");
+        if (mCache.get().get(CACHE_KEY_RETROFIT + service.getCanonicalName()) == null) {
+            mCache.get().put(CACHE_KEY_RETROFIT + service.getCanonicalName(), mRetrofit.get().create(service));
         }
-        return (T) mCache.get().get(CACHE_KEY_RETROFIT+service.getCanonicalName());
+        return (T) mCache.get().get(CACHE_KEY_RETROFIT + service.getCanonicalName());
     }
 
     public Context getContext() {

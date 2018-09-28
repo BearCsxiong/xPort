@@ -4,7 +4,13 @@ package me.csxiong.library.base;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import com.trello.rxlifecycle2.android.ActivityEvent;
+
 import javax.inject.Inject;
+
+import io.reactivex.subjects.BehaviorSubject;
+import io.reactivex.subjects.Subject;
+import me.csxiong.library.integration.lifecycle.IActivityLifecycle;
 
 /**-------------------------------------------------------------------------------
 *|
@@ -14,7 +20,9 @@ import javax.inject.Inject;
 *| on 2018/8/14 created by csxiong
 *|--------------------------------------------------------------------------------
 */
-public abstract class MVPActivity<T extends IPresenter> extends SimpleActivity {
+public abstract class MVPActivity<T extends IPresenter> extends SimpleActivity implements IActivityLifecycle{
+
+    private final BehaviorSubject<ActivityEvent> mLifecycleSubject = BehaviorSubject.create();
 
     @Inject
     T mPresenter;
@@ -32,4 +40,8 @@ public abstract class MVPActivity<T extends IPresenter> extends SimpleActivity {
         super.onDestroy();
     }
 
+    @Override
+    public Subject<ActivityEvent> provideLifecycle() {
+        return mLifecycleSubject;
+    }
 }

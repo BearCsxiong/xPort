@@ -3,10 +3,14 @@ package me.csxiong.library.utils;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-/**
- *
- */
-
+/**-------------------------------------------------------------------------------
+*|
+*| desc : gson 对json格式数据转换工具
+*|
+*|--------------------------------------------------------------------------------
+*| on 2018/9/28 created by csxiong
+*|--------------------------------------------------------------------------------
+*/
 public class GsonUtils {
     private static Gson gson;
 
@@ -15,7 +19,6 @@ public class GsonUtils {
             gson = new Gson();
         }
     }
-
 
     /**
      * 对象转Json字符串
@@ -44,7 +47,6 @@ public class GsonUtils {
 
     /**
      * @des 检测转化工具对象
-     * @author Yancy Lin
      * @date 2017/8/14 上午11:22
      */
     private static void checkGson() {
@@ -55,7 +57,6 @@ public class GsonUtils {
 
     /**
      * @des 去除Bom头与格式多余
-     * @author Yancy Lin
      * @date 2017/8/21 下午3:14
      */
     public static String JSONTokener(String str_json) {
@@ -74,7 +75,6 @@ public class GsonUtils {
 
     /**
      * @des 去除格式多余"和/
-     * @author Yancy Lin
      * @date 2017/8/21 下午3:14
      */
     public static String JSONTokener2(String str_json) {
@@ -90,7 +90,6 @@ public class GsonUtils {
 
     /**
      * @des 转化成JsonObject
-     * @author Yancy Lin
      * @date 2017/8/30 下午4:20
      */
     public static JsonObject toJsonObject(Object obj){

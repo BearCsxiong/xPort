@@ -22,13 +22,14 @@ import android.view.ViewGroup;
 
 import me.csxiong.library.base.SimpleActivity;
 
-/**
- * ================================================
- * Created by JessYan on 26/09/2016 13:59
- * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
- * <a href="https://github.com/JessYanCoding">Follow me</a>
- * ================================================
- */
+/**-------------------------------------------------------------------------------
+*| 
+*| desc : xPort部分前置条件
+*| 
+*|--------------------------------------------------------------------------------
+*| on 2018/9/28 created by csxiong 
+*|--------------------------------------------------------------------------------
+*/
 public final class XPreconditions {
 
     private XPreconditions() {

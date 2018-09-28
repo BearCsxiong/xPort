@@ -10,8 +10,13 @@ import android.view.animation.ScaleAnimation;
 import android.widget.RelativeLayout;
 
 /**
- * User: wtf
- * Date: 2015-06-22 0022 14:11
+ * -------------------------------------------------------------------------------
+ * |
+ * | desc : 动感缩放的控件,内部控件缩放
+ * |
+ * |--------------------------------------------------------------------------------
+ * | on 2018/9/28 created by csxiong
+ * |--------------------------------------------------------------------------------
  */
 public class ZoomRelativeLayout extends RelativeLayout {
     private boolean isPressed;
@@ -22,7 +27,8 @@ public class ZoomRelativeLayout extends RelativeLayout {
     private OnClickListener mOnClickListener;
     private ScaleAnimation zoomInAnimation;
     private ScaleAnimation zoomOutAnimation;
-    private  float SCROLL_THRESHOLD = 0;
+    private float SCROLL_THRESHOLD = 0;
+
     public ZoomRelativeLayout(Context context) {
         this(context, null);
     }
@@ -79,7 +85,7 @@ public class ZoomRelativeLayout extends RelativeLayout {
                 synchronized (ZoomRelativeLayout.this) {
                     State = NORAML;
                 }
-                if (!isPressed&&isOnClick) {
+                if (!isPressed && isOnClick) {
                     if (mOnClickListener != null)
                         mOnClickListener.onClick(ZoomRelativeLayout.this);
                 }
@@ -125,7 +131,7 @@ public class ZoomRelativeLayout extends RelativeLayout {
                 break;
             case MotionEvent.ACTION_UP:
                 isPressed = false;
-                if (State == NORAML&&isOnClick) {
+                if (State == NORAML && isOnClick) {
                     if (mOnClickListener != null)
                         mOnClickListener.onClick(ZoomRelativeLayout.this);
                 }

@@ -14,7 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DeviceUtils {
-    public DeviceUtils() {
+    private DeviceUtils() {
+        throw new IllegalStateException("you can't instantiate me!");
     }
 
     @TargetApi(13)

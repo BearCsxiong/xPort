@@ -95,10 +95,10 @@ public class AppDelegateManager implements IApp, IAppDelegate {
 
         this.mModules = null;
 
-        //注册框架内部已实现的 Activity 生命周期逻辑
+        //注册框架内部已实现的 Activity 生命周期逻辑 ps : 包括rxjava订阅信息处理逻辑时，界面释放，绑定在对应周期上
         mApplication.registerActivityLifecycleCallbacks(mActivityLifecycle);
 
-        //注册框架内部已实现的 RxLifecycle 逻辑
+        //注册框架内部已实现的 RxLifecycle 逻辑 ps : fragment中rxjava订阅信息处理逻辑是，界面释放，绑定在对应释放周期上
         mApplication.registerActivityLifecycleCallbacks(mFragmentLifecycle);
 
         //注册框架外部, 开发者扩展的 Activity 生命周期逻辑

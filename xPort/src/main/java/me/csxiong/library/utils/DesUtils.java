@@ -7,6 +7,10 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class DesUtils {
 
+    private DesUtils() {
+        throw new IllegalStateException("you can't instantiate me!");
+    }
+
     private static byte[] iv = {1,2,3,4,5,6,7,8};
 
     public static String encryptDES(String encryptString, String encryptKey) throws Exception {

@@ -31,16 +31,14 @@ import me.csxiong.library.R;
 import me.csxiong.library.base.delegate.GlobalConfig;
 import me.csxiong.library.integration.ManifestParser;
 
-
-
-/*
- * -----------------------------------------------------------------
- * Copyright by Walten, All rights reserved.
- * -----------------------------------------------------------------
- * desc：
- * -----------------------------------------------------------------
- * 2018/5/24 : Create ActivityLifecycle.java (Walten);
- * -----------------------------------------------------------------
+/**
+ * -------------------------------------------------------------------------------
+ * |
+ * | desc : Fragment生命周期Activity代理,Fragment所attach的Activity帮助在FragmentManager上绑定FragmentLifecycle
+ * |
+ * |--------------------------------------------------------------------------------
+ * | on 2018/9/28 created by csxiong
+ * |--------------------------------------------------------------------------------
  */
 @Singleton
 public class FragmentLifecycleActivityProxyer implements Application.ActivityLifecycleCallbacks {
@@ -58,22 +56,20 @@ public class FragmentLifecycleActivityProxyer implements Application.ActivityLif
 
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-        if(mModules==null){
-
+        if (mModules == null) {
             mModules = new ManifestParser<GlobalConfig>(mApplication).parse(activity.getResources().getString(R.string.GlobalConfig));
-
-            for(GlobalConfig module : mModules){
+            for (GlobalConfig module : mModules) {
                 //将框架外部, 开发者实现的 Fragment 的生命周期回调存入 mFragmentLifecycles 集合 (此时还未注册回调)
                 module.injectFragmentLifecycle(mApplication, mFragmentLifecycles);
             }
 
         }
 
-        if(activity instanceof FragmentActivity){
-            for (FragmentManager.FragmentLifecycleCallbacks callback : mFragmentLifecycles){
+        if (activity instanceof FragmentActivity) {
+            for (FragmentManager.FragmentLifecycleCallbacks callback : mFragmentLifecycles) {
                 FragmentActivity aty = (FragmentActivity) activity;
                 FragmentManager fragmentManager = aty.getSupportFragmentManager();
-                fragmentManager.registerFragmentLifecycleCallbacks(callback,true);
+                fragmentManager.registerFragmentLifecycleCallbacks(callback, true);
             }
         }
 

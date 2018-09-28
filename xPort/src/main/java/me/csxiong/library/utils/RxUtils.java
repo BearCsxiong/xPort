@@ -10,6 +10,15 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import me.csxiong.library.integration.http.Response;
 
+/**
+ * -------------------------------------------------------------------------------
+ * |
+ * | desc : rxjava封装方法
+ * |
+ * |--------------------------------------------------------------------------------
+ * | on 2018/9/28 created by csxiong
+ * |--------------------------------------------------------------------------------
+ */
 public class RxUtils {
 
     /**
