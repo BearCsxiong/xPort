@@ -3,6 +3,7 @@ package me.csxiong.library.integration.lifecycle;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
@@ -11,14 +12,14 @@ import javax.inject.Singleton;
 
 import io.reactivex.subjects.Subject;
 
-/*
- * -----------------------------------------------------------------
- * Copyright by Walten, All rights reserved.
- * -----------------------------------------------------------------
- * desc：
- * -----------------------------------------------------------------
- * 2018/5/24 : Create ActivityLifecycleForRxLifecycle.java (Walten);
- * -----------------------------------------------------------------
+/**
+ * -------------------------------------------------------------------------------
+ * |
+ * | desc : RxLifecycle对应Activity生命周期管理
+ * |
+ * |--------------------------------------------------------------------------------
+ * | on 2018/9/28 created by csxiong
+ * |--------------------------------------------------------------------------------
  */
 @Singleton
 public class ActivityLifecycleForRxLifecycle implements Application.ActivityLifecycleCallbacks {
@@ -35,6 +36,7 @@ public class ActivityLifecycleForRxLifecycle implements Application.ActivityLife
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
         if (activity instanceof IActivityLifecycle) {
             obtainSubject(activity).onNext(ActivityEvent.CREATE);
+            Log.e("RxLifecycle", "onActivityCreated");
         }
     }
 
@@ -42,6 +44,7 @@ public class ActivityLifecycleForRxLifecycle implements Application.ActivityLife
     public void onActivityStarted(Activity activity) {
         if (activity instanceof IActivityLifecycle) {
             obtainSubject(activity).onNext(ActivityEvent.START);
+            Log.e("RxLifecycle", "onActivityStarted");
         }
     }
 
@@ -49,6 +52,7 @@ public class ActivityLifecycleForRxLifecycle implements Application.ActivityLife
     public void onActivityResumed(Activity activity) {
         if (activity instanceof IActivityLifecycle) {
             obtainSubject(activity).onNext(ActivityEvent.RESUME);
+            Log.e("RxLifecycle", "onActivityResumed");
         }
     }
 
@@ -56,6 +60,7 @@ public class ActivityLifecycleForRxLifecycle implements Application.ActivityLife
     public void onActivityPaused(Activity activity) {
         if (activity instanceof IActivityLifecycle) {
             obtainSubject(activity).onNext(ActivityEvent.PAUSE);
+            Log.e("RxLifecycle", "onActivityPaused");
         }
     }
 
@@ -63,18 +68,20 @@ public class ActivityLifecycleForRxLifecycle implements Application.ActivityLife
     public void onActivityStopped(Activity activity) {
         if (activity instanceof IActivityLifecycle) {
             obtainSubject(activity).onNext(ActivityEvent.STOP);
+            Log.e("RxLifecycle", "onActivityStopped");
         }
     }
 
     @Override
     public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-
+        Log.e("RxLifecycle", "onActivitySaveInstanceState");
     }
 
     @Override
     public void onActivityDestroyed(Activity activity) {
         if (activity instanceof IActivityLifecycle) {
             obtainSubject(activity).onNext(ActivityEvent.DESTROY);
+            Log.e("RxLifecycle", "onActivityDestroyed");
         }
     }
 

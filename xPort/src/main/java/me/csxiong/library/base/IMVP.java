@@ -3,15 +3,12 @@ package me.csxiong.library.base;
 /**
  * -------------------------------------------------------------------------------
  * |
- * | desc : MVP模式基础Presenter待实现方法
+ * | desc : 默认在MVP模式开发中需要Dagger注入,此规则为xport限定,不是规范,但是最适合
  * |
  * |--------------------------------------------------------------------------------
- * | on 2018/8/14 created by csxiong
+ * | on 2018/9/28 created by csxiong
  * |--------------------------------------------------------------------------------
  */
-public interface IPresenter<T extends IView> {
-
-    void attachView(T view);
-
-    void detachView();
+public interface IMVP {
+    void initInject();
 }

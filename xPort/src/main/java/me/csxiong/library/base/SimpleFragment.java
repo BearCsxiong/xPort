@@ -14,20 +14,22 @@ import butterknife.Unbinder;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.Subject;
 import me.csxiong.library.R;
+import me.csxiong.library.base.delegate.ViewDelegate;
 import me.csxiong.library.di.component.AppComponent;
 import me.csxiong.library.integration.lifecycle.IFragmentLifecycle;
 import me.csxiong.library.utils.XPreconditions;
 import me.yokeyword.fragmentation.SupportFragment;
 import me.yokeyword.fragmentation.anim.FragmentAnimator;
 
-/**-------------------------------------------------------------------------------
-*| 
-*| desc : 基础Fragment实现,基于Fragmentation
-*| 
-*|--------------------------------------------------------------------------------
-*| on 2018/8/20 created by csxiong 
-*|--------------------------------------------------------------------------------
-*/
+/**
+ * -------------------------------------------------------------------------------
+ * |
+ * | desc : 基础Fragment实现,基于Fragmentation
+ * |
+ * |--------------------------------------------------------------------------------
+ * | on 2018/8/20 created by csxiong
+ * |--------------------------------------------------------------------------------
+ */
 public abstract class SimpleFragment extends SupportFragment implements IView, IPage, IFragmentLifecycle {
 
     private final BehaviorSubject<FragmentEvent> mSubject = BehaviorSubject.create();
@@ -37,6 +39,7 @@ public abstract class SimpleFragment extends SupportFragment implements IView, I
     protected Context mContext;
     private Unbinder mUnBinder;
     protected boolean isInitUI;
+    protected ViewDelegate mViewDegate;
 
     @Override
     public void onAttach(Context context) {
@@ -50,6 +53,9 @@ public abstract class SimpleFragment extends SupportFragment implements IView, I
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mView = inflater.inflate(getLayoutResId(), null);
+        if (mViewDegate == null) {
+            mViewDegate = new ViewDelegate(this);
+        }
         return mView;
     }
 
@@ -72,6 +78,7 @@ public abstract class SimpleFragment extends SupportFragment implements IView, I
     @Override
     public void onDestroy() {
         mUnBinder.unbind();
+        mViewDegate = null;
         super.onDestroy();
     }
 
@@ -90,33 +97,13 @@ public abstract class SimpleFragment extends SupportFragment implements IView, I
     }
 
     @Override
-    public void showErrorTip(String errorMsg) {
-
+    public void startLoading(String loadingMsg) {
+        mViewDegate.startLoading(loadingMsg);
     }
 
     @Override
-    public void showWarnTip(String warnTip) {
-
-    }
-
-    @Override
-    public void showSuccessTip(String successTip) {
-
-    }
-
-    @Override
-    public void dismissTip() {
-
-    }
-
-    @Override
-    public void startWaiting() {
-
-    }
-
-    @Override
-    public void stopWaiting() {
-
+    public void stopLoading() {
+        mViewDegate.stopLoading();
     }
 
     @Override

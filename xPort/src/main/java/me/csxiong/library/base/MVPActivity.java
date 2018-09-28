@@ -12,15 +12,16 @@ import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.Subject;
 import me.csxiong.library.integration.lifecycle.IActivityLifecycle;
 
-/**-------------------------------------------------------------------------------
-*|
-*| desc : MVP-Activity基本使用和使用dagger2注入Presenter,实现PV加解绑
-*|
-*|--------------------------------------------------------------------------------
-*| on 2018/8/14 created by csxiong
-*|--------------------------------------------------------------------------------
-*/
-public abstract class MVPActivity<T extends IPresenter> extends SimpleActivity implements IActivityLifecycle{
+/**
+ * -------------------------------------------------------------------------------
+ * |
+ * | desc : MVP-Activity基本使用和使用dagger2注入Presenter,实现PV加解绑
+ * |
+ * |--------------------------------------------------------------------------------
+ * | on 2018/8/14 created by csxiong
+ * |--------------------------------------------------------------------------------
+ */
+public abstract class MVPActivity<T extends IPresenter> extends SimpleActivity implements IMVP, IActivityLifecycle {
 
     private final BehaviorSubject<ActivityEvent> mLifecycleSubject = BehaviorSubject.create();
 

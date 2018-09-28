@@ -9,13 +9,11 @@ import me.csxiong.library.base.IView;
 
 public interface TestContract {
 
-    public interface View extends IView
-    {
+    interface View extends IView {
 
     }
 
-    public interface Presenter extends IPresenter<TestContract.View>
-    {
+    interface Presenter extends IPresenter<TestContract.View> {
 
     }
 

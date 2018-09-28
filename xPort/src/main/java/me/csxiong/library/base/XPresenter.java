@@ -1,19 +1,22 @@
 package me.csxiong.library.base;
 
+import java.lang.ref.WeakReference;
+
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
-/**-------------------------------------------------------------------------------
-*| 
-*| desc : 基本Presenter帮助控制订阅事件生命周期
-*| 
-*|--------------------------------------------------------------------------------
-*| on 2018/8/20 created by csxiong
-*|--------------------------------------------------------------------------------
-*/
+/**
+ * -------------------------------------------------------------------------------
+ * |
+ * | desc : 基本Presenter帮助控制订阅事件生命周期
+ * |
+ * |--------------------------------------------------------------------------------
+ * | on 2018/8/20 created by csxiong
+ * |--------------------------------------------------------------------------------
+ */
 public class XPresenter<T extends IView> implements IPresenter<T> {
 
-    protected T mView;
+    protected WeakReference<T> mView;
     protected CompositeDisposable mCompositeDisposable;
 
     protected void unSubscribe() {
@@ -31,7 +34,7 @@ public class XPresenter<T extends IView> implements IPresenter<T> {
 
     @Override
     public void attachView(T view) {
-        this.mView = view;
+        this.mView = new WeakReference<T>(view);
     }
 
     @Override

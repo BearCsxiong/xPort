@@ -21,7 +21,7 @@ import me.csxiong.library.integration.lifecycle.IFragmentLifecycle;
  * | on 2018/8/14 created by csxiong
  * |--------------------------------------------------------------------------------
  */
-public abstract class MVPFragment<T extends IPresenter> extends SimpleFragment implements IFragmentLifecycle {
+public abstract class MVPFragment<T extends IPresenter> extends SimpleFragment implements IMVP, IFragmentLifecycle {
 
     private final BehaviorSubject<FragmentEvent> mLifecycleSubject = BehaviorSubject.create();
 

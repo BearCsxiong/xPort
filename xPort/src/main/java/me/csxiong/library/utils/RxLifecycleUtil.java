@@ -27,16 +27,26 @@ public class RxLifecycleUtil {
         throw new IllegalStateException("you can't instantiate me!");
     }
 
+    public static LifecycleTransformer bindUntilEvent(@NonNull final IView view) {
+        XPreconditions.checkNotNull(view, "view == null");
+        if (view instanceof IActivityLifecycle) {
+            return bindUntilEvent(view, ActivityEvent.DESTROY);
+        } else if (view instanceof IFragmentLifecycle) {
+            return bindUntilEvent(view, FragmentEvent.DESTROY_VIEW);
+        } else {
+            throw new IllegalArgumentException("view isn't IActivityLifecycle OR IFragmentLifecycle");
+        }
+    }
+
     /**
      * 绑定 Activity 的指定生命周期
      *
      * @param view
      * @param event
-     * @param <T>
      * @return
      */
-    public static <T> LifecycleTransformer<T> bindUntilEvent(@NonNull final IView view,
-                                                             final ActivityEvent event) {
+    public static LifecycleTransformer bindUntilEvent(@NonNull final IView view,
+                                                      final ActivityEvent event) {
         XPreconditions.checkNotNull(view, "view == null");
         if (view instanceof IActivityLifecycle) {
             return bindUntilEvent((IActivityLifecycle) view, event);
@@ -50,11 +60,10 @@ public class RxLifecycleUtil {
      *
      * @param view
      * @param event
-     * @param <T>
      * @return
      */
-    public static <T> LifecycleTransformer<T> bindUntilEvent(@NonNull final IView view,
-                                                             final FragmentEvent event) {
+    public static LifecycleTransformer bindUntilEvent(@NonNull final IView view,
+                                                      final FragmentEvent event) {
         XPreconditions.checkNotNull(view, "view == null");
         if (view instanceof IFragmentLifecycle) {
             return bindUntilEvent((IFragmentLifecycle) view, event);
@@ -66,12 +75,11 @@ public class RxLifecycleUtil {
     /**
      * @param lifecycleable
      * @param event
-     * @param <T>
      * @param <R>
      * @return
      */
-    public static <T, R> LifecycleTransformer<T> bindUntilEvent(@NonNull final ILifecycle<R> lifecycleable,
-                                                                final R event) {
+    public static <R> LifecycleTransformer bindUntilEvent(@NonNull final ILifecycle<R> lifecycleable,
+                                                          final R event) {
         XPreconditions.checkNotNull(lifecycleable, "lifecycleable == null");
         return RxLifecycle.bindUntilEvent(lifecycleable.provideLifecycle(), event);
     }
@@ -81,10 +89,9 @@ public class RxLifecycleUtil {
      * 绑定 Activity/Fragment 的生命周期
      *
      * @param view
-     * @param <T>
      * @return
      */
-    public static <T> LifecycleTransformer<T> bindToLifecycle(@NonNull IView view) {
+    public static LifecycleTransformer bindToLifecycle(@NonNull IView view) {
         XPreconditions.checkNotNull(view, "view == null");
         if (view instanceof ILifecycle) {
             return bindToLifecycle((ILifecycle) view);
@@ -94,11 +101,12 @@ public class RxLifecycleUtil {
     }
 
     /**
+     * 绑定生命周期,按A->onDetroy,F->onDestroyView
+     *
      * @param lifecycleable
-     * @param <T>
      * @return
      */
-    public static <T> LifecycleTransformer<T> bindToLifecycle(@NonNull ILifecycle lifecycleable) {
+    public static LifecycleTransformer bindToLifecycle(@NonNull ILifecycle lifecycleable) {
         XPreconditions.checkNotNull(lifecycleable, "lifecycleable == null");
         if (lifecycleable instanceof IActivityLifecycle) {
             return RxLifecycleAndroid.bindActivity(((IActivityLifecycle) lifecycleable).provideLifecycle());

@@ -12,18 +12,20 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.Subject;
+import me.csxiong.library.base.delegate.ViewDelegate;
 import me.csxiong.library.di.component.AppComponent;
 import me.csxiong.library.integration.lifecycle.IActivityLifecycle;
 import me.yokeyword.fragmentation.SupportActivity;
 
-/**-------------------------------------------------------------------------------
-*| 
-*| desc : 基础Activity实现类,基于Fragmentation
-*|
-*|--------------------------------------------------------------------------------
-*| on 2018/8/20 created by csxiong
-*|--------------------------------------------------------------------------------
-*/
+/**
+ * -------------------------------------------------------------------------------
+ * |
+ * | desc : 基础Activity实现类,基于Fragmentation
+ * |
+ * |--------------------------------------------------------------------------------
+ * | on 2018/8/20 created by csxiong
+ * |--------------------------------------------------------------------------------
+ */
 public abstract class SimpleActivity extends SupportActivity implements IView, IPage, IActivityLifecycle {
 
     private final BehaviorSubject<ActivityEvent> mSubject = BehaviorSubject.create();
@@ -33,6 +35,8 @@ public abstract class SimpleActivity extends SupportActivity implements IView, I
     private Unbinder mUnBinder;
 
     protected boolean immersive = false;
+
+    protected ViewDelegate mViewDelegate;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,6 +48,9 @@ public abstract class SimpleActivity extends SupportActivity implements IView, I
         if (immersive) {
             setFullScreen();
             cancelFullScreen();
+        }
+        if (mViewDelegate == null) {
+            mViewDelegate = new ViewDelegate(this);
         }
         /*初始化UI*/
         initUI(savedInstanceState);
@@ -67,10 +74,10 @@ public abstract class SimpleActivity extends SupportActivity implements IView, I
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0
-                && event.getAction() == KeyEvent.ACTION_DOWN) {
-            return true;
-        }
+//        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0
+//                && event.getAction() == KeyEvent.ACTION_DOWN) {
+//            return true;
+//        }
         return super.onKeyDown(keyCode, event);
     }
 
@@ -80,27 +87,13 @@ public abstract class SimpleActivity extends SupportActivity implements IView, I
     }
 
     @Override
-    public void showErrorTip(String errorMsg) {
+    public void startLoading(String loadingMsg) {
+        mViewDelegate.startLoading(loadingMsg);
     }
 
     @Override
-    public void showWarnTip(String warnTip) {
-    }
-
-    @Override
-    public void showSuccessTip(String successTip) {
-    }
-
-    @Override
-    public void dismissTip() {
-    }
-
-    @Override
-    public void startWaiting() {
-    }
-
-    @Override
-    public void stopWaiting() {
+    public void stopLoading() {
+        mViewDelegate.stopLoading();
     }
 
     @Override

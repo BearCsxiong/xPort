@@ -36,6 +36,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name="com.base.multi.business.next.NextActivity"/>
+
     </application>
 
 </manifest>

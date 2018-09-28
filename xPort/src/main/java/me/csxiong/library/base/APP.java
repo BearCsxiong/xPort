@@ -15,14 +15,15 @@ import java.util.List;
 import me.csxiong.library.base.delegate.AppDelegateManager;
 import me.csxiong.library.di.component.AppComponent;
 
-/**-------------------------------------------------------------------------------
-*|
-*| desc : Application,实现dagger2注入配置,并初始化交由AppDelegateManager管理生命周期
-*|
-*|--------------------------------------------------------------------------------
-*| on 2018/8/14 created by csxiong
-*|--------------------------------------------------------------------------------
-*/
+/**
+ * -------------------------------------------------------------------------------
+ * |
+ * | desc : Application,实现dagger2注入配置,并初始化交由AppDelegateManager管理生命周期
+ * |
+ * |--------------------------------------------------------------------------------
+ * | on 2018/8/14 created by csxiong
+ * |--------------------------------------------------------------------------------
+ */
 public class APP extends Application {
 
     protected static APP _INSTANCE;
@@ -44,9 +45,6 @@ public class APP extends Application {
         super.onCreate();
         if (!shouldInit())
             return;
-        if (mAppDelegate == null) {
-            mAppDelegate = new AppDelegateManager(this);
-        }
         mAppDelegate.onCreate(this);
 
         _INSTANCE = this;
@@ -76,6 +74,9 @@ public class APP extends Application {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
+        if (mAppDelegate == null) {
+            mAppDelegate = new AppDelegateManager(this);
+        }
         mAppDelegate.attachBaseContext(base);
     }
 
