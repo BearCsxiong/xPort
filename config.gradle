@@ -1,83 +1,190 @@
-ext {
+apply from: versions
+if (isIndependent()) {
+    apply plugin: 'com.android.application'
+} else {
+    apply plugin: 'com.android.library'
+}
+apply plugin: 'com.jakewharton.butterknife'
+android {
+    compileSdkVersion _compileSdkVersion
 
-    def dependVersion = [
-            support         : "26.0.2",
-            retrofit        : "2.3.0",
-            okhttp          : "3.8.1",
-            dagger2         : "2.16",
-            butterknife     : "8.8.1",
-            arouter         : "1.3.1",
-            arouterCompiler : "1.1.4",
-            rxlifecycle     : "2.2.1"
-    ]
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+    aaptOptions.cruncherEnabled = false
+    aaptOptions.useNewCruncher = false
+    defaultConfig {
+        if (isIndependent()) {
+            if (this.name.equals("app")) {
+                applicationId "com.base.project"
+            } else if (this.name.c("library")) {
+                applicationId "me.csxiong.xport"
+                println("this == ${this.name} , applicationId")
+            } else {
+                applicationId "me.csxiong.xport.${this.name}"
+                println("this == ${this.name} , applicationId")
+            }
+        }
+        minSdkVersion _minSdkVersion
+        targetSdkVersion _targetSdkVersion
+        versionCode _versionCode//1 ~ 2147483647 17年10月30号1版本
+        versionName _versionName
 
-    dependencies = [
-            //android support
-            "appcompat-v7"              : "com.android.support:appcompat-v7:${dependVersion.support}",
-            "support-v4"                : "com.android.support:support-v4:${dependVersion.support}",
-            "cardview-v7"               : "com.android.support:cardview-v7:${dependVersion.support}",
-            "recyclerview-v7"           : "com.android.support:recyclerview-v7:${dependVersion.support}",
-            "design"                    : "com.android.support:design:${dependVersion.support}",
-            "gridlayout-v7"             : "com.android.support:gridlayout-v7:${dependVersion.support}",
 
-            //rx
-            "rxjava"                    : "io.reactivex.rxjava2:rxjava:2.1.14",
-            "rxandroid"                 : "io.reactivex.rxjava2:rxandroid:2.0.2",
-            "rxpermissions"             : "com.tbruyelle.rxpermissions2:rxpermissions:0.9.5@aar",
-            "rxbus"                     : "com.hwangjr.rxbus:rxbus:1.0.6",
+        renderscriptTargetApi 23
+        renderscriptSupportModeEnabled true
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+        ndk {
+//            abiFilters "armeabi-v7a", "x86", "arm64-v8a", "armeabi"
+//            abiFilters "armeabi-v7a", "x86"
+            abiFilters "armeabi-v7a"
+        }
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+            }
+        }
+    }
+    buildTypes {
+        release {
+            debuggable false
+            if (isIndependent()) {
+                shrinkResources true
+                minifyEnabled true
+            }
+            //上传埋点URL
+            buildConfigField "String", "UPLOAD_URL", "\"https://data.biaoqing.com\""
+            //金币系统URL
+            buildConfigField "String", "COIN_HOST", "\"https://finance.biaoqing.com\""
+            //主APPHost
+            buildConfigField "String", "MAIN_HOST", "\"https://api.biaoqing.com\""
+            //app下载地址
+            buildConfigField "String", "APP_DOWNLOAD_URL", "\"https://a.app.qq.com/o/simple.jsp?pkgname=com.biaoqing.BiaoQingShuoShuo\""
+            buildConfigField "String", "SHARE_URL", "\"https://m.biaoqing.com/thread\""
+            signingConfig signingConfigs.debug
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            debuggable true
+            crunchPngs false //关闭crunchPng优化, 以加快构建
+//            buildConfigField "String", "UPLOAD_URL", "\"http://data.test.biaoqing.com\""
+//            buildConfigField "String", "COIN_HOST", "\"http://finance.test.biaoqing.com\""
+//            buildConfigField "String", "MAIN_HOST", "\"http://api.test.biaoqing.com\""
+            buildConfigField "String", "UPLOAD_URL", "\"https://data.biaoqing.com\""
+            buildConfigField "String", "COIN_HOST", "\"https://finance.biaoqing.com\""
+            buildConfigField "String", "MAIN_HOST", "\"https://api.biaoqing.com\""
+            buildConfigField "String", "APP_DOWNLOAD_URL", "\"https://a.app.qq.com/o/simple.jsp?pkgname=com.biaoqing.BiaoQingShuoShuo\""
+            buildConfigField "String", "SHARE_URL", "\"https://m.biaoqing.com/thread\""
+            shrinkResources false
+            minifyEnabled false
+            testCoverageEnabled false
+            signingConfig signingConfigs.debug
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets {
+        main {
+            jni.srcDirs = []
+            jniLibs.srcDirs = ['libs']
+            res.srcDirs = [
+                    'src/main/res',
+            ]
+        }
+    }
+    if (this.name.startsWith("app")) {
+        signingConfigs {
+            debug {
+                storeFile file('biaoqing.jks')
+                storePassword "biaoqing663"
+                keyAlias "bq"
+                keyPassword "biaoqing663"
+            }
+            release {
+                storeFile file('biaoqing.jks')
+                storePassword "biaoqing663"
+                keyAlias "bq"
+                keyPassword "biaoqing663"
+            }
+        }
+    }
 
-            //network
-            "gson"                      : "com.google.code.gson:gson:2.7",
-            "retrofit"                  : "com.squareup.retrofit2:retrofit:${dependVersion.retrofit}",
-            "retrofit-converter-gson"   : "com.squareup.retrofit2:converter-gson:${dependVersion.retrofit}",
-            "retrofit-converter-xml"    : "com.squareup.retrofit2:converter-simplexml:${dependVersion.retrofit}",
-            "retrofit-adapter-rxjava2"  : "com.squareup.retrofit2:adapter-rxjava2:${dependVersion.retrofit}",
-            "okhttp"                    : "com.squareup.okhttp3:okhttp:${dependVersion.okhttp}",
-            "okhttp-logging-interceptor": "com.squareup.okhttp3:logging-interceptor:${dependVersion.okhttp}",
-            "glide"                     : "com.github.bumptech.glide:glide:4.7.1",
-            "glide-compiler"            : "com.github.bumptech.glide:compiler:4.7.1",
-            "jsoup"                     : "org.jsoup:jsoup:1.10.1",
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+    sourceSets {
+        main {
+            //未开启独立编译 并且是独立的module，才会使用总是使用 library/AndroidManifest.xml
+            if (isModule && this.name.startsWith("module")) {
+                manifest.srcFile 'src/main/ismodule/AndroidManifest.xml'
+            } else {
+                manifest.srcFile 'src/main/AndroidManifest.xml'
+                java {
+                    //全部Module一起编译的时候剔除debug目录
+                    exclude '**/debug/**'
+                }
+            }
+        }
+    }
+    packagingOptions {
+//        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/rxjava.properties'
+//        exclude 'META-INF/NOTICE'
+//        exclude 'META-INF/LICENSE'
+//        exclude 'META-INF/LICENSE.txt'
+//        exclude 'META-INF/NOTICE.txt'
+    }
+}
 
-            //router
-            "arouter"                   : "com.alibaba:arouter-api:${dependVersion.arouter}",
-            "arouter-compiler"          : "com.alibaba:arouter-compiler:${dependVersion.arouterCompiler}",
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        def requested = details.requested
+        if (requested.group == 'com.android.support') {
+            if (!requested.name.startsWith("multidex")) {
+                details.useVersion "$supportLibraryVersion"
+            }
+        }
+    }
+    resolutionStrategy.force "com.google.code.findbugs:jsr305:3.0.2"
+}
 
-            //di
-            "dagger"                    : "com.google.dagger:dagger:${dependVersion.dagger2}",
-            "dagger-compiler"           : "com.google.dagger:dagger-compiler:${dependVersion.dagger2}",
-            "butterknife"               : "com.jakewharton:butterknife:${dependVersion.butterknife}",
-            "butterknife-compiler"      : "com.jakewharton:butterknife-compiler:${dependVersion.butterknife}",
-            "annotation"                : "org.glassfish:javax.annotation:10.0-b28",
+/**
+ * 不再建议群体剥离单独编译，应单独模块可单独编译，控制权交还给单独模块
+ * @return
+ */
+def isIndependent() {
+    //是app module ，独立编译
+    if (this.name.startsWith("app")) {
+        println("this module's name is not startsWith [module] , this.name = ${this.name}")
+        return true
+    }
+    //是library module
+    if (this.name.startsWith("library")) {
+        println("this module's name is library , this.name = ${this.name}")
+        return false
+    }
+    //module_common
+    if (this.name.equals("module_common")) {
+        println("this module's name is library , this.name = ${this.name}")
+        return isModule_Common
+    }
 
-            //fragmentation
-            "fragmentation"             : "me.yokeyword:fragmentation:1.1.6",
+    //没有开启独立编译选项，所以为library
+    if (!isModule) {
+        println("not independent!")
+        return false
+    }
 
-            //64k
-            "multidex"                  : "com.android.support:multidex:1.0.1",
-
-            //ui
-            "barlibrary"                : "com.gyf.barlibrary:barlibrary:2.3.0",
-            "android-segmented-control" : "info.hoang8f:android-segmented:1.0.6",//https://github.com/Kaopiz/android-segmented-control
-            "FlycoRoundView"            : "com.flyco.roundview:FlycoRoundView_Lib:1.1.4@aar",//https://github.com/H07000223/FlycoRoundView
-            "SmartRefreshLayout"        : "com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1",
-            "SmartRefreshHeader"        : "com.scwang.smartrefresh:SmartRefreshHeader:1.0.5.1",//https://github.com/scwang90/SmartRefreshLayout
-            "FlycoDialogLib"            : "com.flyco.dialog:FlycoDialog_Lib:1.3.2@aar",//https://github.com/H07000223/FlycoDialog_Master
-            "switchbutton"              : "com.kyleduo.switchbutton:library:2.0.0",//https://github.com/kyleduo/SwitchButton
-
-            //cache
-            "RxCache"                   : "com.github.VictorAlbertos.RxCache:runtime:1.8.3-2.x",
-            "RxCache-gson"              : "com.github.VictorAlbertos.Jolyglot:gson:0.0.4",
-
-            //lifecycle
-            "rxlifecycle"               : "com.trello.rxlifecycle2:rxlifecycle:${dependVersion.rxlifecycle}",
-            "rxlifecycle-android"       : "com.trello.rxlifecycle2:rxlifecycle-android:${dependVersion.rxlifecycle}",
-            "rxlifecycle-components"    : "com.trello.rxlifecycle2:rxlifecycle-components:${dependVersion.rxlifecycle}",
-
-            //utils
-            "android-utils"             : "com.blankj:utilcode:1.16.0",
-            "logger"                    : "com.orhanobut:logger:2.2.0",
-            "BaseRecyclerViewAdapterHelper": "com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.40",//https://github.com/CymChad/BaseRecyclerViewAdapterHelper
-
-    ]
-
+    //开启了独立编译选项，但是模块名称不是module_ 开头，所以为 library
+    if (!this.name.startsWith("module")) {
+        println("this module's name is not startsWith [module] , this.name = ${this.name}")
+        return false
+    }
+    println("this module is independent!")
+    return true
 }

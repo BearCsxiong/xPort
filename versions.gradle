@@ -1,0 +1,102 @@
+ext {
+
+    _versionCode = 1
+    _versionName = "1.0.1"
+    _minSdkVersion = 16
+    _targetSdkVersion = 23
+    _compileSdkVersion = 28
+    _buildToolsVersion = "28.0.2"
+    supportLibraryVersion = "28.0.0"
+    butterknifeSdkVersion = "9.0.0"
+
+    version = [
+            arouterVersion    : '1.4.0',
+            okioVersion       : '1.5.0',
+            gsonVersion       : '2.6.2',
+            multidexVersion   : '1.0.3',
+            loggerVersion     : '2.2.0',
+            okhttpVersion     : '3.12.1',
+            glideVersion      : '3.7.0',
+            frescoVersion     : '1.9.0',
+            dagger2SdkVersion : "2.15",
+            retrofitSdkVersion: "2.4.0",
+            butterknifeVersion: "9.0.0",
+            espressoSdkVersion: "3.0.1",
+            canarySdkVersion  : "1.5.4",
+            rxjava2           : "2.2.2",
+            rxandroid2        : "2.1.0",
+            rxlifecycle       : "2.2.1",
+            exoplayerVersion  : "2.9.0",
+            objectboxVersion  : "2.3.4",
+            upyunVersion      : '2.0.5',
+            andPermission     : '1.1.2',
+            rxPermission      : '0.10.2',
+            utilCode          : '1.23.7',
+    ]
+
+    appcompatv7 = "com.android.support:appcompat-v7:$supportLibraryVersion"
+    compat = "com.android.support:support-compat:$supportLibraryVersion"
+    design = "com.android.support:design:$supportLibraryVersion"
+    supportv4 = "com.android.support:support-v4:$supportLibraryVersion"
+    cardviewv7 = "com.android.support:cardview-v7:$supportLibraryVersion"
+    annotations = "com.android.support:support-annotations:$supportLibraryVersion"
+    recyclerviewv7 = "com.android.support:recyclerview-v7:$supportLibraryVersion"
+
+    fresco = "com.facebook.fresco:fresco:${version.frescoVersion}"
+    frescoOkhttp = "com.facebook.fresco:imagepipeline-okhttp3:${version.frescoVersion}"
+    fresco_animated_gif = "com.facebook.fresco:animated-gif:${version.frescoVersion}"
+    fresco_animated_webp = "com.facebook.fresco:animated-webp:${version.frescoVersion}"
+    fresco_webpsupport = "com.facebook.fresco:webpsupport:${version.frescoVersion}"
+    //view di
+    butterknife = "com.jakewharton:butterknife:${version.butterknifeVersion}"
+    //fix 8.8.1version compiler fail
+    butterknifecompiler = "com.jakewharton:butterknife-compiler:8.8.1"
+    // 替换成最新版本, 需要注意的是api
+    // 要与compiler匹配使用，均使用最新版可以保证兼容
+    arouterapi = "com.alibaba:arouter-api:${version.arouterVersion}"
+    aroutercompiler = "com.alibaba:arouter-compiler:1.2.1"
+    flowlayout = "com.hyman:flowlayout-lib:1.1.2"
+    //rx2
+    rxandroid2 = "io.reactivex.rxjava2:rxandroid:${version.rxandroid2}"
+    rxjava2 = "io.reactivex.rxjava2:rxjava:${version.rxjava2}"
+    //tools
+    dagger2 = "com.google.dagger:dagger:${version["dagger2SdkVersion"]}"
+    dagger2android = "com.google.dagger:dagger-android:${version["dagger2SdkVersion"]}"
+    dagger2androidsupport = "com.google.dagger:dagger-android-support:${version["dagger2SdkVersion"]}"
+    dagger2compiler = "com.google.dagger:dagger-compiler:${version["dagger2SdkVersion"]}"
+    dagger2androidprocessor = "com.google.dagger:dagger-android-processor:${version["dagger2SdkVersion"]}"
+    eventbus = "org.greenrobot:eventbus:3.0.0"
+    //network plugin
+    retrofit2 = "com.squareup.retrofit2:retrofit:${version["retrofitSdkVersion"]}"
+    retrofit2_converter_gson = "com.squareup.retrofit2:converter-gson:${version["retrofitSdkVersion"]}"
+    retrofit2_adapter_rxjava2 = "com.squareup.retrofit2:adapter-rxjava2:${version["retrofitSdkVersion"]}"
+    //network
+    okhttp3 = "com.squareup.okhttp3:okhttp:${version["okhttpVersion"]}"
+    okhttp3_logging = "com.squareup.okhttp3:logging-interceptor:${version["okhttpVersion"]}"
+    //db
+    objectbox = "io.objectbox:objectbox-gradle-plugin:${version.objectboxVersion}"
+    objectboxDebug = "io.objectbox:objectbox-android-objectbrowser:${version.objectboxVersion}"
+    objectboxRxjava = "io.objectbox:objectbox-rxjava:${version.objectboxVersion}"
+    //lifecycle
+    rxlifecycle = "com.trello.rxlifecycle2:rxlifecycle:${version.rxlifecycle}"
+    rxlifecycle_android = "com.trello.rxlifecycle2:rxlifecycle-android:${version.rxlifecycle}"
+    rxlifecycle_components = "com.trello.rxlifecycle2:rxlifecycle-components:${version.rxlifecycle}"
+    exoplayer = "com.google.android.exoplayer:exoplayer:${version.exoplayerVersion}"
+    //logger
+    logger2 = "com.orhanobut:logger:${version.loggerVersion}"
+    //multidex
+    multidex = "com.android.support:multidex:${version.multidexVersion}"
+    //gson
+    gson = "com.google.code.gson:gson:${version.gsonVersion}"
+    okio = "com.squareup.okio:okio:${version.okioVersion}"
+    //glide
+    glide = "com.github.bumptech.glide:glide:${version.glideVersion}"
+    //upyun
+    upyun = "com.upyun:upyun-android-sdk:${version.upyunVersion}"
+    //permission
+    rxPermission = "com.github.tbruyelle:rxpermissions:${version.rxPermission}"
+    andPermission = "com.yanzhenjie:permission:${version.andPermission}"
+    //utilsCode
+    utilCode = "com.blankj:utilcode:${version.utilCode}"
+}
+
