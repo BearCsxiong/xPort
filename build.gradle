@@ -3,7 +3,7 @@ buildscript {
         config = "${rootDir}/config.gradle"
         versions = "${rootDir}/versions.gradle"
         isModule = false//是否开启组件化
-        isModule_Common = false//是否开启组件化
+        isExampleModule = false//是否开启组件化
     }
 
     repositories {

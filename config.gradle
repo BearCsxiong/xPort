@@ -138,34 +138,24 @@ configurations.all {
     resolutionStrategy.force "com.google.code.findbugs:jsr305:3.0.2"
 }
 
-/**
- * 不再建议群体剥离单独编译，应单独模块可单独编译，控制权交还给单独模块
- * @return
- */
+//dif module single build
 def isIndependent() {
-    //是app module ，独立编译
     if (this.name.startsWith("app")) {
         println("this module's name is not startsWith [module] , this.name = ${this.name}")
         return true
     }
-    //是library module
     if (this.name.startsWith("library")) {
         println("this module's name is library , this.name = ${this.name}")
         return false
     }
-    //module_common
-    if (this.name.equals("module_common")) {
-        println("this module's name is library , this.name = ${this.name}")
-        return isModule_Common
+    if (this.name.equals("module_example")) {
+        println("this module's name is module , this.name = ${this.name}")
+        return isExampleModule
     }
-
-    //没有开启独立编译选项，所以为library
     if (!isModule) {
         println("not independent!")
         return false
     }
-
-    //开启了独立编译选项，但是模块名称不是module_ 开头，所以为 library
     if (!this.name.startsWith("module")) {
         println("this module's name is not startsWith [module] , this.name = ${this.name}")
         return false
