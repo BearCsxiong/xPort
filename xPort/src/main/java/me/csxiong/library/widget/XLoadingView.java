@@ -41,7 +41,7 @@ public class XLoadingView extends View {
     public XLoadingView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray array = getContext().obtainStyledAttributes(attrs, R.styleable.XLoadingView, defStyleAttr, 0);
-        mSize = array.getDimensionPixelSize(R.styleable.XLoadingView_x_loading_view_size, XDisplayUtil.dpToPxInt(context, 32));
+        mSize = array.getDimensionPixelSize(R.styleable.XLoadingView_x_loading_view_size, XDisplayUtil.dpToPxInt(32));
         mPaintColor = array.getInt(R.styleable.XLoadingView_android_color, Color.WHITE);
         array.recycle();
         initPaint();

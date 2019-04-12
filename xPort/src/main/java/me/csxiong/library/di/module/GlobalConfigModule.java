@@ -1,18 +1,3 @@
-/*
- * Copyright 2017 JessYan
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package me.csxiong.library.di.module;
 
 import android.app.Application;
@@ -25,7 +10,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import me.csxiong.library.utils.Constants;
+import me.csxiong.library.BuildConfig;
 import okhttp3.HttpUrl;
 
 @Module
@@ -35,6 +20,7 @@ public class GlobalConfigModule {
     private ClientModule.RetrofitConfiguration mRetrofitConfiguration;
     private ClientModule.OkhttpConfiguration mOkhttpConfiguration;
     private ClientModule.LoggerConfiguration mLoggerConfiguration;
+    private ClientModule.GsonConfiguration mGsonConfiguration;
 
     private GlobalConfigModule(Builder builder) {
         this.mApiUrl = builder.apiUrl;
@@ -42,6 +28,7 @@ public class GlobalConfigModule {
         this.mRetrofitConfiguration = builder.retrofitConfiguration;
         this.mOkhttpConfiguration = builder.okhttpConfiguration;
         this.mLoggerConfiguration = builder.loggerConfiguration;
+        this.mGsonConfiguration = builder.gsonConfiguration;
     }
 
     public static Builder builder() {
@@ -56,7 +43,7 @@ public class GlobalConfigModule {
     @Singleton
     @Provides
     HttpUrl provideBaseUrl() {
-        return mApiUrl == null ? HttpUrl.parse("https://api.github.com/") : mApiUrl;
+        return mApiUrl == null ? HttpUrl.parse(BuildConfig.MAIN_HOST) : mApiUrl;
     }
 
 
@@ -66,7 +53,7 @@ public class GlobalConfigModule {
     @Singleton
     @Provides
     File provideCacheFile(Application application) {
-        return mCacheFile == null ? new File(application.getCacheDir().getAbsolutePath()+File.separator+ Constants.FILE_NAME_NET_CACHE) : mCacheFile;
+        return mCacheFile == null ? new File(application.getCacheDir().getAbsolutePath() + File.separator + "NetCache") : mCacheFile;
     }
 
 
@@ -91,6 +78,13 @@ public class GlobalConfigModule {
         return mLoggerConfiguration;
     }
 
+    @Singleton
+    @Provides
+    @Nullable
+    ClientModule.GsonConfiguration provideGsonModule() {
+        return mGsonConfiguration;
+    }
+
 
     public static final class Builder {
         private HttpUrl apiUrl;
@@ -98,6 +92,7 @@ public class GlobalConfigModule {
         private ClientModule.RetrofitConfiguration retrofitConfiguration;
         private ClientModule.OkhttpConfiguration okhttpConfiguration;
         private ClientModule.LoggerConfiguration loggerConfiguration;
+        private ClientModule.GsonConfiguration gsonConfiguration;
 
         private Builder() {
         }
@@ -130,10 +125,14 @@ public class GlobalConfigModule {
             return this;
         }
 
+        public Builder gsonConfiguration(ClientModule.GsonConfiguration gsonConfiguration) {
+            this.gsonConfiguration = gsonConfiguration;
+            return this;
+        }
+
         public GlobalConfigModule build() {
             return new GlobalConfigModule(this);
         }
-
 
     }
 

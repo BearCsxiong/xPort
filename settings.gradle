@@ -1,1 +1,3 @@
-include ':app', ':xPort', ':ExampleModule'
+include ':app',
+        ':module_example',
+        ':xPort'

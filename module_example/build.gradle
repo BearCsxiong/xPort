@@ -2,23 +2,12 @@ apply from: config
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
-    compile project(path: ':xPort')
+    api project(':xPort')
     annotationProcessor aroutercompiler
     annotationProcessor butterknifecompiler
     annotationProcessor dagger2compiler
-}
-
-android.applicationVariants.all { variant ->
-    variant.outputs.all {
-        if (variant.buildType.debuggable) {
-            outputFileName = "app_debug.apk"
-        } else {
-            outputFileName = "app_release.apk"
-        }
-    }
 }

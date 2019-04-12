@@ -32,7 +32,7 @@ public class RxLifecycleUtil {
         if (view instanceof IActivityLifecycle) {
             return bindUntilEvent(view, ActivityEvent.DESTROY);
         } else if (view instanceof IFragmentLifecycle) {
-            return bindUntilEvent(view, FragmentEvent.DESTROY_VIEW);
+            return bindUntilEvent(view, FragmentEvent.STOP);
         } else {
             throw new IllegalArgumentException("view isn't IActivityLifecycle OR IFragmentLifecycle");
         }

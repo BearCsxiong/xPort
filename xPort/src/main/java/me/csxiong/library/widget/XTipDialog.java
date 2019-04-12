@@ -97,7 +97,8 @@ public class XTipDialog extends Dialog {
         public @interface IconType {
         }
 
-        private @IconType int mCurrentIconType = ICON_TYPE_NOTHING;
+        private @IconType
+        int mCurrentIconType = ICON_TYPE_NOTHING;
 
         private Context mContext;
 
@@ -139,7 +140,7 @@ public class XTipDialog extends Dialog {
                 case ICON_TYPE_LOADING:
                     XLoadingView loadingView = new XLoadingView(mContext);
                     loadingView.setColor(Color.WHITE);
-                    loadingView.setSize(XDisplayUtil.dpToPxInt(mContext, 32));
+                    loadingView.setSize(XDisplayUtil.dpToPxInt(32));
                     LinearLayout.LayoutParams loadingViewLP = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                     loadingView.setLayoutParams(loadingViewLP);
                     contentWrap.addView(loadingView);
@@ -152,11 +153,11 @@ public class XTipDialog extends Dialog {
                     imageView.setLayoutParams(imageViewLP);
 
                     if (mCurrentIconType == ICON_TYPE_SUCCESS) {
-                        imageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.qmui_icon_notify_done));
+                        imageView.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.qmui_icon_notify_done));
                     } else if (mCurrentIconType == ICON_TYPE_FAIL) {
-                        imageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.qmui_icon_notify_error));
+                        imageView.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.qmui_icon_notify_error));
                     } else {
-                        imageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.qmui_icon_notify_info));
+                        imageView.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.qmui_icon_notify_info));
                     }
 
                     contentWrap.addView(imageView);
@@ -168,7 +169,7 @@ public class XTipDialog extends Dialog {
                 LinearLayout.LayoutParams tipViewLP = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
                 if (mCurrentIconType != ICON_TYPE_NOTHING) {
-                    tipViewLP.topMargin = XDisplayUtil.dpToPxInt(mContext, 12);
+                    tipViewLP.topMargin = XDisplayUtil.dpToPxInt(12);
                 }
                 tipView.setLayoutParams(tipViewLP);
 

@@ -1,6 +1,7 @@
 package me.csxiong.library.utils;
 
-import org.jsoup.helper.StringUtil;
+
+import android.text.TextUtils;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -38,7 +39,7 @@ public class RxUtils {
      * @param <T>
      * @return
      */
-    public static <T> ObservableTransformer<Response<T>, T> doDefaultHttpTransformer(final IView view,Class<T> classes) {
+    public static <T> ObservableTransformer<Response<T>, T> doDefaultHttpTransformer(final IView view, Class<T> classes) {
         return new ObservableTransformer<Response<T>, T>() {
             @Override
             public Observable<T> apply(Observable<Response<T>> observable) {
@@ -111,7 +112,7 @@ public class RxUtils {
                     if (response.getErrcode() == 200) {
                         return formatData(response.getData());
                     } else {
-                        return Observable.error(new ApiException(StringUtil.isBlank(response.getMessage())
+                        return Observable.error(new ApiException(TextUtils.isEmpty(response.getMessage())
                                 ? "服务器错误" : response.getMessage()));
                     }
                 }

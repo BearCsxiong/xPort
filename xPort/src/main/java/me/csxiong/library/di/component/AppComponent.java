@@ -2,16 +2,18 @@ package me.csxiong.library.di.component;
 
 import android.app.Application;
 
-import me.csxiong.library.base.delegate.AppDelegateManager;
-import me.csxiong.library.di.module.AppModule;
-import me.csxiong.library.di.module.ClientModule;
-import me.csxiong.library.di.module.GlobalConfigModule;
-
 import java.io.File;
+import java.util.concurrent.ExecutorService;
 
 import javax.inject.Singleton;
 
 import dagger.Component;
+import io.reactivex.Scheduler;
+import me.csxiong.library.base.delegate.AppDelegateManager;
+import me.csxiong.library.di.module.AppModule;
+import me.csxiong.library.di.module.ClientModule;
+import me.csxiong.library.di.module.GlobalConfigModule;
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 
 /**
@@ -22,14 +24,14 @@ import retrofit2.Retrofit;
 public interface AppComponent {
 
     /**
-     * 应用实例
+     * APP
      *
      * @return
      */
     Application application();
 
     /**
-     * 网络请求客户端
+     * provide retrofit for Rxjava2(default)
      *
      * @return
      */
@@ -41,6 +43,27 @@ public interface AppComponent {
      * @return File
      */
     File cacheFile();
+
+    /**
+     * provider for httpConnect
+     *
+     * @return
+     */
+    OkHttpClient provideHttpClient();
+
+    /**
+     * provide base scheduler for RxJava
+     *
+     * @return
+     */
+    Scheduler provideScheduler();
+
+    /**
+     * provide thread pool service for
+     *
+     * @return
+     */
+    ExecutorService provideExcutorService();
 
     /**
      * 注入到APP代理

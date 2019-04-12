@@ -17,7 +17,7 @@ android {
         if (isIndependent()) {
             if (this.name.equals("app")) {
                 applicationId "com.base.project"
-            } else if (this.name.c("library")) {
+            } else if (this.name.contains("library")) {
                 applicationId "me.csxiong.xport"
                 println("this == ${this.name} , applicationId")
             } else {
@@ -53,32 +53,17 @@ android {
                 shrinkResources true
                 minifyEnabled true
             }
-            //上传埋点URL
-            buildConfigField "String", "UPLOAD_URL", "\"https://data.biaoqing.com\""
-            //金币系统URL
-            buildConfigField "String", "COIN_HOST", "\"https://finance.biaoqing.com\""
-            //主APPHost
-            buildConfigField "String", "MAIN_HOST", "\"https://api.biaoqing.com\""
-            //app下载地址
-            buildConfigField "String", "APP_DOWNLOAD_URL", "\"https://a.app.qq.com/o/simple.jsp?pkgname=com.biaoqing.BiaoQingShuoShuo\""
-            buildConfigField "String", "SHARE_URL", "\"https://m.biaoqing.com/thread\""
+            buildConfigField "String", "MAIN_HOST", "\"your host\""
             signingConfig signingConfigs.debug
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
             debuggable true
             crunchPngs false //关闭crunchPng优化, 以加快构建
-//            buildConfigField "String", "UPLOAD_URL", "\"http://data.test.biaoqing.com\""
-//            buildConfigField "String", "COIN_HOST", "\"http://finance.test.biaoqing.com\""
-//            buildConfigField "String", "MAIN_HOST", "\"http://api.test.biaoqing.com\""
-            buildConfigField "String", "UPLOAD_URL", "\"https://data.biaoqing.com\""
-            buildConfigField "String", "COIN_HOST", "\"https://finance.biaoqing.com\""
-            buildConfigField "String", "MAIN_HOST", "\"https://api.biaoqing.com\""
-            buildConfigField "String", "APP_DOWNLOAD_URL", "\"https://a.app.qq.com/o/simple.jsp?pkgname=com.biaoqing.BiaoQingShuoShuo\""
-            buildConfigField "String", "SHARE_URL", "\"https://m.biaoqing.com/thread\""
             shrinkResources false
             minifyEnabled false
             testCoverageEnabled false
+            buildConfigField "String", "MAIN_HOST", "\"your host\""
             signingConfig signingConfigs.debug
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -95,16 +80,16 @@ android {
     if (this.name.startsWith("app")) {
         signingConfigs {
             debug {
-                storeFile file('biaoqing.jks')
-                storePassword "biaoqing663"
-                keyAlias "bq"
-                keyPassword "biaoqing663"
+                storeFile file(RELEASE_STORE_FILE)
+                storePassword RELEASE_STORE_PASSWORD
+                keyAlias RELEASE_KEY_ALIAS
+                keyPassword RELEASE_KEY_PASSWORD
             }
             release {
-                storeFile file('biaoqing.jks')
-                storePassword "biaoqing663"
-                keyAlias "bq"
-                keyPassword "biaoqing663"
+                storeFile file(RELEASE_STORE_FILE)
+                storePassword RELEASE_STORE_PASSWORD
+                keyAlias RELEASE_KEY_ALIAS
+                keyPassword RELEASE_KEY_PASSWORD
             }
         }
     }
@@ -121,7 +106,7 @@ android {
         main {
             //未开启独立编译 并且是独立的module，才会使用总是使用 library/AndroidManifest.xml
             if (isModule && this.name.startsWith("module")) {
-                manifest.srcFile 'src/main/ismodule/AndroidManifest.xml'
+                manifest.srcFile 'src/main/module/AndroidManifest.xml'
             } else {
                 manifest.srcFile 'src/main/AndroidManifest.xml'
                 java {
