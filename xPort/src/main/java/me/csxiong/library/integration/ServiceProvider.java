@@ -21,7 +21,7 @@ import android.content.Context;
 import javax.inject.Inject;
 
 import dagger.Lazy;
-import me.csxiong.library.cache.LruCache;
+import me.csxiong.library.integration.cache.LruCache;
 import me.csxiong.library.utils.XPreconditions;
 import retrofit2.Retrofit;
 

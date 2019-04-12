@@ -1,4 +1,4 @@
-package me.csxiong.library.cache;
+package me.csxiong.library.integration.cache;
 
 /**-------------------------------------------------------------------------------
 *|
