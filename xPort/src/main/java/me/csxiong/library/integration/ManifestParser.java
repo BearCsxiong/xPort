@@ -1,37 +1,26 @@
-/*
- * Copyright 2017 JessYan
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package me.csxiong.library.integration;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import me.csxiong.library.BuildConfig;
 import me.csxiong.library.base.delegate.GlobalConfig;
 
-/**-------------------------------------------------------------------------------
-*| 
-*| desc : ManifestParser解析器,帮助获取manifest中的注册的配置类
-*| 
-*|--------------------------------------------------------------------------------
-*| on 2018/9/26 created by csxiong 
-*|--------------------------------------------------------------------------------
-*/
+
+/**
+ * -------------------------------------------------------------------------------
+ * |
+ * | desc : ManifestParser praser content like {Key:Value} content
+ * |
+ * |--------------------------------------------------------------------------------
+ * | on 2018/9/26 created by csxiong
+ * |--------------------------------------------------------------------------------
+ */
 public final class ManifestParser<T> {
     private static final String MODULE_VALUE = "GlobalConfig";
 
@@ -56,11 +45,29 @@ public final class ManifestParser<T> {
         } catch (PackageManager.NameNotFoundException e) {
             throw new RuntimeException("Unable to find metadata to parse GlobalConfig", e);
         }
-
+        for (T t : modules) {
+            if (BuildConfig.DEBUG)
+                Log.e("Manifest", "init APP delegate -> " + t.getClass().getName());
+        }
         return modules;
     }
 
-    private T  parseModule(String className) {
+    public String parseString(String manifestTargetName) {
+        try {
+            ApplicationInfo appInfo = context.getPackageManager()
+                    .getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+            if (appInfo.metaData != null) {
+                for (String key : appInfo.metaData.keySet()) {
+                    if (manifestTargetName.equals(key)) return appInfo.metaData.getString(key);
+                }
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    private T parseModule(String className) {
         Class<?> clazz;
         try {
             clazz = Class.forName(className);

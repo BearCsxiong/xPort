@@ -1,15 +1,25 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-apply from:"config.gradle"
 buildscript {
+    ext {
+        config = "${rootDir}/config.gradle"
+        versions = "${rootDir}/versions.gradle"
+        isModule = false//是否开启组件化
+        isExampleModule = false//是否开启组件化
+    }
+
     repositories {
         jcenter()
         google()
     }
+
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+        classpath 'com.android.tools.build:gradle:3.3.1'
+        classpath 'com.jakewharton:butterknife-gradle-plugin:9.0.0'
+        classpath "io.realm:realm-gradle-plugin:5.4.1"
+        classpath "com.alibaba:arouter-register:1.0.2"
+        classpath "io.objectbox:objectbox-gradle-plugin:2.3.4"
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         classpath 'com.novoda:bintray-release:0.8.0'
-        classpath 'com.jakewharton:butterknife-gradle-plugin:8.4.0'
     }
 }
 
@@ -36,16 +46,4 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
-}
-
-ext {
-    android = [
-            compileSdkVersion : 26,
-            buildToolsVersion : '26.0.2',
-            applicationId     : "me.csxiong.xPort",
-            minSdkVersion     : 21,
-            targetSdkVersion  : 26,
-            versionCode       : 1,
-            versionName       : "0.0.1"
-    ]
 }

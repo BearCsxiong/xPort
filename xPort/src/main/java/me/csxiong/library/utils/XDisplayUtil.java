@@ -9,11 +9,13 @@ import android.view.inputmethod.InputMethodManager;
 
 import java.lang.reflect.Field;
 
+import me.csxiong.library.base.APP;
+
 
 /**
  * -------------------------------------------------------------------------------
  * |
- * | desc : dp、px等转换工具
+ * | desc : dp、px等转换工具,显示型参数数据获取
  * |
  * |--------------------------------------------------------------------------------
  * | on 2018/9/28 created by csxiong
@@ -25,48 +27,36 @@ public class XDisplayUtil {
         throw new IllegalStateException("you can't instantiate me!");
     }
 
-    public static float dpToPx(Context context, float dp) {
-        if (context == null) {
-            return -1;
-        }
-        return dp * getDensity(context);
+    public static float dpToPx(float dp) {
+        return dp * getDensity();
     }
 
-    public static float pxToDp(Context context, int px) {
-        if (context == null) {
-            return -1;
-        }
-        return px / getDensity(context);
+    public static float pxToDp(int px) {
+        return px / getDensity();
     }
 
-    public static int dpToPxInt(Context context, float dp) {
-        return (int) (dpToPx(context, dp) + 0.5f);
+    public static int dpToPxInt(float dp) {
+        return (int) (dpToPx(dp) + 0.5f);
     }
 
-    public static int pxToDpInt(Context context, int px) {
-        return (int) (pxToDp(context, px) + 0.5f);
+    public static int pxToDpInt(int px) {
+        return (int) (pxToDp(px) + 0.5f);
     }
 
-    public static float spToPx(Context context, float dp) {
-        if (context == null) {
-            return -1;
-        }
-        return dp * context.getResources().getDisplayMetrics().scaledDensity;
+    public static float spToPx(float dp) {
+        return dp * APP.getInstance().getResources().getDisplayMetrics().scaledDensity;
     }
 
-    public static float pxToSp(Context context, int px) {
-        if (context == null) {
-            return -1;
-        }
-        return px / context.getResources().getDisplayMetrics().scaledDensity;
+    public static float pxToSp(int px) {
+        return px / APP.getInstance().getResources().getDisplayMetrics().scaledDensity;
     }
 
-    public static int spToPxInt(Context context, float dp) {
-        return (int) (spToPx(context, dp) + 0.5f);
+    public static int spToPxInt(float dp) {
+        return (int) (spToPx(dp) + 0.5f);
     }
 
-    public static int pxToSpInt(Context context, int px) {
-        return (int) (pxToSp(context, px) + 0.5f);
+    public static int pxToSpInt(int px) {
+        return (int) (pxToSp(px) + 0.5f);
     }
 
     /**
@@ -74,9 +64,9 @@ public class XDisplayUtil {
      */
     public static float sDensity = 0f;
 
-    public static float getDensity(Context context) {
+    public static float getDensity() {
         if (sDensity == 0f) {
-            sDensity = getDisplayMetrics(context).density;
+            sDensity = getDisplayMetrics().density;
         }
         return sDensity;
     }
@@ -86,9 +76,9 @@ public class XDisplayUtil {
      *
      * @return
      */
-    public static DisplayMetrics getDisplayMetrics(Context context) {
+    public static DisplayMetrics getDisplayMetrics() {
         DisplayMetrics displayMetrics = new DisplayMetrics();
-        ((WindowManager) context.getApplicationContext().getSystemService(Context.WINDOW_SERVICE))
+        ((WindowManager) APP.getInstance().getApplicationContext().getSystemService(Context.WINDOW_SERVICE))
                 .getDefaultDisplay().getMetrics(displayMetrics);
         return displayMetrics;
     }
@@ -96,45 +86,44 @@ public class XDisplayUtil {
     /**
      * 获取屏幕大小
      *
-     * @param context
      * @return
      */
-    public static int[] getScreenPixelSize(Context context) {
-        DisplayMetrics metrics = getDisplayMetrics(context);
+    public static int[] getScreenPixelSize() {
+        DisplayMetrics metrics = getDisplayMetrics();
         return new int[]{metrics.widthPixels, metrics.heightPixels};
     }
 
-    public static void hideSoftInputKeyBoard(Context context, View focusView) {
+    public static void hideSoftInputKeyBoard(View focusView) {
         if (focusView != null) {
             IBinder binder = focusView.getWindowToken();
             if (binder != null) {
-                InputMethodManager imd = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imd = (InputMethodManager) APP.getInstance().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imd.hideSoftInputFromWindow(binder, InputMethodManager.HIDE_IMPLICIT_ONLY);
             }
         }
     }
 
-    public static void showSoftInputKeyBoard(Context context, View focusView) {
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+    public static void showSoftInputKeyBoard(View focusView) {
+        InputMethodManager imm = (InputMethodManager) APP.getInstance().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(focusView, InputMethodManager.SHOW_FORCED);
     }
 
-    public static int getScreenWidth(Context context) {
-        return context.getResources().getDisplayMetrics().widthPixels;
+    public static int getScreenWidth() {
+        return APP.getInstance().getResources().getDisplayMetrics().widthPixels;
     }
 
-    public static int getScreenHeight(Context context) {
-        return context.getResources().getDisplayMetrics().heightPixels;
+    public static int getScreenHeight() {
+        return APP.getInstance().getResources().getDisplayMetrics().heightPixels;
     }
 
-    public static int getStatusBarHeight(Context context) {
+    public static int getStatusBarHeight() {
         int statusBarHeight = 0;
         try {
             Class<?> c = Class.forName("com.android.internal.R$dimen");
             Object obj = c.newInstance();
             Field field = c.getField("status_bar_height");
             int x = Integer.parseInt(field.get(obj).toString());
-            statusBarHeight = context.getResources().getDimensionPixelSize(x);
+            statusBarHeight = APP.getInstance().getResources().getDimensionPixelSize(x);
         } catch (Exception e1) {
             e1.printStackTrace();
         }

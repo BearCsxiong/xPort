@@ -8,27 +8,33 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.annotation.CheckResult;
+import android.os.Looper;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import me.csxiong.library.R;
+import me.csxiong.library.base.APP;
 
 
-/**-------------------------------------------------------------------------------
-*|
-*| desc : Toast展示方法，默认Toast一套UI
-*|
-*|--------------------------------------------------------------------------------
-*| on 2018/9/28 created by csxiong
-*|--------------------------------------------------------------------------------
-*/
+/**
+ * -------------------------------------------------------------------------------
+ * |
+ * | desc : Toast展示方法，默认Toast一套UI
+ * |
+ * |--------------------------------------------------------------------------------
+ * | on 2018/9/28 created by csxiong
+ * |--------------------------------------------------------------------------------
+ */
 @SuppressLint("InflateParams")
 public class XToast {
 
@@ -49,227 +55,210 @@ public class XToast {
 
     private static final String TOAST_TYPEFACE = "sans-serif-condensed";
 
-    private static Toast currentToast;
+    //----------------------------show----------------------------
 
-    //*******************************************普通 使用ApplicationContext 方法*********************
-    /**
-     * Toast 替代方法 ：立即显示无需等待
-     */
-    private static Toast mToast;
-    private static long mExitTime;
-
-    public static void normal(@NonNull String message) {
-        normal(XUtils.getContext(), message, Toast.LENGTH_SHORT, null, false).show();
+    public static void show(@NonNull String message) {
+        show(APP.getInstance(), message, Gravity.BOTTOM, Toast.LENGTH_SHORT, null, false);
     }
 
-    public static void normal(@NonNull String message, Drawable icon) {
-        normal(XUtils.getContext(), message, Toast.LENGTH_SHORT, icon, true).show();
+    public static void show(@NonNull String message, int gravity) {
+        show(APP.getInstance(), message, gravity, Toast.LENGTH_SHORT, null, false);
     }
 
-    public static void normal(@NonNull String message, int duration) {
-        normal(XUtils.getContext(), message, duration, null, false).show();
+    public static void show(@NonNull String message, Drawable icon) {
+        show(APP.getInstance(), message, Gravity.BOTTOM, Toast.LENGTH_SHORT, icon, true);
     }
 
-    public static void normal(@NonNull String message, int duration, Drawable icon) {
-        normal(XUtils.getContext(), message, duration, icon, true).show();
+    public static void show(@NonNull String message, int duration, Drawable icon) {
+        show(APP.getInstance(), message, Gravity.BOTTOM, duration, icon, true);
     }
 
-    public static Toast normal(@NonNull String message, int duration, Drawable icon, boolean withIcon) {
-        return custom(XUtils.getContext(), message, icon, DEFAULT_TEXT_COLOR, duration, withIcon);
+    public static void show(@NonNull String message, int duration, Drawable icon, boolean withIcon) {
+        custom(APP.getInstance(), message, Gravity.BOTTOM, icon, DEFAULT_TEXT_COLOR, duration, withIcon);
     }
+
+    public static void show(@NonNull Context context, @NonNull String message, int gravity, int duration, Drawable icon, boolean withIcon) {
+        custom(context, message, gravity, icon, DEFAULT_TEXT_COLOR, duration, withIcon);
+    }
+
+    //----------------------------warning----------------------------
 
     public static void warning(@NonNull String message) {
-        warning(XUtils.getContext(), message, Toast.LENGTH_SHORT, true).show();
+        warning(APP.getInstance(), message, Toast.LENGTH_SHORT, true);
     }
 
     public static void warning(@NonNull String message, int duration) {
-        warning(XUtils.getContext(), message, duration, true).show();
+        warning(APP.getInstance(), message, duration, true);
     }
 
-    public static Toast warning(@NonNull String message, int duration, boolean withIcon) {
-        return custom(XUtils.getContext(), message, getDrawable(XUtils.getContext(), R.drawable.ic_error_outline_white_48dp), DEFAULT_TEXT_COLOR, WARNING_COLOR, duration, withIcon, true);
+    public static void warning(@NonNull Context context, @NonNull String message) {
+        warning(context, message, Toast.LENGTH_SHORT, true);
     }
+
+    public static void warning(@NonNull Context context, @NonNull String message, int duration) {
+        warning(context, message, duration, true);
+    }
+
+    public static void warning(@NonNull String message, int duration, boolean withIcon) {
+        custom(APP.getInstance(), message, Gravity.CENTER, getDrawable(APP.getInstance(), R.mipmap.qmui_icon_notify_error), DEFAULT_TEXT_COLOR, WARNING_COLOR, duration, withIcon, true);
+    }
+
+    public static void warning(@NonNull Context context, @NonNull String message, int duration, boolean withIcon) {
+        custom(context, message, Gravity.CENTER, getDrawable(context, R.mipmap.qmui_icon_notify_error), DEFAULT_TEXT_COLOR, WARNING_COLOR, duration, withIcon, true);
+    }
+
+    //----------------------------info----------------------------
 
     public static void info(@NonNull String message) {
-        info(XUtils.getContext(), message, Toast.LENGTH_SHORT, true).show();
+        info(APP.getInstance(), message, Toast.LENGTH_SHORT, true);
     }
 
     public static void info(@NonNull String message, int duration) {
-        info(XUtils.getContext(), message, duration, true).show();
+        info(APP.getInstance(), message, duration, true);
     }
 
-    public static Toast info(@NonNull String message, int duration, boolean withIcon) {
-        return custom(XUtils.getContext(), message, getDrawable(XUtils.getContext(), R.drawable.ic_info_outline_white_48dp), DEFAULT_TEXT_COLOR, INFO_COLOR, duration, withIcon, true);
+    public static void info(@NonNull String message, int duration, boolean withIcon) {
+        custom(APP.getInstance(), message, Gravity.CENTER, getDrawable(APP.getInstance(), R.mipmap.qmui_icon_notify_info), DEFAULT_TEXT_COLOR, INFO_COLOR, duration, withIcon, true);
     }
+
+    public static void info(@NonNull Context context, @NonNull String message) {
+        info(context, message, Toast.LENGTH_SHORT, true);
+    }
+
+    public static void info(@NonNull Context context, @NonNull String message, int duration) {
+        info(context, message, duration, true);
+    }
+
+    public static void info(@NonNull Context context, @NonNull String message, int duration, boolean withIcon) {
+        custom(context, message, Gravity.CENTER, getDrawable(context, R.mipmap.qmui_icon_notify_info), DEFAULT_TEXT_COLOR, INFO_COLOR, duration, withIcon, true);
+    }
+
+    //----------------------------success----------------------------
 
     public static void success(@NonNull String message) {
-        success(XUtils.getContext(), message, Toast.LENGTH_SHORT, true).show();
+        success(APP.getInstance(), message, Toast.LENGTH_SHORT, true);
     }
 
     public static void success(@NonNull String message, int duration) {
-        success(XUtils.getContext(), message, duration, true).show();
+        success(APP.getInstance(), message, duration, true);
     }
 
-    public static Toast success(@NonNull String message, int duration, boolean withIcon) {
-        return custom(XUtils.getContext(), message, getDrawable(XUtils.getContext(), R.drawable.ic_check_white_48dp), DEFAULT_TEXT_COLOR, SUCCESS_COLOR, duration, withIcon, true);
+    public static void success(@NonNull String message, int duration, boolean withIcon) {
+        custom(APP.getInstance(), message, Gravity.CENTER, getDrawable(APP.getInstance(), R.mipmap.qmui_icon_notify_done), DEFAULT_TEXT_COLOR, SUCCESS_COLOR, duration, withIcon, true);
     }
+
+    public static void success(@NonNull Context context, @NonNull String message) {
+        success(context, message, Toast.LENGTH_SHORT, true);
+    }
+
+    public static void success(@NonNull Context context, @NonNull String message, int duration) {
+        success(context, message, duration, true);
+    }
+
+    public static void success(@NonNull Context context, @NonNull String message, int duration, boolean withIcon) {
+        custom(context, message, Gravity.CENTER, getDrawable(context, R.mipmap.qmui_icon_notify_done), DEFAULT_TEXT_COLOR, SUCCESS_COLOR, duration, withIcon, true);
+    }
+
+    //----------------------------error----------------------------
 
     public static void error(@NonNull String message) {
-        error(XUtils.getContext(), message, Toast.LENGTH_SHORT, true).show();
+        error(APP.getInstance(), message, Gravity.CENTER, Toast.LENGTH_SHORT, true);
     }
-    //===========================================使用ApplicationContext 方法=========================
-
-    //*******************************************常规方法********************************************
 
     public static void error(@NonNull String message, int duration) {
-        error(XUtils.getContext(), message, duration, true).show();
+        error(APP.getInstance(), message, Gravity.CENTER, duration, true);
     }
 
-    public static Toast error(@NonNull String message, int duration, boolean withIcon) {
-        return custom(XUtils.getContext(), message, getDrawable(XUtils.getContext(), R.drawable.ic_clear_white_48dp), DEFAULT_TEXT_COLOR, ERROR_COLOR, duration, withIcon, true);
+    public static void error(@NonNull String message, int duration, boolean withIcon) {
+        custom(APP.getInstance(), message, Gravity.CENTER, getDrawable(APP.getInstance(), R.mipmap.qmui_icon_notify_error), DEFAULT_TEXT_COLOR, ERROR_COLOR, duration, withIcon, true);
     }
 
-    @CheckResult
-    public static Toast normal(@NonNull Context context, @NonNull String message) {
-        return normal(context, message, Toast.LENGTH_SHORT, null, false);
+    public static void error(@NonNull Context context, @NonNull String message) {
+        error(context, message, Gravity.CENTER, Toast.LENGTH_SHORT, true);
     }
 
-    @CheckResult
-    public static Toast normal(@NonNull Context context, @NonNull String message, Drawable icon) {
-        return normal(context, message, Toast.LENGTH_SHORT, icon, true);
+    public static void error(@NonNull Context context, @NonNull String message, int gravity, int duration) {
+        error(context, message, gravity, duration, true);
     }
 
-    @CheckResult
-    public static Toast normal(@NonNull Context context, @NonNull String message, int duration) {
-        return normal(context, message, duration, null, false);
+    public static void error(@NonNull Context context, @NonNull String message, int gravity, int duration, boolean withIcon) {
+        custom(context, message, gravity, getDrawable(context, R.mipmap.qmui_icon_notify_error), DEFAULT_TEXT_COLOR, ERROR_COLOR, duration, withIcon, true);
     }
 
-    @CheckResult
-    public static Toast normal(@NonNull Context context, @NonNull String message, int duration, Drawable icon) {
-        return normal(context, message, duration, icon, true);
+    public static void custom(@NonNull Context context, @NonNull String message, int gravity, Drawable icon, @ColorInt int textColor, int duration, boolean withIcon) {
+        custom(context, message, gravity, icon, textColor, -1, duration, withIcon, false);
     }
 
-    @CheckResult
-    public static Toast normal(@NonNull Context context, @NonNull String message, int duration, Drawable icon, boolean withIcon) {
-        return custom(context, message, icon, DEFAULT_TEXT_COLOR, duration, withIcon);
+    public static void custom(@NonNull Context context, @NonNull String message, int gravity, @DrawableRes int iconRes, @ColorInt int textColor, @ColorInt int tintColor, int duration, boolean withIcon, boolean shouldTint) {
+        custom(context, message, gravity, getDrawable(context, iconRes), textColor, tintColor, duration, withIcon, shouldTint);
     }
 
-    @CheckResult
-    public static Toast warning(@NonNull Context context, @NonNull String message) {
-        return warning(context, message, Toast.LENGTH_SHORT, true);
-    }
-
-    @CheckResult
-    public static Toast warning(@NonNull Context context, @NonNull String message, int duration) {
-        return warning(context, message, duration, true);
-    }
-
-    @CheckResult
-    public static Toast warning(@NonNull Context context, @NonNull String message, int duration, boolean withIcon) {
-        return custom(context, message, getDrawable(context, R.drawable.ic_error_outline_white_48dp), DEFAULT_TEXT_COLOR, WARNING_COLOR, duration, withIcon, true);
-    }
-
-    @CheckResult
-    public static Toast info(@NonNull Context context, @NonNull String message) {
-        return info(context, message, Toast.LENGTH_SHORT, true);
-    }
-
-    @CheckResult
-    public static Toast info(@NonNull Context context, @NonNull String message, int duration) {
-        return info(context, message, duration, true);
-    }
-
-    @CheckResult
-    public static Toast info(@NonNull Context context, @NonNull String message, int duration, boolean withIcon) {
-        return custom(context, message, getDrawable(context, R.drawable.ic_info_outline_white_48dp), DEFAULT_TEXT_COLOR, INFO_COLOR, duration, withIcon, true);
-    }
-
-    @CheckResult
-    public static Toast success(@NonNull Context context, @NonNull String message) {
-        return success(context, message, Toast.LENGTH_SHORT, true);
-    }
-
-    @CheckResult
-    public static Toast success(@NonNull Context context, @NonNull String message, int duration) {
-        return success(context, message, duration, true);
-    }
-
-    @CheckResult
-    public static Toast success(@NonNull Context context, @NonNull String message, int duration, boolean withIcon) {
-        return custom(context, message, getDrawable(context, R.drawable.ic_check_white_48dp), DEFAULT_TEXT_COLOR, SUCCESS_COLOR, duration, withIcon, true);
-    }
-
-    @CheckResult
-    public static Toast error(@NonNull Context context, @NonNull String message) {
-        return error(context, message, Toast.LENGTH_SHORT, true);
-    }
-
-    //===========================================常规方法============================================
-
-    @CheckResult
-    public static Toast error(@NonNull Context context, @NonNull String message, int duration) {
-        return error(context, message, duration, true);
-    }
-
-    @CheckResult
-    public static Toast error(@NonNull Context context, @NonNull String message, int duration, boolean withIcon) {
-        return custom(context, message, getDrawable(context, R.drawable.ic_clear_white_48dp), DEFAULT_TEXT_COLOR, ERROR_COLOR, duration, withIcon, true);
-    }
-
-    @CheckResult
-    public static Toast custom(@NonNull Context context, @NonNull String message, Drawable icon, @ColorInt int textColor, int duration, boolean withIcon) {
-        return custom(context, message, icon, textColor, -1, duration, withIcon, false);
-    }
-
-    //*******************************************内需方法********************************************
-
-    @CheckResult
-    public static Toast custom(@NonNull Context context, @NonNull String message, @DrawableRes int iconRes, @ColorInt int textColor, @ColorInt int tintColor, int duration, boolean withIcon, boolean shouldTint) {
-        return custom(context, message, getDrawable(context, iconRes), textColor, tintColor, duration, withIcon, shouldTint);
-    }
-
-    @CheckResult
-    public static Toast custom(@NonNull Context context, @NonNull String message, Drawable icon, @ColorInt int textColor, @ColorInt int tintColor, int duration, boolean withIcon, boolean shouldTint) {
-        if (currentToast == null) {
-            currentToast = new Toast(context);
+    public static void custom(@NonNull Context context, @NonNull String message, int gravity, Drawable icon, @ColorInt int textColor, @ColorInt int tintColor, int duration, boolean withIcon, boolean shouldTint) {
+        if (Thread.currentThread() != Looper.getMainLooper().getThread()) {
+            return;
         }
-        final View toastLayout = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.toast_layout, null);
-        final ImageView toastIcon = (ImageView) toastLayout.findViewById(R.id.toast_icon);
-        final TextView toastTextView = (TextView) toastLayout.findViewById(R.id.toast_text);
-        Drawable drawableFrame;
+        Toast currentToast = new Toast(context);
+        LinearLayout contentWrap = (LinearLayout) LayoutInflater.from(APP.getInstance()).inflate(R.layout.toast_layout, null);
 
-        if (shouldTint) {
-            drawableFrame = tint9PatchDrawableFrame(context, tintColor);
-        } else {
-            drawableFrame = getDrawable(context, R.drawable.xtoast_frame);
-        }
-        setBackground(toastLayout, drawableFrame);
-
+        ImageView imageView = contentWrap.findViewById(R.id.toast_icon);
+        //添加ICON
         if (withIcon) {
-            if (icon == null)
-                throw new IllegalArgumentException("Avoid passing 'icon' as null if 'withIcon' is set to true");
-            setBackground(toastIcon, icon);
-        } else
-            toastIcon.setVisibility(View.GONE);
+            contentWrap.setBackgroundResource(R.drawable.x_tip_dialog_bg);
+            contentWrap.setMinimumHeight((int) XResUtils.getXDimen(150));
+            contentWrap.setMinimumWidth((int) XResUtils.getXDimen(240));
+            imageView.setVisibility(View.VISIBLE);
+            LinearLayout.LayoutParams imageViewLP = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            imageView.setLayoutParams(imageViewLP);
+            imageViewLP.setMargins(0, XResUtils.getDimenInt(R.dimen.x20), 0, 0);
+            imageView.setImageDrawable(icon);
+        } else {
+            imageView.setVisibility(View.GONE);
+        }
+
+        //TOAST 背景
+        //仅无内容背景显示
+        if (!shouldTint) {
+            Drawable drawableFrame = getDrawable(context, R.drawable.x_toast_frame);
+            setBackground(contentWrap, drawableFrame);
+        }
+
+        TextView toastTextView = contentWrap.findViewById(R.id.toast_text);
+        if (!withIcon) {
+//            toastTextView.setBackgroundResource(R.drawable.x_toast_frame);
+            toastTextView.setPadding((int) XResUtils.getXDimen(38), (int) XResUtils.getXDimen(12), (int) XResUtils.getXDimen(38), (int) XResUtils.getXDimen(12));
+        } else {
+            toastTextView.setPadding(0, (int) XResUtils.getXDimen(15), 0, 0);
+        }
+        toastTextView.setEllipsize(TextUtils.TruncateAt.END);
+        toastTextView.setGravity(Gravity.CENTER);
+        toastTextView.setMaxLines(1);
+        toastTextView.setTextColor(textColor);
+        toastTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);
+        toastTextView.setText(message);
 
         toastTextView.setTextColor(textColor);
         toastTextView.setText(message);
         toastTextView.setTypeface(Typeface.create(TOAST_TYPEFACE, Typeface.NORMAL));
 
-        currentToast.setView(toastLayout);
+        currentToast.setView(contentWrap);
+        if (withIcon) {
+            currentToast.setGravity(Gravity.CENTER, 0, 0);
+        } else {
+            if (gravity != Gravity.BOTTOM) {
+                currentToast.setGravity(gravity, 0, 0);
+            } else {
+                currentToast.setGravity(Gravity.BOTTOM, 0, (int) XResUtils.getXDimen(120));
+            }
+        }
         currentToast.setDuration(duration);
-        return currentToast;
+        currentToast.show();
     }
 
     public static final Drawable tint9PatchDrawableFrame(@NonNull Context context, @ColorInt int tintColor) {
-        final Drawable toastDrawable =  getDrawable(context, R.drawable.xtoast_frame);
+        final Drawable toastDrawable = getDrawable(context, R.drawable.x_toast_frame);
         toastDrawable.setColorFilter(new PorterDuffColorFilter(tintColor, PorterDuff.Mode.SRC_IN));
         return toastDrawable;
     }
-    //===========================================内需方法============================================
-
-
-    //******************************************系统 Toast 替代方法***************************************
 
     public static final void setBackground(@NonNull View view, Drawable drawable) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
@@ -285,111 +274,4 @@ public class XToast {
             return context.getResources().getDrawable(id);
     }
 
-    /**
-     * 封装了Toast的方法 :需要等待
-     *
-     * @param context Context
-     * @param str     要显示的字符串
-     * @param isLong  Toast.LENGTH_LONG / Toast.LENGTH_SHORT
-     */
-    public static void showToast(Context context, String str, boolean isLong) {
-        if (isLong) {
-            Toast.makeText(context, str, Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    /**
-     * 封装了Toast的方法 :需要等待
-     */
-    public static void showToastShort(String str) {
-        Toast.makeText(XUtils.getContext(), str, Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * 封装了Toast的方法 :需要等待
-     */
-    public static void showToastShort(int resId) {
-        Toast.makeText(XUtils.getContext(), XUtils.getContext().getString(resId), Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * 封装了Toast的方法 :需要等待
-     */
-    public static void showToastLong(String str) {
-        Toast.makeText(XUtils.getContext(), str, Toast.LENGTH_LONG).show();
-    }
-
-    /**
-     * 封装了Toast的方法 :需要等待
-     */
-    public static void showToastLong(int resId) {
-        Toast.makeText(XUtils.getContext(), XUtils.getContext().getString(resId), Toast.LENGTH_LONG).show();
-    }
-
-    /**
-     * Toast 替代方法 ：立即显示无需等待
-     *
-     * @param msg 显示内容
-     */
-    public static void showToast(String msg) {
-        if (mToast == null) {
-            mToast = Toast.makeText(XUtils.getContext(), msg, Toast.LENGTH_LONG);
-        } else {
-            mToast.setText(msg);
-        }
-        mToast.show();
-    }
-
-    /**
-     * Toast 替代方法 ：立即显示无需等待
-     *
-     * @param resId String资源ID
-     */
-    public static void showToast(int resId) {
-        if (mToast == null) {
-            mToast = Toast.makeText(XUtils.getContext(), XUtils.getContext().getString(resId), Toast.LENGTH_LONG);
-        } else {
-            mToast.setText(XUtils.getContext().getString(resId));
-        }
-        mToast.show();
-    }
-
-    /**
-     * Toast 替代方法 ：立即显示无需等待
-     *
-     * @param context  实体
-     * @param resId    String资源ID
-     * @param duration 显示时长
-     */
-    public static void showToast(Context context, int resId, int duration) {
-        showToast(context, context.getString(resId), duration);
-    }
-    //===========================================Toast 替代方法======================================
-
-    /**
-     * Toast 替代方法 ：立即显示无需等待
-     *
-     * @param context  实体
-     * @param msg      要显示的字符串
-     * @param duration 显示时长
-     */
-    public static void showToast(Context context, String msg, int duration) {
-        if (mToast == null) {
-            mToast = Toast.makeText(context, msg, duration);
-        } else {
-            mToast.setText(msg);
-        }
-        mToast.show();
-    }
-
-    public static boolean doubleClickExit() {
-        if ((System.currentTimeMillis() - mExitTime) > 2000) {
-            XToast.normal("再按一次退出");
-            mExitTime = System.currentTimeMillis();
-            return false;
-        }
-        return true;
-    }
 }

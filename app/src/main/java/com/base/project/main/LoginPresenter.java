@@ -2,7 +2,7 @@ package com.base.project.main;
 
 import javax.inject.Inject;
 
-import me.csxiong.library.base.XPresenter;
+import me.csxiong.library.base.mvp.XPresenter;
 
 /**
  * Created by csxiong on 2018/8/10.

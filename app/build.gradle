@@ -1,143 +1,4 @@
-apply plugin: 'com.android.application'
-apply plugin: 'com.jakewharton.butterknife'
-
-android {
-
-    compileSdkVersion rootProject.ext.android.compileSdkVersion
-    buildToolsVersion rootProject.ext.android.buildToolsVersion
-
-    defaultConfig {
-        applicationId rootProject.ext.android.applicationId
-        minSdkVersion rootProject.ext.android.minSdkVersion
-        targetSdkVersion rootProject.ext.android.targetSdkVersion
-        versionCode rootProject.ext.android.versionCode
-        versionName rootProject.ext.android.versionName
-        multiDexEnabled true
-
-        flavorDimensions "versionCode"
-        //Arouter 配置模块名
-        javaCompileOptions {
-            annotationProcessorOptions {
-                includeCompileClasspath = true
-                arguments = [moduleName: project.getName()]
-            }
-        }
-
-    }
-
-    //签名
-    signingConfigs {
-        debug {
-            storeFile file(RELEASE_STORE_FILE)
-            keyAlias RELEASE_KEY_ALIAS
-            storePassword RELEASE_KEY_PASSWORD
-            keyPassword RELEASE_STORE_PASSWORD
-        }
-        release {
-            storeFile file(RELEASE_STORE_FILE)
-            keyAlias RELEASE_KEY_ALIAS
-            storePassword RELEASE_KEY_PASSWORD
-            keyPassword RELEASE_STORE_PASSWORD
-        }
-    }
-
-    buildTypes {
-        debug {
-            debuggable true
-            jniDebuggable true
-            zipAlignEnabled true
-            minifyEnabled false
-            shrinkResources false
-            signingConfig signingConfigs.debug
-        }
-        release {
-            debuggable false
-            jniDebuggable false
-            zipAlignEnabled false
-            minifyEnabled false
-            shrinkResources false
-            signingConfig signingConfigs.release
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-
-    sourceSets {
-        development.setRoot('build-types/Development')
-        baidu.setRoot('build-types/Baidu')
-        m360.setRoot('build-types/M360')
-        tencent.setRoot('build-types/Tencent')
-        wandoujia.setRoot('build-types/Wandoujia')
-        xiaomi.setRoot('build-types/Xiaomi')
-        huawei.setRoot('build-types/Huawei')
-        lenove.setRoot('build-types/Lenove')
-        googleplay.setRoot('build-types/Googleplay')
-    }
-
-    packagingOptions {
-        exclude 'META-INF/DEPENDENCIES.txt'
-        exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/NOTICE.txt'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/notice.txt'
-        exclude 'META-INF/license.txt'
-        exclude 'META-INF/dependencies.txt'
-        exclude 'META-INF/LGPL2.1'
-        exclude 'LICENSE.txt'
-        exclude 'org/apache/http/version.properties'
-        exclude 'org/apache/http/entity/mime/version.properties'
-        exclude 'META-INF/services/javax.annotation.processing.Processor'
-        exclude 'META-INF/rxjava.properties'
-    }
-
-    //渠道
-    productFlavors {
-        development {}// 开发版
-        baidu {}
-        m360 {}
-        tencent {}
-        wandoujia {}
-        xiaomi {}
-        huawei {}
-        lenove {}
-        googleplay {}
-    }
-
-    productFlavors.all {
-        flavor ->
-            flavor.manifestPlaceholders = [
-                    APP_CHANNEL: name]
-    }
-
-    //修改生成的最终文件名
-    applicationVariants.all { variant ->
-        variant.outputs.all { output ->
-            if (!variant.buildType.isDebuggable()) {
-                //获取签名的名字 variant.signingConfig.name
-                //要被替换的源字符串
-                def sourceFile = "-${variant.flavorName}-${variant.buildType.name}"
-                //替换的字符串
-                def replaceFile = "_V${variant.versionName}_${variant.flavorName}_${variant.buildType.name}_${packageTime()}"
-                outputFileName = output.outputFile.name.replace(sourceFile, replaceFile);
-                //遗留问题：如何获取当前module的name，如CodeBooke这个名字怎么获取到
-            }
-        }
-    }
-
-    lintOptions {
-        disable 'InvalidPackage'
-        abortOnError false
-        ignoreWarnings true
-        warningsAsErrors false
-    }
-
-    dexOptions {
-        //incremental true
-        preDexLibraries = false
-        javaMaxHeapSize "1536M"
-    }
-}
+apply from: config
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
@@ -146,22 +7,18 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
-    compile 'com.android.support:multidex:1.0.1'
-    //di
-    compile rootProject.ext.dependencies["dagger"]
-    annotationProcessor rootProject.ext.dependencies["dagger-compiler"]
-    compile rootProject.ext.dependencies["butterknife"]
-    annotationProcessor rootProject.ext.dependencies["butterknife-compiler"]
-    provided rootProject.ext.dependencies["annotation"]
-    compile rootProject.ext.dependencies["arouter"]
-    annotationProcessor rootProject.ext.dependencies["arouter-compiler"]
-    if (isModule.toBoolean()) {
-        implementation project(':ExampleModule')
-    }
-    compile project(path: ':xPort')
+    api project(':xPort')
+    annotationProcessor aroutercompiler
+    annotationProcessor butterknifecompiler
+    annotationProcessor dagger2compiler
 }
 
-//定义打包时间函数
-def packageTime() {
-    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
+android.applicationVariants.all { variant ->
+    variant.outputs.all {
+        if (variant.buildType.debuggable) {
+            outputFileName = "app_debug.apk"
+        } else {
+            outputFileName = "app_release.apk"
+        }
+    }
 }
