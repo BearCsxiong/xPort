@@ -1,2 +1,2 @@
 # xPort
-Help build apps quickly!
+help to build apps easily!
