@@ -49,7 +49,7 @@
         </activity>
 
         <meta-data
-            android:name="com.base.project.config.AppGlobalConfig"
+            android:name="com.base.project.config.MainGlobalConfig"
             android:value="@string/GlobalConfig" />
     </application>
 

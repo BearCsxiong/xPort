@@ -11,7 +11,6 @@ import com.alibaba.android.arouter.launcher.ARouter;
 
 import javax.inject.Inject;
 
-import me.csxiong.library.base.IMVP;
 import me.csxiong.library.base.IPresenter;
 import me.csxiong.library.base.SimpleDialog;
 
@@ -19,7 +18,7 @@ import me.csxiong.library.base.SimpleDialog;
  * Created by csxiong on 2018/11/2.
  */
 
-public abstract class MVPDialog<T extends IPresenter> extends SimpleDialog implements IMVP {
+public abstract class MVPDialog<T extends IPresenter> extends SimpleDialog {
 
     @Inject
     protected T mPresenter;
@@ -28,7 +27,6 @@ public abstract class MVPDialog<T extends IPresenter> extends SimpleDialog imple
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ARouter.getInstance().inject(this);
-        initInject();
         mPresenter.attachView(this);
         return super.onCreateView(inflater, container, savedInstanceState);
     }

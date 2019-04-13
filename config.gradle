@@ -53,7 +53,7 @@ android {
                 shrinkResources true
                 minifyEnabled true
             }
-            buildConfigField "String", "MAIN_HOST", "\"your host\""
+            buildConfigField "String", "MAIN_HOST", "\"http://www.yourhost.com\""
             signingConfig signingConfigs.debug
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -63,7 +63,7 @@ android {
             shrinkResources false
             minifyEnabled false
             testCoverageEnabled false
-            buildConfigField "String", "MAIN_HOST", "\"your host\""
+            buildConfigField "String", "MAIN_HOST", "\"http://www.yourhost.com\""
             signingConfig signingConfigs.debug
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -148,7 +148,11 @@ def isIndependent() {
         println("this module's name is library , this.name = ${this.name}")
         return false
     }
-    if (this.name.equals("module_example")) {
+    if (this.name.contains("module_example")) {
+        println("this module's name is module , this.name = ${this.name}")
+        return isExampleModule
+    }
+    if (this.name.contains("module_login")) {
         println("this module's name is module , this.name = ${this.name}")
         return isExampleModule
     }

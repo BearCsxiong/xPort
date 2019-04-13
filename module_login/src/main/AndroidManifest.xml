@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.login">
+
+    <application>
+
+        <meta-data
+            android:name="com.example.login.config.LoginGlobalConfig"
+            android:value="ConfigModule" />
+
+        <activity android:name=".ui.login.LoginActivity" />
+
+    </application>
+
+</manifest>

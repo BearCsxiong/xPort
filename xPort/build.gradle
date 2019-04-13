@@ -35,8 +35,12 @@ dependencies {
     api fresco_animated_gif
     api fresco_animated_webp
     api fresco_webpsupport
+
     api dagger2
+    api dagger2android
+    api dagger2androidsupport
     annotationProcessor dagger2compiler
+    annotationProcessor dagger2androidprocessor
     api arouterapi
     annotationProcessor aroutercompiler
     api butterknife
