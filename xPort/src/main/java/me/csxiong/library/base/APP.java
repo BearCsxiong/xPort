@@ -1,8 +1,10 @@
 package me.csxiong.library.base;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 
 import com.blankj.utilcode.util.Utils;
@@ -12,6 +14,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.HasActivityInjector;
+import dagger.android.support.HasSupportFragmentInjector;
 import me.csxiong.library.base.delegate.AppDelegateManager;
 import me.csxiong.library.di.component.AppComponent;
 
@@ -24,7 +32,20 @@ import me.csxiong.library.di.component.AppComponent;
  * | on 2018/8/14 created by csxiong
  * |--------------------------------------------------------------------------------
  */
-public class APP extends Application {
+public class APP extends Application implements HasActivityInjector,
+        HasSupportFragmentInjector {
+
+    /**
+     * help for Activity inject
+     */
+    @Inject
+    DispatchingAndroidInjector<Activity> activityInjector;
+
+    /**
+     * help for Fragment inject
+     */
+    @Inject
+    DispatchingAndroidInjector<Fragment> fragmentInjector;
 
     protected static APP _INSTANCE;
 
@@ -47,14 +68,12 @@ public class APP extends Application {
             return;
         mAppDelegate.onCreate(this);
 
-        _INSTANCE = this;
-
         Utils.init(this);
 
     }
 
     /**
-     * 是否需要初始化
+     * check is need init
      *
      * @return
      */
@@ -74,18 +93,13 @@ public class APP extends Application {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
+        _INSTANCE = this;
         if (mAppDelegate == null) {
             mAppDelegate = new AppDelegateManager(this);
         }
         mAppDelegate.attachBaseContext(base);
     }
 
-    /**
-     * 获取进程号对应的进程名
-     *
-     * @param pid 进程号
-     * @return 进程名
-     */
     private static String getProcessName(int pid) {
         BufferedReader reader = null;
         try {
@@ -115,7 +129,22 @@ public class APP extends Application {
         mAppDelegate.onTerminate(this);
     }
 
+    /**
+     * provide appComponent's content for all UIComponent
+     *
+     * @return
+     */
     public AppComponent getAppComponent() {
         return _INSTANCE.mAppDelegate.getAppComponent();
+    }
+
+    @Override
+    public AndroidInjector<Activity> activityInjector() {
+        return activityInjector;
+    }
+
+    @Override
+    public AndroidInjector<Fragment> supportFragmentInjector() {
+        return fragmentInjector;
     }
 }

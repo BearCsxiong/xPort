@@ -10,6 +10,7 @@ import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import dagger.android.AndroidInjection;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.Subject;
 import me.csxiong.library.base.delegate.ViewDelegate;
@@ -41,7 +42,10 @@ public abstract class SimpleActivity extends SupportActivity implements IView, I
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(getLayoutResId());
+        AndroidInjection.inject(this);
+        if (getLayoutResId() > 0) {
+            setContentView(getLayoutResId());
+        }
         mUnBinder = ButterKnife.bind(this);
         mContext = this;
 

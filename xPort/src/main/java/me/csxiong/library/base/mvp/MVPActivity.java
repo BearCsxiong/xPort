@@ -10,7 +10,6 @@ import javax.inject.Inject;
 
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.Subject;
-import me.csxiong.library.base.IMVP;
 import me.csxiong.library.base.IPresenter;
 import me.csxiong.library.base.SimpleActivity;
 import me.csxiong.library.integration.lifecycle.IActivityLifecycle;
@@ -24,7 +23,7 @@ import me.csxiong.library.integration.lifecycle.IActivityLifecycle;
  * | on 2018/8/14 created by csxiong
  * |--------------------------------------------------------------------------------
  */
-public abstract class MVPActivity<T extends IPresenter> extends SimpleActivity implements IMVP, IActivityLifecycle {
+public abstract class MVPActivity<T extends IPresenter> extends SimpleActivity implements IActivityLifecycle {
 
     private final BehaviorSubject<ActivityEvent> mLifecycleSubject = BehaviorSubject.create();
 
@@ -34,7 +33,6 @@ public abstract class MVPActivity<T extends IPresenter> extends SimpleActivity i
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initInject();
         if (mPresenter != null) mPresenter.attachView(this);
     }
 

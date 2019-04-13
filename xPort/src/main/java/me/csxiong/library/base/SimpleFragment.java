@@ -11,6 +11,7 @@ import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import dagger.android.support.AndroidSupportInjection;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.Subject;
 import me.csxiong.library.R;
@@ -47,6 +48,12 @@ public abstract class SimpleFragment extends SupportFragment implements IView, I
         mActivity = (SimpleActivity) context;
         mContext = context;
         super.onAttach(context);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        AndroidSupportInjection.inject(this);
+        super.onCreate(savedInstanceState);
     }
 
     @Nullable

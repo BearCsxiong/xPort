@@ -10,7 +10,6 @@ import javax.inject.Inject;
 
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.Subject;
-import me.csxiong.library.base.IMVP;
 import me.csxiong.library.base.IPresenter;
 import me.csxiong.library.base.SimpleFragment;
 import me.csxiong.library.integration.lifecycle.IFragmentLifecycle;
@@ -24,7 +23,7 @@ import me.csxiong.library.integration.lifecycle.IFragmentLifecycle;
  * | on 2018/8/14 created by csxiong
  * |--------------------------------------------------------------------------------
  */
-public abstract class MVPFragment<T extends IPresenter> extends SimpleFragment implements IMVP, IFragmentLifecycle {
+public abstract class MVPFragment<T extends IPresenter> extends SimpleFragment implements IFragmentLifecycle {
 
     private final BehaviorSubject<FragmentEvent> mLifecycleSubject = BehaviorSubject.create();
 
@@ -36,7 +35,6 @@ public abstract class MVPFragment<T extends IPresenter> extends SimpleFragment i
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         if (!isInjected) {
-            initInject();
             isInjected = true;
         }
         if (mPresenter != null) mPresenter.attachView(this);

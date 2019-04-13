@@ -1,0 +1,12 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.login">
+
+    <application>
+        <meta-data
+            android:name="com.base.multi.config.LoginGlobalConfig"
+            android:value="ConfigModule" />
+
+        <activity android:name=".ui.login.LoginActivity" />
+
+    </application>
+</manifest>
