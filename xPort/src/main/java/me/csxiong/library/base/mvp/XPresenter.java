@@ -2,13 +2,12 @@ package me.csxiong.library.base.mvp;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import me.csxiong.library.base.IPresenter;
 import me.csxiong.library.base.IView;
 
 /**
  * -------------------------------------------------------------------------------
  * |
- * | desc : 基本Presenter帮助控制订阅事件生命周期
+ * | desc : default Presenter for using
  * |
  * |--------------------------------------------------------------------------------
  * | on 2018/8/20 created by csxiong

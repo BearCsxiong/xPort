@@ -11,17 +11,27 @@ import com.alibaba.android.arouter.launcher.ARouter;
 
 import javax.inject.Inject;
 
-import me.csxiong.library.base.IPresenter;
+import dagger.android.support.AndroidSupportInjection;
 import me.csxiong.library.base.SimpleDialog;
 
-/**
- * Created by csxiong on 2018/11/2.
- */
-
+/**-------------------------------------------------------------------------------
+*|
+*| desc : base on MVP to build DilagFragment
+*|
+*|--------------------------------------------------------------------------------
+*| on 2019/4/15 created by csxiong
+*|--------------------------------------------------------------------------------
+*/
 public abstract class MVPDialog<T extends IPresenter> extends SimpleDialog {
 
     @Inject
     protected T mPresenter;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        AndroidSupportInjection.inject(this);
+        super.onCreate(savedInstanceState);
+    }
 
     @Nullable
     @Override
@@ -35,6 +45,7 @@ public abstract class MVPDialog<T extends IPresenter> extends SimpleDialog {
     public void onDestroyView() {
         if (mPresenter != null) mPresenter.detachView();
         super.onDestroyView();
+        if (unbinder != null) unbinder.unbind();
     }
 
 }

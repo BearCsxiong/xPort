@@ -1,16 +1,13 @@
 package me.csxiong.library.base;
 
-import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.KeyEvent;
 import android.view.WindowManager;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
-import dagger.android.AndroidInjection;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.Subject;
 import me.csxiong.library.base.delegate.ViewDelegate;
@@ -21,7 +18,7 @@ import me.yokeyword.fragmentation.SupportActivity;
 /**
  * -------------------------------------------------------------------------------
  * |
- * | desc : 基础Activity实现类,基于Fragmentation
+ * | desc : base on {@link SupportActivity} to build all Activity
  * |
  * |--------------------------------------------------------------------------------
  * | on 2018/8/20 created by csxiong
@@ -31,35 +28,38 @@ public abstract class SimpleActivity extends SupportActivity implements IView, I
 
     private final BehaviorSubject<ActivityEvent> mSubject = BehaviorSubject.create();
 
-    protected Activity mContext;
-
-    private Unbinder mUnBinder;
-
-    protected boolean immersive = false;
-
     protected ViewDelegate mViewDelegate;
+
+    protected ImmersionBar immersionBar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AndroidInjection.inject(this);
+        //design for MVP or MVVM change
         if (getLayoutResId() > 0) {
             setContentView(getLayoutResId());
         }
-        mUnBinder = ButterKnife.bind(this);
-        mContext = this;
+        //default immersionBar
+        immersionBar = ImmersionBar.with(this);
+        initImmersive(immersionBar);
+        immersionBar.init();
 
-        if (immersive) {
-            setFullScreen();
-            cancelFullScreen();
-        }
+        //default viewDelegate help A or F or DF instance proxy method
         if (mViewDelegate == null) {
             mViewDelegate = new ViewDelegate(this);
         }
-        /*初始化UI*/
+
+        //default UI method
         initUI(savedInstanceState);
-        /*初始化数据*/
+
+        //default Data method
         initData(savedInstanceState);
+    }
+
+    public void initImmersive(ImmersionBar immersionBar) {
+        immersionBar
+                .navigationBarColorInt(Color.WHITE)
+                .statusBarDarkFont(true);
     }
 
     public void cancelFullScreen() {
@@ -68,21 +68,6 @@ public abstract class SimpleActivity extends SupportActivity implements IView, I
 
     public void setFullScreen() {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mUnBinder.unbind();
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0
-//                && event.getAction() == KeyEvent.ACTION_DOWN) {
-//            return true;
-//        }
-        return super.onKeyDown(keyCode, event);
     }
 
     @Override

@@ -25,7 +25,7 @@ import me.yokeyword.fragmentation.anim.FragmentAnimator;
 /**
  * -------------------------------------------------------------------------------
  * |
- * | desc : from fragmentation fragment to create dialogfragment
+ * | desc : copy from supportFragment support dialogfragment
  * |
  * |--------------------------------------------------------------------------------
  * | on 2019/4/12 created by csxiong

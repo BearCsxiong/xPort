@@ -7,11 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import dagger.android.support.AndroidSupportInjection;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.Subject;
 import me.csxiong.library.R;
@@ -25,7 +25,7 @@ import me.yokeyword.fragmentation.anim.FragmentAnimator;
 /**
  * -------------------------------------------------------------------------------
  * |
- * | desc : 基础Fragment实现,基于Fragmentation
+ * | desc : base on {@link SupportFragment} to build all Fragment
  * |
  * |--------------------------------------------------------------------------------
  * | on 2018/8/20 created by csxiong
@@ -35,12 +35,13 @@ public abstract class SimpleFragment extends SupportFragment implements IView, I
 
     private final BehaviorSubject<FragmentEvent> mSubject = BehaviorSubject.create();
 
-    protected View mView;
+    protected View view;
     protected SimpleActivity mActivity;
     protected Context mContext;
-    private Unbinder mUnBinder;
-    protected boolean isInitUI;
+
     protected ViewDelegate mViewDegate;
+
+    private Unbinder unbinder;
 
     @Override
     public void onAttach(Context context) {
@@ -50,41 +51,29 @@ public abstract class SimpleFragment extends SupportFragment implements IView, I
         super.onAttach(context);
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        AndroidSupportInjection.inject(this);
-        super.onCreate(savedInstanceState);
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mView = inflater.inflate(getLayoutResId(), null);
+        view = inflater.inflate(getLayoutResId(), container, false);
+        unbinder = ButterKnife.bind(this, view);
         if (mViewDegate == null) {
             mViewDegate = new ViewDelegate(this);
         }
-        return mView;
+        initUI(savedInstanceState);
+        initData(savedInstanceState);
+        ImmersionBar.with(this).init();
+        return view;
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mUnBinder = ButterKnife.bind(this, view);
-    }
-
-    @Override
-    public void onLazyInitView(@Nullable Bundle savedInstanceState) {
-        super.onLazyInitView(savedInstanceState);
-        if (!isInitUI) {
-            initUI(savedInstanceState);
-            initData(savedInstanceState);
-            isInitUI = true;
-        }
+    public void onDestroyView() {
+        ImmersionBar.with(this).destroy();
+        if (unbinder != null) unbinder.unbind();
+        super.onDestroyView();
     }
 
     @Override
     public void onDestroy() {
-        mUnBinder.unbind();
         mViewDegate = null;
         super.onDestroy();
     }

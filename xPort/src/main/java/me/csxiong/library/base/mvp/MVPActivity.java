@@ -8,21 +8,22 @@ import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import javax.inject.Inject;
 
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+import dagger.android.AndroidInjection;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.Subject;
-import me.csxiong.library.base.IPresenter;
 import me.csxiong.library.base.SimpleActivity;
 import me.csxiong.library.integration.lifecycle.IActivityLifecycle;
 
-/**
- * -------------------------------------------------------------------------------
- * |
- * | desc : MVP-Activity基本使用和使用dagger2注入Presenter,实现PV加解绑
- * |
- * |--------------------------------------------------------------------------------
- * | on 2018/8/14 created by csxiong
- * |--------------------------------------------------------------------------------
- */
+/**-------------------------------------------------------------------------------
+*|
+*| desc : base on MVP mode to build A
+*|
+*|--------------------------------------------------------------------------------
+*| on 2019/4/15 created by csxiong
+*|--------------------------------------------------------------------------------
+*/
 public abstract class MVPActivity<T extends IPresenter> extends SimpleActivity implements IActivityLifecycle {
 
     private final BehaviorSubject<ActivityEvent> mLifecycleSubject = BehaviorSubject.create();
@@ -30,16 +31,21 @@ public abstract class MVPActivity<T extends IPresenter> extends SimpleActivity i
     @Inject
     T mPresenter;
 
+    private Unbinder unbinder;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         if (mPresenter != null) mPresenter.attachView(this);
+        unbinder = ButterKnife.bind(this);
     }
 
     @Override
     protected void onDestroy() {
         if (mPresenter != null) mPresenter.detachView();
         super.onDestroy();
+        if (unbinder != null) unbinder.unbind();
     }
 
     @Override

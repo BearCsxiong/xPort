@@ -3,7 +3,7 @@ package me.csxiong.library.base;
 /**
  * -------------------------------------------------------------------------------
  * |
- * | desc : MVP模式基础View待实现的方法
+ * | desc : default view behavior
  * |
  * |--------------------------------------------------------------------------------
  * | on 2018/8/14 created by csxiong
@@ -11,8 +11,16 @@ package me.csxiong.library.base;
  */
 public interface IView {
 
+    /**
+     * default loading with msg
+     *
+     * @param loadingMsg
+     */
     void startLoading(String loadingMsg);
 
+    /**
+     * stop loading
+     */
     void stopLoading();
 
 }
