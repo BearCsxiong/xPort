@@ -5,32 +5,26 @@
     <option name="myDefaultNotNull" value="android.support.annotation.NonNull" />
     <option name="myNullables">
       <value>
-        <list size="10">
+        <list size="7">
           <item index="0" class="java.lang.String" itemvalue="org.jetbrains.annotations.Nullable" />
           <item index="1" class="java.lang.String" itemvalue="javax.annotation.Nullable" />
-          <item index="2" class="java.lang.String" itemvalue="edu.umd.cs.findbugs.annotations.Nullable" />
-          <item index="3" class="java.lang.String" itemvalue="android.support.annotation.Nullable" />
-          <item index="4" class="java.lang.String" itemvalue="javax.annotation.CheckForNull" />
+          <item index="2" class="java.lang.String" itemvalue="javax.annotation.CheckForNull" />
+          <item index="3" class="java.lang.String" itemvalue="edu.umd.cs.findbugs.annotations.Nullable" />
+          <item index="4" class="java.lang.String" itemvalue="android.support.annotation.Nullable" />
           <item index="5" class="java.lang.String" itemvalue="androidx.annotation.Nullable" />
           <item index="6" class="java.lang.String" itemvalue="androidx.annotation.RecentlyNullable" />
-          <item index="7" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.qual.Nullable" />
-          <item index="8" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.compatqual.NullableDecl" />
-          <item index="9" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.compatqual.NullableType" />
         </list>
       </value>
     </option>
     <option name="myNotNulls">
       <value>
-        <list size="9">
+        <list size="6">
           <item index="0" class="java.lang.String" itemvalue="org.jetbrains.annotations.NotNull" />
           <item index="1" class="java.lang.String" itemvalue="javax.annotation.Nonnull" />
           <item index="2" class="java.lang.String" itemvalue="edu.umd.cs.findbugs.annotations.NonNull" />
           <item index="3" class="java.lang.String" itemvalue="android.support.annotation.NonNull" />
           <item index="4" class="java.lang.String" itemvalue="androidx.annotation.NonNull" />
           <item index="5" class="java.lang.String" itemvalue="androidx.annotation.RecentlyNonNull" />
-          <item index="6" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.qual.NonNull" />
-          <item index="7" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.compatqual.NonNullDecl" />
-          <item index="8" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.compatqual.NonNullType" />
         </list>
       </value>
     </option>
@@ -40,26 +34,5 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
-  </component>
-  <component name="SvnBranchConfigurationManager">
-    <option name="myConfigurationMap">
-      <map>
-        <entry key="$PROJECT_DIR$">
-          <value>
-            <SvnBranchConfiguration>
-              <option name="trunkUrl" value="http://svn19.rjy.com/svn/APP/09%E5%85%85%E7%94%B5%E6%A1%A9%E6%99%BA%E8%83%BD%E7%9B%91%E6%8E%A7%E4%BA%91%E5%B9%B3%E5%8F%B0%E4%BA%8C%E6%9C%9FAPP/03%E4%BB%A3%E7%A0%81%E5%88%86%E6%94%AF/02Android/WiseCharge" />
-            </SvnBranchConfiguration>
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/BaseModule">
-          <value>
-            <SvnBranchConfiguration>
-              <option name="trunkUrl" value="http://svn19.rjy.com/svn/APP/09%E5%85%85%E7%94%B5%E6%A1%A9%E6%99%BA%E8%83%BD%E7%9B%91%E6%8E%A7%E4%BA%91%E5%B9%B3%E5%8F%B0%E4%BA%8C%E6%9C%9FAPP/03%E4%BB%A3%E7%A0%81%E5%88%86%E6%94%AF/02Android/WiseCharge/commonLibrary" />
-            </SvnBranchConfiguration>
-          </value>
-        </entry>
-      </map>
-    </option>
-    <option name="mySupportsUserInfoFilter" value="true" />
   </component>
 </project>
