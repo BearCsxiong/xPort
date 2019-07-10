@@ -26,7 +26,7 @@ import me.csxiong.library.di.component.AppComponent;
 /**
  * -------------------------------------------------------------------------------
  * |
- * | desc : Application,实现dagger2注入配置,并初始化交由AppDelegateManager管理生命周期
+ * | desc : singleton Application for All Module's ApplicationContext and provide help inject UI Component
  * |
  * |--------------------------------------------------------------------------------
  * | on 2018/8/14 created by csxiong

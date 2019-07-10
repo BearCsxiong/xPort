@@ -2,7 +2,7 @@ package com.base.project.main;
 
 
 import me.csxiong.library.base.IView;
-import me.csxiong.library.base.IPresenter;
+import me.csxiong.library.base.mvp.IPresenter;
 
 /**
  * User: Walten

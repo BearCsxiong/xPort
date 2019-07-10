@@ -1,6 +1,7 @@
 package me.csxiong.library.base.mvp;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,18 +12,18 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
-import me.csxiong.library.base.SimpleFragment;
+import me.csxiong.library.base.SimpleBottomSheetDialog;
 
 /**
- * -------------------------------------------------------------------------------
+ * ---------------------------------------------------------------------------------
  * |
- * | desc : base on MVP to build Fragment
+ * | desc : base on MVP to build bottomSheetDialogFragment
  * |
  * |--------------------------------------------------------------------------------
- * | on 2018/8/14 created by csxiong
+ * | on 2019/4/12 created by csxiong
  * |--------------------------------------------------------------------------------
  */
-public abstract class MVPFragment<T extends IPresenter> extends SimpleFragment {
+public abstract class MVPBottomSheetDialog<T extends IPresenter> extends SimpleBottomSheetDialog {
 
     @Inject
     protected T mPresenter;
@@ -35,7 +36,7 @@ public abstract class MVPFragment<T extends IPresenter> extends SimpleFragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ARouter.getInstance().inject(this);
         mPresenter.attachView(this);
         return super.onCreateView(inflater, container, savedInstanceState);

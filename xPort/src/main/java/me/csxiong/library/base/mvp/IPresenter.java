@@ -1,9 +1,11 @@
-package me.csxiong.library.base;
+package me.csxiong.library.base.mvp;
+
+import me.csxiong.library.base.IView;
 
 /**
  * -------------------------------------------------------------------------------
  * |
- * | desc : MVP模式基础Presenter待实现方法
+ * | desc : default presenter behavior
  * |
  * |--------------------------------------------------------------------------------
  * | on 2018/8/14 created by csxiong
@@ -11,7 +13,15 @@ package me.csxiong.library.base;
  */
 public interface IPresenter<T extends IView> {
 
+    /**
+     * bind target view
+     *
+     * @param view
+     */
     void attachView(T view);
 
+    /**
+     * unbind target view
+     */
     void detachView();
 }

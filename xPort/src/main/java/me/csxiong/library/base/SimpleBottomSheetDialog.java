@@ -42,14 +42,14 @@ public abstract class SimpleBottomSheetDialog extends BaseBottomSheetDialogFragm
 
     private BottomSheetBehavior<FrameLayout> behavior;
 
-    protected Unbinder unbinder;
-
     ViewDelegate viewDelegate;
 
-    private View rootView;
+    protected Unbinder unbinder;
+
+    private View view;
 
     /**
-     * 修复状态栏问题
+     * fix BottomSheetDialogFragment immersionBar Bug->
      */
     public static class StatusFixSheetDialog extends BottomSheetDialog {
 
@@ -93,8 +93,6 @@ public abstract class SimpleBottomSheetDialog extends BaseBottomSheetDialogFragm
         return dialog;
     }
 
-    private int stateChanged;
-
     @Override
     public void onStart() {
         super.onStart();
@@ -134,23 +132,23 @@ public abstract class SimpleBottomSheetDialog extends BaseBottomSheetDialogFragm
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         viewDelegate = new ViewDelegate(this);
         final Window window = getDialog().getWindow();
-        rootView = inflater.inflate(getLayoutResId(), container, false);
-        unbinder = ButterKnife.bind(this, rootView);
+        view = inflater.inflate(getLayoutResId(), container, false);
+        unbinder = ButterKnife.bind(this, view);
         window.setLayout(-1, -1);
         window.setBackgroundDrawable(getBackground());
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
         initUI(savedInstanceState);
         initData(savedInstanceState);
         ImmersionBar.with(this).init();
-        return rootView;
+        return view;
     }
 
     @Override
     public void onDestroyView() {
-        unbinder.unbind();
         btnClickListener = null;
         onClickListener = null;
         ImmersionBar.with(this).destroy();
+        if (unbinder != null) unbinder.unbind();
         super.onDestroyView();
     }
 
@@ -251,6 +249,6 @@ public abstract class SimpleBottomSheetDialog extends BaseBottomSheetDialogFragm
     }
 
     public View getRootView() {
-        return rootView;
+        return view;
     }
 }

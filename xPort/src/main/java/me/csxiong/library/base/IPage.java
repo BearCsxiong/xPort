@@ -9,7 +9,7 @@ import me.csxiong.library.di.component.AppComponent;
 /**
  * -------------------------------------------------------------------------------
  * |
- * | desc : 基本页面提供方法,规范代码编写
+ * | desc : default method declare to override for build Page UI
  * |
  * |--------------------------------------------------------------------------------
  * | on 2018/8/14 created by csxiong

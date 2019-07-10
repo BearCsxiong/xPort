@@ -22,6 +22,15 @@ import me.yokeyword.fragmentation.SupportFragmentDelegate;
 import me.yokeyword.fragmentation.SupportHelper;
 import me.yokeyword.fragmentation.anim.FragmentAnimator;
 
+/**
+ * -------------------------------------------------------------------------------
+ * |
+ * | desc : copy from supportFragment support dialogfragment
+ * |
+ * |--------------------------------------------------------------------------------
+ * | on 2019/4/15 created by csxiong
+ * |--------------------------------------------------------------------------------
+ */
 public class BaseBottomSheetDialogFragment extends BottomSheetDialogFragment implements ISupportFragment {
     final SupportFragmentDelegate mDelegate = new SupportFragmentDelegate(this);
     protected FragmentActivity _mActivity;

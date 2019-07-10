@@ -1,21 +1,21 @@
-# 🔥xPort
-guide to build apps quickly!
-## justCoding
+# XPort
+## 🔥快速构建App的基础代码,提供优质脚手架。快速构建
 
-## no design,just using!!
+> **努力成为一个高级Android开发**
 
-The Combination of Dagger2 <-> Rx series <-> great UI lib <-> great coding(MVP、MVVM) <-> Android native component
-
-guide to build app quickly!
-
-# Q.1 why dagger2
-A:  Never or Unlimited
-
-# Q.2 why Rx?
-A:  Rx series bring a great coding habit like react,that's great! and important!
-
-# Q.3 What MVP、MVVM?
-A:  same reason,coding habit!
-
-# Q.3 list some great UI lib
-A:  just like great adapter lib BRVAH...select your like!
+### 关于构建一个项目的一些想法和思想
+---
+- Q:为什么要基础架构？
+- A:在接触很多开发者并且和他人开发者合作的时候发现,其实基础架构就意味着**沟通成本**,一个高效的基础架构是自带指导性质
+    的模板,他存在**约束**,只有存在约束,在多人合作的时候才能高效。因项目差异可差异化部分内容,但绝大多数结构都**类似**
+---
+- Q:怎么样才算一个基础架构？
+- A:这个是存在指标的,由多方评估一个基础架构的优劣,比较重要的两点就是健壮性和拓展性。架构很多,但是适合自己的才是最重要
+    不要闭门造车,只有适合自己的轮子才能跑的舒服。
+---
+- Q:为什么要写这个项目?
+- A:我的感觉是,只有在不断的记录和维护一段代码,才能逐渐完善思路并保证框架的健壮性.更希望能得到场景验证。另一方面主要是
+    学习使用。
+   
+## 主要思路和选择
+ 

@@ -27,20 +27,26 @@ import me.csxiong.library.R;
 import me.csxiong.library.base.delegate.ViewDelegate;
 import me.csxiong.library.di.component.AppComponent;
 import me.csxiong.library.integration.lifecycle.IFragmentLifecycle;
+import me.yokeyword.fragmentation.SupportFragment;
 
 /**
- * Created by csxiong on 2018/11/2.
+ * -------------------------------------------------------------------------------
+ * |
+ * | desc : copy from {@link SupportFragment} support dialogFragment
+ * |
+ * |--------------------------------------------------------------------------------
+ * | on 2019/4/15 created by csxiong
+ * |--------------------------------------------------------------------------------
  */
-
 public abstract class SimpleDialog extends BaseDialogFragment implements IView, IPage, IFragmentLifecycle {
 
     private final BehaviorSubject<FragmentEvent> mSubject = BehaviorSubject.create();
 
-    protected Unbinder unbinder;
-
     ViewDelegate viewDelegate;
 
-    private View rootView;
+    private View view;
+
+    protected Unbinder unbinder;
 
     @NonNull
     @Override
@@ -61,23 +67,23 @@ public abstract class SimpleDialog extends BaseDialogFragment implements IView, 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         viewDelegate = new ViewDelegate(this);
         final Window window = getDialog().getWindow();
-        rootView = inflater.inflate(getLayoutResId(), window.findViewById(android.R.id.content), false);
-        rootView.setBackground(getBackground());
-        unbinder = ButterKnife.bind(this, rootView);
+        view = inflater.inflate(getLayoutResId(), container, false);
+        unbinder = ButterKnife.bind(this, view);
+        view.setBackground(getBackground());
         window.setLayout(-1, -2);
         window.setBackgroundDrawable(getBackground());
         initUI(savedInstanceState);
         initData(savedInstanceState);
         ImmersionBar.with(this).init();
-        return rootView;
+        return view;
     }
 
     @Override
     public void onDestroyView() {
-        unbinder.unbind();
         btnClickListener = null;
         onClickListener = null;
         ImmersionBar.with(this).destroy();
+        if (unbinder != null) unbinder.unbind();
         super.onDestroyView();
     }
 
@@ -160,6 +166,6 @@ public abstract class SimpleDialog extends BaseDialogFragment implements IView, 
     }
 
     public View getRootView() {
-        return rootView;
+        return view;
     }
 }
