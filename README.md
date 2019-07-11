@@ -26,15 +26,15 @@ Dagger2|DataBinding|RxJava2|AndroidAutoSize|Room|OkHttp3<br>Retrofit|LiveData|Mv
 
 ## 结构性的框架主打拓展性和在未来一段时间内的稳定性,尽量在选择上更加追求稳定高效
 ### **DI**
-   > 是一个控制反转的一个思想 解耦类间依赖的一个**控制器**,把某个类的依赖转移剥离出来。达到即插即用的一中思想
+  > 是一个控制反转的一个思想 解耦类间依赖的一个**控制器**,把某个类的依赖转移剥离出来。达到即插即用的一中思想
   
 ### **UI DI**
-   > UI注入其实是一个帮助Android做findViewById的工具,DataBinding只是谷歌在知道性框架rchitecture的一个UI DI的框架,<br>
-         因为原生所以使用,同性质可查看ButterKnife
+  > UI注入其实是一个帮助Android做findViewById的工具,DataBinding只是谷歌在知道性框架rchitecture的一个UI DI的框架,<br>
+     因为原生所以使用,同性质可查看ButterKnife
   
 ### **响应式编程** 
-   > 如大家所知,Java是一个静态语言,那么我们希望使用一个响应式的特性该怎么做呢,我们借助RxJava对流的封装达到响应式编程的效果<br>
-       RxJava其实也在Android纳入源码的思考当中,提供了诸多的帮助。
+  > 如大家所知,Java是一个静态语言,那么我们希望使用一个响应式的特性该怎么做呢,我们借助RxJava对流的封装达到响应式编程的效果<br>
+    RxJava其实也在Android纳入源码的思考当中,提供了诸多的帮助。
   
 ### **屏幕适配方案**
   > 主要是针对Android市场品种繁多屏幕碎片化严重而引入的解决框架,之前都是sw适配方案,此方案本人还待观察使用
@@ -47,8 +47,19 @@ Dagger2|DataBinding|RxJava2|AndroidAutoSize|Room|OkHttp3<br>Retrofit|LiveData|Mv
   其中使用大量设计模式完善对Api的封装.
   
 ### **消息机制** 
-  > 消息机制是一个相对泛的机制,种类也是五花八门,主流EventBus,RxBus这类,实现无非观察者模式实现内部带线程切换的一套机制.同样是消息机制,同样是LiveData,<br>
-  LiveData有很多的优点,JetPack成员之一
+  > 消息机制是一个相对泛的机制,种类也是五花八门,主流EventBus,RxBus这类,实现无非观察者模式实现内部带线程切换的一套机制.<br>
+  同样是消息机制,LiveData有很多的优点,JetPack成员之一
   
 ### **基础结构** 
   > 尽管市场上大多的应用还是主流的Mvp结构,但是响应Google结合DataBinding+ViewModel策略下实现的一套Mvvm结构的框架,我们决定使用Mvvm替代Mvp成为框架中主流的基础结构
+  
+## 更多大型项目的方案使用
+
+|目的|框架|出处|Stars
+|:-:|:-:|:-:|:-:
+|模块化|[ARouter](https://github.com/alibaba/ARouter)| Alibaba|1w+
+|生命周期控制|[RxLifecycle](https://github.com/trello/RxLifecycle)|trello|7k+
+|RecycleView适配器|[BaseRecyclerViewAdapterHelper](https://github.com/CymChad/BaseRecyclerViewAdapterHelper)|CymChad|1.7w+
+|权限|[IPermission](https://github.com/csxiong/IPermission)|[csxiong](https://www.jianshu.com/u/9022fb039221)|1
+
+- 许多优质的框架可因项目需要而添加,未完待续...
