@@ -19,6 +19,6 @@
    
 ## 主要思路和选择
  
-DI|网络请求|
----|:--|:---:
-Dagger2|OkHttp3
+DI|网络请求|响应式封装
+---|---|---
+Dagger2|OkHttp3\nRetrofit|RxJava2
