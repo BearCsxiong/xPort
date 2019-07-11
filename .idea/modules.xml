@@ -2,11 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/XPort.iml" filepath="$PROJECT_DIR$/XPort.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/library_ui/library_ui.iml" filepath="$PROJECT_DIR$/library_ui/library_ui.iml" />
       <module fileurl="file://$PROJECT_DIR$/module_login/module_login.iml" filepath="$PROJECT_DIR$/module_login/module_login.iml" />
-      <module fileurl="file://$PROJECT_DIR$/xPort.iml" filepath="$PROJECT_DIR$/xPort.iml" />
-      <module fileurl="file://$PROJECT_DIR$/xPort/xPort-xPort.iml" filepath="$PROJECT_DIR$/xPort/xPort-xPort.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xPort/xPort.iml" filepath="$PROJECT_DIR$/xPort/xPort.iml" />
     </modules>
   </component>
 </project>
