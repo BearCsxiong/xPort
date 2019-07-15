@@ -23,7 +23,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
-import com.gyf.barlibrary.ImmersionBar;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import butterknife.ButterKnife;
@@ -139,7 +138,6 @@ public abstract class SimpleBottomSheetDialog extends BaseBottomSheetDialogFragm
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
         initUI(savedInstanceState);
         initData(savedInstanceState);
-        ImmersionBar.with(this).init();
         return view;
     }
 
@@ -147,7 +145,6 @@ public abstract class SimpleBottomSheetDialog extends BaseBottomSheetDialogFragm
     public void onDestroyView() {
         btnClickListener = null;
         onClickListener = null;
-        ImmersionBar.with(this).destroy();
         if (unbinder != null) unbinder.unbind();
         super.onDestroyView();
     }

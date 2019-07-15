@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 
-import com.gyf.barlibrary.ImmersionBar;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import butterknife.ButterKnife;
@@ -74,7 +73,6 @@ public abstract class SimpleDialog extends BaseDialogFragment implements IView, 
         window.setBackgroundDrawable(getBackground());
         initUI(savedInstanceState);
         initData(savedInstanceState);
-        ImmersionBar.with(this).init();
         return view;
     }
 
@@ -82,7 +80,6 @@ public abstract class SimpleDialog extends BaseDialogFragment implements IView, 
     public void onDestroyView() {
         btnClickListener = null;
         onClickListener = null;
-        ImmersionBar.with(this).destroy();
         if (unbinder != null) unbinder.unbind();
         super.onDestroyView();
     }

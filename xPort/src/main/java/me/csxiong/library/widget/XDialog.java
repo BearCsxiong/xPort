@@ -12,8 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.ActivityUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +19,7 @@ import butterknife.BindView;
 import me.csxiong.library.R;
 import me.csxiong.library.R2;
 import me.csxiong.library.base.SimpleDialog;
+import me.csxiong.library.utils.ActivityUtils;
 import me.csxiong.library.utils.XDisplayUtil;
 import me.csxiong.library.utils.XResUtils;
 import me.csxiong.library.widget.round.RoundTextView;

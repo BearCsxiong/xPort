@@ -10,13 +10,8 @@ import android.view.animation.ScaleAnimation;
 import android.widget.RelativeLayout;
 
 /**
- * -------------------------------------------------------------------------------
- * |
- * | desc : 动感缩放的控件,内部控件缩放
- * |
- * |--------------------------------------------------------------------------------
- * | on 2018/9/28 created by csxiong
- * |--------------------------------------------------------------------------------
+ * Desc : Zoom click animation layout
+ * Author : csxiong - 2019/7/15
  */
 public class ZoomRelativeLayout extends RelativeLayout {
     private boolean isPressed;
@@ -45,9 +40,6 @@ public class ZoomRelativeLayout extends RelativeLayout {
     }
 
     private void init() {
-        /**
-         * 初始化动画
-         */
         zoomInAnimation = new ScaleAnimation(1f, 0.8f, 1f, 0.8f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         zoomInAnimation.setFillAfter(true);
         zoomInAnimation.setDuration(150);

@@ -7,8 +7,6 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 
-import com.blankj.utilcode.util.Utils;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -16,6 +14,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.internal.Utils;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
@@ -24,15 +23,11 @@ import me.csxiong.library.base.delegate.AppDelegateManager;
 import me.csxiong.library.di.component.AppComponent;
 
 /**
- * -------------------------------------------------------------------------------
- * |
- * | desc : singleton Application for All Module's ApplicationContext and provide help inject UI Component
- * |
- * |--------------------------------------------------------------------------------
- * | on 2018/8/14 created by csxiong
- * |--------------------------------------------------------------------------------
+ * Desc : Main Application
+ * Author : csxiong - 2019/7/15
  */
-public class APP extends Application implements HasActivityInjector,
+public class APP extends Application implements
+        HasActivityInjector,
         HasSupportFragmentInjector {
 
     /**
@@ -47,10 +42,21 @@ public class APP extends Application implements HasActivityInjector,
     @Inject
     DispatchingAndroidInjector<Fragment> fragmentInjector;
 
+    /**
+     * instance for application
+     */
     protected static APP _INSTANCE;
 
-    AppDelegateManager mAppDelegate;
+    /**
+     * delegate for multi module
+     */
+    private AppDelegateManager mAppDelegate;
 
+    /**
+     * help get instance for application
+     *
+     * @return application instance
+     */
     public static APP getInstance() {
         if (_INSTANCE == null) {
             synchronized (APP.class) {
@@ -61,35 +67,22 @@ public class APP extends Application implements HasActivityInjector,
         return _INSTANCE;
     }
 
+    /**
+     * lifecycle for application onCreate
+     */
     @Override
     public void onCreate() {
         super.onCreate();
         if (!shouldInit())
             return;
         mAppDelegate.onCreate(this);
-
-        Utils.init(this);
-
     }
 
     /**
-     * check is need init
+     * lifecycle for application attachBaseContext
      *
-     * @return
+     * @param base
      */
-    public boolean shouldInit() {
-        ActivityManager am = ((ActivityManager) getSystemService(Context.ACTIVITY_SERVICE));
-        List<ActivityManager.RunningAppProcessInfo> processInfos = am.getRunningAppProcesses();
-        String mainProcessName = getPackageName();
-        int myPid = android.os.Process.myPid();
-        for (ActivityManager.RunningAppProcessInfo info : processInfos) {
-            if (info.pid == myPid && mainProcessName.equals(info.processName)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
@@ -100,6 +93,21 @@ public class APP extends Application implements HasActivityInjector,
         mAppDelegate.attachBaseContext(base);
     }
 
+    /**
+     * lifecycle for application's destroy
+     */
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        mAppDelegate.onTerminate(this);
+    }
+
+    /**
+     * get process name by process id
+     *
+     * @param pid
+     * @return
+     */
     private static String getProcessName(int pid) {
         BufferedReader reader = null;
         try {
@@ -123,10 +131,22 @@ public class APP extends Application implements HasActivityInjector,
         return null;
     }
 
-    @Override
-    public void onTerminate() {
-        super.onTerminate();
-        mAppDelegate.onTerminate(this);
+    /**
+     * check is multi process
+     *
+     * @return
+     */
+    public boolean shouldInit() {
+        ActivityManager am = ((ActivityManager) getSystemService(Context.ACTIVITY_SERVICE));
+        List<ActivityManager.RunningAppProcessInfo> processInfos = am.getRunningAppProcesses();
+        String mainProcessName = getPackageName();
+        int myPid = android.os.Process.myPid();
+        for (ActivityManager.RunningAppProcessInfo info : processInfos) {
+            if (info.pid == myPid && mainProcessName.equals(info.processName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

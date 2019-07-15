@@ -30,9 +30,6 @@ import me.csxiong.library.utils.XDisplayUtil;
  * <li>{@link XTipDialog.Builder} 提供了一个图标和一行文字的样式, 其中图标有几种类型可选, 见 {@link XTipDialog.Builder.IconType}</li>
  * <li>{@link XTipDialog.CustomBuilder} 支持传入自定义的 layoutResId, 达到自定义 TipDialog 的效果。</li>
  * </ul>
- *
- * @author cginechen
- * @date 2016-10-14
  */
 
 public class XTipDialog extends Dialog {

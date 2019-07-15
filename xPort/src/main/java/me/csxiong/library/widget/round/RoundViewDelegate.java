@@ -15,6 +15,10 @@ import android.widget.TextView;
 
 import me.csxiong.library.R;
 
+/**
+ * Desc : round background view delegate
+ * Author : csxiong - 2019/7/15
+ */
 public class RoundViewDelegate {
     private View view;
     private Context context;

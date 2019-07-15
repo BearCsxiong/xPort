@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.gyf.barlibrary.ImmersionBar;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import butterknife.ButterKnife;
@@ -61,13 +60,11 @@ public abstract class SimpleFragment extends SupportFragment implements IView, I
         }
         initUI(savedInstanceState);
         initData(savedInstanceState);
-        ImmersionBar.with(this).init();
         return view;
     }
 
     @Override
     public void onDestroyView() {
-        ImmersionBar.with(this).destroy();
         if (unbinder != null) unbinder.unbind();
         super.onDestroyView();
     }

@@ -16,9 +16,6 @@ import me.csxiong.library.utils.XDisplayUtil;
 
 /**
  * 用于显示 Loading 的 {@link View}，支持颜色和大小的设置。
- *
- * @author cginechen
- * @date 2016-09-21
  */
 public class XLoadingView extends View {
 

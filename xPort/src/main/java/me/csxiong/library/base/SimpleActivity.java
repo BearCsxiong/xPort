@@ -1,11 +1,9 @@
 package me.csxiong.library.base;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.WindowManager;
 
-import com.gyf.barlibrary.ImmersionBar;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import io.reactivex.subjects.BehaviorSubject;
@@ -30,8 +28,6 @@ public abstract class SimpleActivity extends SupportActivity implements IView, I
 
     protected ViewDelegate mViewDelegate;
 
-    protected ImmersionBar immersionBar;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,11 +35,6 @@ public abstract class SimpleActivity extends SupportActivity implements IView, I
         if (getLayoutResId() > 0) {
             setContentView(getLayoutResId());
         }
-        //default immersionBar
-        immersionBar = ImmersionBar.with(this);
-        initImmersive(immersionBar);
-        immersionBar.init();
-
         //default viewDelegate help A or F or DF instance proxy method
         if (mViewDelegate == null) {
             mViewDelegate = new ViewDelegate(this);
@@ -54,12 +45,6 @@ public abstract class SimpleActivity extends SupportActivity implements IView, I
 
         //default Data method
         initData(savedInstanceState);
-    }
-
-    public void initImmersive(ImmersionBar immersionBar) {
-        immersionBar
-                .navigationBarColorInt(Color.WHITE)
-                .statusBarDarkFont(true);
     }
 
     public void cancelFullScreen() {

@@ -17,7 +17,8 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 
 /**
- * Created by csxiong on 2018/5/23.
+ * Desc : main component for other components
+ * Author : csxiong - 2019/7/15
  */
 @Singleton
 @Component(modules = {AppModule.class, ClientModule.class, GlobalConfigModule.class})
@@ -38,7 +39,7 @@ public interface AppComponent {
     Retrofit retrofit();
 
     /**
-     * 缓存文件
+     * cache file
      *
      * @return File
      */
