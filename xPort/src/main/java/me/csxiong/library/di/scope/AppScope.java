@@ -23,11 +23,11 @@ import javax.inject.Scope;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * A scoping annotation to permit objects whose lifetime should
- * conform to the life of the activity to be memorized in the
- * correct component.
+ * @Desc : 限定App作用范围
+ * @Author : csxiong create on 2019/7/16
  */
 @Scope
 @Documented
 @Retention(RUNTIME)
-public @interface AppScope {}
+public @interface AppScope {
+}

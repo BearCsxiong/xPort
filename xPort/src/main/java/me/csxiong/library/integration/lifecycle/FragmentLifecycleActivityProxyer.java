@@ -32,13 +32,8 @@ import me.csxiong.library.base.delegate.GlobalConfig;
 import me.csxiong.library.integration.ManifestParser;
 
 /**
- * -------------------------------------------------------------------------------
- * |
- * | desc : Fragment生命周期Activity代理,Fragment所attach的Activity帮助在FragmentManager上绑定FragmentLifecycle
- * |
- * |--------------------------------------------------------------------------------
- * | on 2018/9/28 created by csxiong
- * |--------------------------------------------------------------------------------
+ * @Desc : Fragment生命周期监控{@link me.csxiong.library.utils.RxLifecycleUtil}
+ * @Author : csxiong create on 2019/7/17
  */
 @Singleton
 public class FragmentLifecycleActivityProxyer implements Application.ActivityLifecycleCallbacks {

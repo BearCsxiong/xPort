@@ -57,7 +57,7 @@ public abstract class SimpleActivity extends SupportActivity implements IView, I
 
     @Override
     public AppComponent getAppComponent() {
-        return APP.getInstance().getAppComponent();
+        return APP.get().getAppComponent();
     }
 
     @Override

@@ -8,13 +8,8 @@ import android.view.ViewGroup;
 import me.csxiong.library.base.SimpleActivity;
 
 /**
- * -------------------------------------------------------------------------------
- * |
- * | desc : check pre conditions
- * |
- * |--------------------------------------------------------------------------------
- * | on 2018/9/28 created by csxiong
- * |--------------------------------------------------------------------------------
+ * @Desc : 控制工具
+ * @Author : csxiong create on 2019/7/17
  */
 public final class XPreconditions {
 

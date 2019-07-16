@@ -8,14 +8,10 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
-/**-------------------------------------------------------------------------------
-*| 
-*| desc : indicator圆心指示器
-*| 
-*|--------------------------------------------------------------------------------
-*| on 2018/9/28 created by csxiong 
-*|--------------------------------------------------------------------------------
-*/
+/**
+ * @Desc : 简单的圆点指示器
+ * @Author : csxiong create on 2019/7/17
+ */
 public class CircleIndicator extends View {
     public CircleIndicator(Context context) {
         super(context);

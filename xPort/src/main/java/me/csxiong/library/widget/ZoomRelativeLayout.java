@@ -10,8 +10,8 @@ import android.view.animation.ScaleAnimation;
 import android.widget.RelativeLayout;
 
 /**
- * Desc : Zoom click animation layout
- * Author : csxiong - 2019/7/15
+ * @Desc : 动感的relativeLayout
+ * @Author : csxiong create on 2019/7/17
  */
 public class ZoomRelativeLayout extends RelativeLayout {
     private boolean isPressed;

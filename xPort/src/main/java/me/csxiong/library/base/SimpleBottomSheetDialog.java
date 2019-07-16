@@ -237,7 +237,7 @@ public abstract class SimpleBottomSheetDialog extends BaseBottomSheetDialogFragm
     }
 
     public AppComponent getAppComponent() {
-        return APP.getInstance().getAppComponent();
+        return APP.get().getAppComponent();
     }
 
     @Override

@@ -9,9 +9,9 @@ import me.csxiong.library.utils.XPreconditions;
 import me.csxiong.library.widget.XTipDialog;
 
 /**
- * Created by csxiong on 2018/9/28.
+ * @Desc : IView代理接口,提供多组件默认实现
+ * @Author : csxiong create on 2019/7/17
  */
-
 public class ViewDelegate implements IView {
 
     private XTipDialog mDialog;
@@ -28,7 +28,7 @@ public class ViewDelegate implements IView {
             throw new IllegalArgumentException("check your'Activity or your'Fragment is extends from SimpleActivity or SimpleFragment");
         }
     }
-    
+
     @Override
     public void startLoading(String loadingMsg) {
         stopLoading();

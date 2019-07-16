@@ -154,7 +154,7 @@ public abstract class SimpleDialog extends BaseDialogFragment implements IView, 
     }
 
     public AppComponent getAppComponent() {
-        return APP.getInstance().getAppComponent();
+        return APP.get().getAppComponent();
     }
 
     @Override

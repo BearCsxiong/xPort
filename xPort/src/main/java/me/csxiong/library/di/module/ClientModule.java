@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Context;
 import android.support.annotation.Nullable;
 
+import com.alibaba.android.arouter.thread.DefaultThreadFactory;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -22,8 +23,12 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.security.cert.CertificateException;
 import java.util.Date;
+import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
@@ -39,6 +44,7 @@ import io.reactivex.schedulers.Schedulers;
 import me.csxiong.library.BuildConfig;
 import me.csxiong.library.integration.http.HttpLogger;
 import me.csxiong.library.integration.http.JsonConverterFactory;
+import me.csxiong.library.integration.scheduler.XThreadFactory;
 import okhttp3.ConnectionPool;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -133,7 +139,7 @@ public class ClientModule {
     @Singleton
     @Provides
     ExecutorService provideExecutor() {
-        return Executors.newCachedThreadPool();
+        return new ThreadPoolExecutor(10, 30, 30, TimeUnit.SECONDS, new LinkedBlockingDeque<>(), new XThreadFactory());
     }
 
     /**

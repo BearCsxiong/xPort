@@ -1,9 +1,10 @@
 package me.csxiong.library.integration.http;
 
 /**
- * API自定义异常
+ * @Desc : 自定义Api异常
+ * @Author : csxiong create on 2019/7/16
  */
-public class ApiException extends Exception{
+public class ApiException extends Exception {
 
     private int code;
 

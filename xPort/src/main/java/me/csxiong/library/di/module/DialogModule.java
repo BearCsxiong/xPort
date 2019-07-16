@@ -8,7 +8,8 @@ import me.csxiong.library.base.SimpleDialog;
 import me.csxiong.library.di.scope.FragmentScope;
 
 /**
- * Created by csxiong on 2018/11/2.
+ * @Desc : 所有弹框模块
+ * @Author : csxiong create on 2019/7/16
  */
 @Module
 public class DialogModule {

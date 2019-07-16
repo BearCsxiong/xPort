@@ -15,18 +15,13 @@ import java.io.InputStreamReader;
 import me.csxiong.library.base.APP;
 
 /**
- * -------------------------------------------------------------------------------
- * |
- * | desc : 资源数据获取
- * |
- * |--------------------------------------------------------------------------------
- * | on 2019/4/10 created by csxiong
- * |--------------------------------------------------------------------------------
+ * @Desc : 资源工具
+ * @Author : csxiong create on 2019/7/16
  */
 public class XResUtils {
 
     public static Animation getAnim(int animResId, Animation.AnimationListener listener) {
-        Animation animation = AnimationUtils.loadAnimation(APP.getInstance(), animResId);
+        Animation animation = AnimationUtils.loadAnimation(APP.get(), animResId);
         if (listener != null) {
             animation.setAnimationListener(listener);
         }
@@ -38,11 +33,11 @@ public class XResUtils {
     }
 
     public static String getString(int stringResId) {
-        return APP.getInstance().getResources().getString(stringResId);
+        return APP.get().getResources().getString(stringResId);
     }
 
     public static int getColor(int colorResId) {
-        return ContextCompat.getColor(APP.getInstance(), colorResId);
+        return ContextCompat.getColor(APP.get(), colorResId);
     }
 
     public static int getColor(String color) {
@@ -50,7 +45,7 @@ public class XResUtils {
     }
 
     public static float getDimen(int dimensResId) {
-        return APP.getInstance().getResources().getDimension(dimensResId);
+        return APP.get().getResources().getDimension(dimensResId);
     }
 
     public static int getDimenInt(int dimensResId) {
@@ -66,11 +61,11 @@ public class XResUtils {
     }
 
     public static int getResIdByName(String resName, String resType) {
-        return APP.getInstance().getResources().getIdentifier(resName, resType, APP.getInstance().getPackageName());
+        return APP.get().getResources().getIdentifier(resName, resType, APP.get().getPackageName());
     }
 
     public static Drawable getDrawable(int drawableResId) {
-        Drawable drawable = ContextCompat.getDrawable(APP.getInstance(), drawableResId);
+        Drawable drawable = ContextCompat.getDrawable(APP.get(), drawableResId);
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
         return drawable;
     }
@@ -78,7 +73,7 @@ public class XResUtils {
     public static String getJson(String fileName) {
         StringBuilder stringBuilder = new StringBuilder();
         try {
-            AssetManager assetManager = APP.getInstance().getAssets();
+            AssetManager assetManager = APP.get().getAssets();
             BufferedReader bf = new BufferedReader(new InputStreamReader(
                     assetManager.open(fileName)));
             String line;
@@ -98,7 +93,7 @@ public class XResUtils {
 
     public static float getAttrValue(int styleAttr) {
         TypedValue typedValue = new TypedValue();
-        APP.getInstance().getTheme().resolveAttribute(styleAttr, typedValue, true);
+        APP.get().getTheme().resolveAttribute(styleAttr, typedValue, true);
         return typedValue.getFloat();
     }
 

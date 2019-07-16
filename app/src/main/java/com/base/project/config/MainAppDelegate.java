@@ -31,7 +31,7 @@ public class MainAppDelegate implements IAppDelegate {
         }
 
         DaggerUIComponent.builder()
-                .appComponent(APP.getInstance().getAppComponent())
+                .appComponent(APP.get().getAppComponent())
                 .build()
                 .inject((APP) application);
     }

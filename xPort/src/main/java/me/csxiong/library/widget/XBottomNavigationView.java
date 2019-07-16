@@ -13,13 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
- * -------------------------------------------------------------------------------
- * |
- * | desc : navigationview for base
- * |
- * |--------------------------------------------------------------------------------
- * | on 2019/4/10 created by csxiong
- * |--------------------------------------------------------------------------------
+ * @Desc : 简单的Navigationbar
+ * @Author : csxiong create on 2019/7/17
  */
 public class XBottomNavigationView extends XBottomNavigationViewInner {
 

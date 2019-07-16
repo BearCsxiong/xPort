@@ -25,15 +25,9 @@ import android.widget.Toast;
 import me.csxiong.library.R;
 import me.csxiong.library.base.APP;
 
-
 /**
- * -------------------------------------------------------------------------------
- * |
- * | desc : Toast展示方法，默认Toast一套UI
- * |
- * |--------------------------------------------------------------------------------
- * | on 2018/9/28 created by csxiong
- * |--------------------------------------------------------------------------------
+ * @Desc : 全局Toast工具封装,内部实现暴露
+ * @Author : csxiong create on 2019/7/16
  */
 @SuppressLint("InflateParams")
 public class XToast {
@@ -58,23 +52,23 @@ public class XToast {
     //----------------------------show----------------------------
 
     public static void show(@NonNull String message) {
-        show(APP.getInstance(), message, Gravity.BOTTOM, Toast.LENGTH_SHORT, null, false);
+        show(APP.get(), message, Gravity.BOTTOM, Toast.LENGTH_SHORT, null, false);
     }
 
     public static void show(@NonNull String message, int gravity) {
-        show(APP.getInstance(), message, gravity, Toast.LENGTH_SHORT, null, false);
+        show(APP.get(), message, gravity, Toast.LENGTH_SHORT, null, false);
     }
 
     public static void show(@NonNull String message, Drawable icon) {
-        show(APP.getInstance(), message, Gravity.BOTTOM, Toast.LENGTH_SHORT, icon, true);
+        show(APP.get(), message, Gravity.BOTTOM, Toast.LENGTH_SHORT, icon, true);
     }
 
     public static void show(@NonNull String message, int duration, Drawable icon) {
-        show(APP.getInstance(), message, Gravity.BOTTOM, duration, icon, true);
+        show(APP.get(), message, Gravity.BOTTOM, duration, icon, true);
     }
 
     public static void show(@NonNull String message, int duration, Drawable icon, boolean withIcon) {
-        custom(APP.getInstance(), message, Gravity.BOTTOM, icon, DEFAULT_TEXT_COLOR, duration, withIcon);
+        custom(APP.get(), message, Gravity.BOTTOM, icon, DEFAULT_TEXT_COLOR, duration, withIcon);
     }
 
     public static void show(@NonNull Context context, @NonNull String message, int gravity, int duration, Drawable icon, boolean withIcon) {
@@ -84,11 +78,11 @@ public class XToast {
     //----------------------------warning----------------------------
 
     public static void warning(@NonNull String message) {
-        warning(APP.getInstance(), message, Toast.LENGTH_SHORT, true);
+        warning(APP.get(), message, Toast.LENGTH_SHORT, true);
     }
 
     public static void warning(@NonNull String message, int duration) {
-        warning(APP.getInstance(), message, duration, true);
+        warning(APP.get(), message, duration, true);
     }
 
     public static void warning(@NonNull Context context, @NonNull String message) {
@@ -100,7 +94,7 @@ public class XToast {
     }
 
     public static void warning(@NonNull String message, int duration, boolean withIcon) {
-        custom(APP.getInstance(), message, Gravity.CENTER, getDrawable(APP.getInstance(), R.mipmap.qmui_icon_notify_error), DEFAULT_TEXT_COLOR, WARNING_COLOR, duration, withIcon, true);
+        custom(APP.get(), message, Gravity.CENTER, getDrawable(APP.get(), R.mipmap.qmui_icon_notify_error), DEFAULT_TEXT_COLOR, WARNING_COLOR, duration, withIcon, true);
     }
 
     public static void warning(@NonNull Context context, @NonNull String message, int duration, boolean withIcon) {
@@ -110,15 +104,15 @@ public class XToast {
     //----------------------------info----------------------------
 
     public static void info(@NonNull String message) {
-        info(APP.getInstance(), message, Toast.LENGTH_SHORT, true);
+        info(APP.get(), message, Toast.LENGTH_SHORT, true);
     }
 
     public static void info(@NonNull String message, int duration) {
-        info(APP.getInstance(), message, duration, true);
+        info(APP.get(), message, duration, true);
     }
 
     public static void info(@NonNull String message, int duration, boolean withIcon) {
-        custom(APP.getInstance(), message, Gravity.CENTER, getDrawable(APP.getInstance(), R.mipmap.qmui_icon_notify_info), DEFAULT_TEXT_COLOR, INFO_COLOR, duration, withIcon, true);
+        custom(APP.get(), message, Gravity.CENTER, getDrawable(APP.get(), R.mipmap.qmui_icon_notify_info), DEFAULT_TEXT_COLOR, INFO_COLOR, duration, withIcon, true);
     }
 
     public static void info(@NonNull Context context, @NonNull String message) {
@@ -136,15 +130,15 @@ public class XToast {
     //----------------------------success----------------------------
 
     public static void success(@NonNull String message) {
-        success(APP.getInstance(), message, Toast.LENGTH_SHORT, true);
+        success(APP.get(), message, Toast.LENGTH_SHORT, true);
     }
 
     public static void success(@NonNull String message, int duration) {
-        success(APP.getInstance(), message, duration, true);
+        success(APP.get(), message, duration, true);
     }
 
     public static void success(@NonNull String message, int duration, boolean withIcon) {
-        custom(APP.getInstance(), message, Gravity.CENTER, getDrawable(APP.getInstance(), R.mipmap.qmui_icon_notify_done), DEFAULT_TEXT_COLOR, SUCCESS_COLOR, duration, withIcon, true);
+        custom(APP.get(), message, Gravity.CENTER, getDrawable(APP.get(), R.mipmap.qmui_icon_notify_done), DEFAULT_TEXT_COLOR, SUCCESS_COLOR, duration, withIcon, true);
     }
 
     public static void success(@NonNull Context context, @NonNull String message) {
@@ -162,15 +156,15 @@ public class XToast {
     //----------------------------error----------------------------
 
     public static void error(@NonNull String message) {
-        error(APP.getInstance(), message, Gravity.CENTER, Toast.LENGTH_SHORT, true);
+        error(APP.get(), message, Gravity.CENTER, Toast.LENGTH_SHORT, true);
     }
 
     public static void error(@NonNull String message, int duration) {
-        error(APP.getInstance(), message, Gravity.CENTER, duration, true);
+        error(APP.get(), message, Gravity.CENTER, duration, true);
     }
 
     public static void error(@NonNull String message, int duration, boolean withIcon) {
-        custom(APP.getInstance(), message, Gravity.CENTER, getDrawable(APP.getInstance(), R.mipmap.qmui_icon_notify_error), DEFAULT_TEXT_COLOR, ERROR_COLOR, duration, withIcon, true);
+        custom(APP.get(), message, Gravity.CENTER, getDrawable(APP.get(), R.mipmap.qmui_icon_notify_error), DEFAULT_TEXT_COLOR, ERROR_COLOR, duration, withIcon, true);
     }
 
     public static void error(@NonNull Context context, @NonNull String message) {
@@ -198,7 +192,7 @@ public class XToast {
             return;
         }
         Toast currentToast = new Toast(context);
-        LinearLayout contentWrap = (LinearLayout) LayoutInflater.from(APP.getInstance()).inflate(R.layout.toast_layout, null);
+        LinearLayout contentWrap = (LinearLayout) LayoutInflater.from(APP.get()).inflate(R.layout.toast_layout, null);
 
         ImageView imageView = contentWrap.findViewById(R.id.toast_icon);
         //添加ICON

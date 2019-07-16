@@ -23,16 +23,8 @@ import me.csxiong.library.integration.ManifestParser;
 import me.csxiong.library.utils.XPreconditions;
 
 /**
- * ---------------------------------------------------
- * |
- * |  Des : Application生命周期的管理类，管理所有注册的IAppDelegate
- * |
- * |----------------------------------------------------
- * |
- * |  Author : csxiong
- * |  Date : 2018/8/14
- * |
- * |----------------------------------------------------
+ * @Desc : Application代理管理器,管理所有注入GlobalConfig的配置
+ * @Author : csxiong create on 2019/7/17
  */
 public class AppDelegateManager implements IApp, IAppDelegate {
     private Application mApplication;

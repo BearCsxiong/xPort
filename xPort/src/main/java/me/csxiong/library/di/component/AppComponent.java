@@ -17,8 +17,8 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 
 /**
- * Desc : main component for other components
- * Author : csxiong - 2019/7/15
+ * @Desc : 主要的注入器,提供各个模块默认依赖的注入器,使用者可独立再编写注入器
+ * @Author : csxiong create on 2019/7/16
  */
 @Singleton
 @Component(modules = {AppModule.class, ClientModule.class, GlobalConfigModule.class})
@@ -32,35 +32,38 @@ public interface AppComponent {
     Application application();
 
     /**
-     * provide retrofit for Rxjava2(default)
+     * 默认内部使用提供Retrofit实例
      *
      * @return
      */
     Retrofit retrofit();
 
     /**
-     * cache file
-     *
-     * @return File
-     */
-    File cacheFile();
-
-    /**
-     * provider for httpConnect
+     * 默认提供缓存文件
      *
      * @return
      */
-    OkHttpClient provideHttpClient();
+    @Deprecated
+    File cacheFile();
 
     /**
-     * provide base scheduler for RxJava
+     * 默认提供OKHttp客户端
+     *
+     * @return
+     */
+    OkHttpClient provideOkHttpClient();
+
+    /**
+     * 默认提供线程调度器{@link me.csxiong.library.utils.RxUtils}和{@link io.reactivex.android.schedulers.AndroidSchedulers}
+     * 提供Rxjava使用
      *
      * @return
      */
     Scheduler provideScheduler();
 
     /**
-     * provide thread pool service for
+     * 全局线程池
+     * TODO 在长连接和短连接需要区分线程池 可优化
      *
      * @return
      */
@@ -69,7 +72,7 @@ public interface AppComponent {
     /**
      * 注入到APP代理
      *
-     * @param appDelegate
+     * @param appDelegate 需要注入的对象
      */
     void inject(AppDelegateManager appDelegate);
 

@@ -7,7 +7,8 @@ import dagger.Provides;
 import me.csxiong.library.di.scope.ActivityScope;
 
 /**
- * Created by csxiong on 2018/10/10.
+ * @Desc : 活动模块
+ * @Author : csxiong create on 2019/7/16
  */
 @Module
 public class ActivityModule {

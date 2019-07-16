@@ -13,13 +13,8 @@ import me.csxiong.library.integration.lifecycle.IFragmentLifecycle;
 import me.csxiong.library.integration.lifecycle.ILifecycle;
 
 /**
- * -------------------------------------------------------------------------------
- * |
- * | desc : RxLifecycle绑定对应生命周期工具类
- * |
- * |--------------------------------------------------------------------------------
- * | on 2018/9/28 created by csxiong
- * |--------------------------------------------------------------------------------
+ * @Desc : 简单的RxJava生命周期的控制工具
+ * @Author : csxiong create on 2019/7/16
  */
 public class RxLifecycleUtil {
 

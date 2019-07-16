@@ -13,13 +13,8 @@ import javax.inject.Singleton;
 import io.reactivex.subjects.Subject;
 
 /**
- * -------------------------------------------------------------------------------
- * |
- * | desc : RxLifecycle对应Activity生命周期管理
- * |
- * |--------------------------------------------------------------------------------
- * | on 2018/9/28 created by csxiong
- * |--------------------------------------------------------------------------------
+ * @Desc : 活动生命周期监控主要的Rxlifecycle发射{@link me.csxiong.library.utils.RxLifecycleUtil}
+ * @Author : csxiong create on 2019/7/17
  */
 @Singleton
 public class ActivityLifecycleForRxLifecycle implements Application.ActivityLifecycleCallbacks {

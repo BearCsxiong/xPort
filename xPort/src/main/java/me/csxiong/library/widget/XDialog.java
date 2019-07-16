@@ -26,14 +26,8 @@ import me.csxiong.library.widget.round.RoundTextView;
 import me.csxiong.library.widget.round.RoundViewDelegate;
 
 /**
- * -------------------------------------------------------------------------------
- * |
- * | desc : simple message and tip dialog for user
- * |  TODO : 增加垂直对话选项
- * |
- * |--------------------------------------------------------------------------------
- * | on 2019/3/11 created by csxiong
- * |--------------------------------------------------------------------------------
+ * @Desc : TODO 可定制的对话框
+ * @Author : csxiong create on 2019/7/17
  */
 public class XDialog extends SimpleDialog {
 

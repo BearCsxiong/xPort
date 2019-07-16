@@ -23,17 +23,11 @@ import java.util.List;
 
 import me.csxiong.library.di.module.GlobalConfigModule;
 
-/**-------------------------------------------------------------------------------
-*|
-*| desc : 全局配置,实现全局配置并注册此配置。
-*|
-*|--------------------------------------------------------------------------------
-*| on 2018/8/20 created by csxiong
-*|--------------------------------------------------------------------------------
-*/
+/**
+ * @Desc : 全局配置接口
+ * @Author : csxiong create on 2019/7/17
+ */
 public interface GlobalConfig {
-
-    String NAME = "GlobalConfig";
 
     /**
      * 注入部分本框架提供的建造方式,完成dagger2的注入

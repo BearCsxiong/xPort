@@ -8,7 +8,8 @@ import dagger.Provides;
 import me.csxiong.library.di.scope.FragmentScope;
 
 /**
- * Created by csxiong on 2018/10/10.
+ * @Desc : 统一Fragment的Module
+ * @Author : csxiong create on 2019/7/16
  */
 
 @Module

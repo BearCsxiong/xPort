@@ -11,8 +11,13 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import me.csxiong.library.BuildConfig;
+import me.csxiong.library.base.delegate.GlobalConfig;
 import okhttp3.HttpUrl;
 
+/**
+ * @Desc : 全局化配置模块 所有内部提供可配置选项,使用{@link GlobalConfig}
+ * @Author : csxiong create on 2019/7/16
+ */
 @Module
 public class GlobalConfigModule {
     private HttpUrl mApiUrl;

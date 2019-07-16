@@ -14,7 +14,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.internal.Utils;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
@@ -23,63 +22,63 @@ import me.csxiong.library.base.delegate.AppDelegateManager;
 import me.csxiong.library.di.component.AppComponent;
 
 /**
- * Desc : Main Application
- * Author : csxiong - 2019/7/15
+ * @Desc : 全局使用的Application
+ * @Author : csxiong create on 2019/7/16
  */
 public class APP extends Application implements
         HasActivityInjector,
         HasSupportFragmentInjector {
 
     /**
-     * help for Activity inject
+     * 提供Activity的dagger注入服务
      */
     @Inject
     DispatchingAndroidInjector<Activity> activityInjector;
 
     /**
-     * help for Fragment inject
+     * 提供Fragment的dagger注入服务
      */
     @Inject
     DispatchingAndroidInjector<Fragment> fragmentInjector;
 
     /**
-     * instance for application
+     * 单例Application
      */
     protected static APP _INSTANCE;
 
     /**
-     * delegate for multi module
+     * Application的代理管理器
      */
     private AppDelegateManager mAppDelegate;
 
     /**
-     * help get instance for application
+     * 单例实现及获取
      *
-     * @return application instance
+     * @return
      */
-    public static APP getInstance() {
-        if (_INSTANCE == null) {
-            synchronized (APP.class) {
-                if (_INSTANCE == null)
-                    _INSTANCE = new APP();
+    public static APP get() {
+        synchronized (APP.class) {
+            if (_INSTANCE == null) {
+                _INSTANCE = new APP();
             }
         }
         return _INSTANCE;
     }
 
     /**
-     * lifecycle for application onCreate
+     * Application生命周期
      */
     @Override
     public void onCreate() {
         super.onCreate();
-        if (!shouldInit())
+        if (!shouldInit()) {
             return;
+        }
         mAppDelegate.onCreate(this);
     }
 
     /**
-     * lifecycle for application attachBaseContext
+     * Application生命周期
      *
      * @param base
      */
@@ -94,7 +93,7 @@ public class APP extends Application implements
     }
 
     /**
-     * lifecycle for application's destroy
+     * Application生命周期
      */
     @Override
     public void onTerminate() {
@@ -103,7 +102,7 @@ public class APP extends Application implements
     }
 
     /**
-     * get process name by process id
+     * 通过进程Id获取进程名
      *
      * @param pid
      * @return
@@ -132,7 +131,7 @@ public class APP extends Application implements
     }
 
     /**
-     * check is multi process
+     * 进程判断
      *
      * @return
      */
@@ -150,19 +149,29 @@ public class APP extends Application implements
     }
 
     /**
-     * provide appComponent's content for all UIComponent
+     * XPort提供的默认注入器,提供基础功能
      *
-     * @return
+     * @return 默认注入器
      */
     public AppComponent getAppComponent() {
         return _INSTANCE.mAppDelegate.getAppComponent();
     }
 
+    /**
+     * dagger获取注入器方法,{@link HasActivityInjector}
+     *
+     * @return
+     */
     @Override
     public AndroidInjector<Activity> activityInjector() {
         return activityInjector;
     }
 
+    /**
+     * dagger获取注入器方法,{@link HasSupportFragmentInjector}
+     *
+     * @return
+     */
     @Override
     public AndroidInjector<Fragment> supportFragmentInjector() {
         return fragmentInjector;

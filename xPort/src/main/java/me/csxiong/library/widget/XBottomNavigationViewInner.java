@@ -25,7 +25,8 @@ import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 
 /**
- * Created by yu on 2016/11/10.
+ * @Desc : 简单的NavigationBar
+ * @Author : csxiong create on 2019/7/17
  */
 @SuppressLint("RestrictedApi")
 public class XBottomNavigationViewInner extends BottomNavigationView {
@@ -314,10 +315,9 @@ public class XBottomNavigationViewInner extends BottomNavigationView {
     }
 
     /**
+     * @param enable It will has a shift animation if true. Otherwise all items are the same width.
      * @Deprecated use {@link #setLabelVisibilityMode }
      * enable the shifting mode for navigation
-     *
-     * @param enable It will has a shift animation if true. Otherwise all items are the same width.
      */
     @Deprecated
     public XBottomNavigationViewInner enableShiftingMode(boolean enable) {
@@ -338,10 +338,9 @@ public class XBottomNavigationViewInner extends BottomNavigationView {
     }
 
     /**
+     * @param enable It will has a shift animation for item if true. Otherwise the item text always be shown.
      * @Deprecated use {@link #setItemHorizontalTranslationEnabled(boolean)}
      * enable the shifting mode for each item
-     *
-     * @param enable It will has a shift animation for item if true. Otherwise the item text always be shown.
      */
     @Deprecated
     public XBottomNavigationViewInner enableItemShiftingMode(boolean enable) {
@@ -464,13 +463,14 @@ public class XBottomNavigationViewInner extends BottomNavigationView {
     /**
      * The lib has a default icon tint color. You can call this method to clear it if no need.
      * It usually used when you set two image for item.
+     *
      * @return
      */
     public XBottomNavigationViewInner clearIconTintColor() {
         getBottomNavigationMenuView().setIconTintList(null);
         return this;
     }
-    
+
     /**
      * get private mButtons in mMenuView
      *
@@ -649,10 +649,10 @@ public class XBottomNavigationViewInner extends BottomNavigationView {
     /**
      * set all item ImageView size
      *
-     * @param dpSize  in dp
+     * @param dpSize in dp
      */
     public XBottomNavigationViewInner setIconSize(float dpSize) {
-        setItemIconSize(dp2px(getContext(),dpSize));
+        setItemIconSize(dp2px(getContext(), dpSize));
         return this;
     }
 

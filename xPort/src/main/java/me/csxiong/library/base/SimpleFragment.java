@@ -86,7 +86,7 @@ public abstract class SimpleFragment extends SupportFragment implements IView, I
 
     @Override
     public AppComponent getAppComponent() {
-        return APP.getInstance().getAppComponent();
+        return APP.get().getAppComponent();
     }
 
     @Override

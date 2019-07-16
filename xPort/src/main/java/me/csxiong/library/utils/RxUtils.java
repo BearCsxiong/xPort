@@ -15,13 +15,8 @@ import me.csxiong.library.integration.http.ApiException;
 import me.csxiong.library.integration.http.Response;
 
 /**
- * -------------------------------------------------------------------------------
- * |
- * | desc : rxjava封装方法
- * |
- * |--------------------------------------------------------------------------------
- * | on 2018/9/28 created by csxiong
- * |--------------------------------------------------------------------------------
+ * @Desc : RxJava工具,主要是线程切换和数据解析,主要针对Http请求
+ * @Author : csxiong create on 2019/7/16
  */
 public class RxUtils {
 

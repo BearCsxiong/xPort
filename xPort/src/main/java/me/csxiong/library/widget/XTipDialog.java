@@ -25,13 +25,9 @@ import me.csxiong.library.R;
 import me.csxiong.library.utils.XDisplayUtil;
 
 /**
- * 提供一个浮层展示在屏幕中间, 一般使用 {@link XTipDialog.Builder} 或 {@link XTipDialog.CustomBuilder} 生成。
- * <ul>
- * <li>{@link XTipDialog.Builder} 提供了一个图标和一行文字的样式, 其中图标有几种类型可选, 见 {@link XTipDialog.Builder.IconType}</li>
- * <li>{@link XTipDialog.CustomBuilder} 支持传入自定义的 layoutResId, 达到自定义 TipDialog 的效果。</li>
- * </ul>
+ * @Desc : 可定制的提示框
+ * @Author : csxiong create on 2019/7/17
  */
-
 public class XTipDialog extends Dialog {
 
     public XTipDialog(Context context) {

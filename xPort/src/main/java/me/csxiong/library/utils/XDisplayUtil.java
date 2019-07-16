@@ -1,11 +1,8 @@
 package me.csxiong.library.utils;
 
 import android.content.Context;
-import android.os.IBinder;
 import android.util.DisplayMetrics;
-import android.view.View;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 
 import java.lang.reflect.Field;
 
@@ -13,13 +10,8 @@ import me.csxiong.library.base.APP;
 
 
 /**
- * -------------------------------------------------------------------------------
- * |
- * | desc : dp、px等转换工具,显示型参数数据获取
- * |
- * |--------------------------------------------------------------------------------
- * | on 2018/9/28 created by csxiong
- * |--------------------------------------------------------------------------------
+ * @Desc : 尺寸工具
+ * @Author : csxiong create on 2019/7/16
  */
 public class XDisplayUtil {
 
@@ -44,11 +36,11 @@ public class XDisplayUtil {
     }
 
     public static float spToPx(float dp) {
-        return dp * APP.getInstance().getResources().getDisplayMetrics().scaledDensity;
+        return dp * APP.get().getResources().getDisplayMetrics().scaledDensity;
     }
 
     public static float pxToSp(int px) {
-        return px / APP.getInstance().getResources().getDisplayMetrics().scaledDensity;
+        return px / APP.get().getResources().getDisplayMetrics().scaledDensity;
     }
 
     public static int spToPxInt(float dp) {
@@ -70,7 +62,7 @@ public class XDisplayUtil {
 
     public static DisplayMetrics getDisplayMetrics() {
         DisplayMetrics displayMetrics = new DisplayMetrics();
-        ((WindowManager) APP.getInstance().getApplicationContext().getSystemService(Context.WINDOW_SERVICE))
+        ((WindowManager) APP.get().getApplicationContext().getSystemService(Context.WINDOW_SERVICE))
                 .getDefaultDisplay().getMetrics(displayMetrics);
         return displayMetrics;
     }
@@ -81,11 +73,11 @@ public class XDisplayUtil {
     }
 
     public static int getScreenWidth() {
-        return APP.getInstance().getResources().getDisplayMetrics().widthPixels;
+        return APP.get().getResources().getDisplayMetrics().widthPixels;
     }
 
     public static int getScreenHeight() {
-        return APP.getInstance().getResources().getDisplayMetrics().heightPixels;
+        return APP.get().getResources().getDisplayMetrics().heightPixels;
     }
 
     public static int getStatusBarHeight() {
@@ -95,7 +87,7 @@ public class XDisplayUtil {
             Object obj = c.newInstance();
             Field field = c.getField("status_bar_height");
             int x = Integer.parseInt(field.get(obj).toString());
-            statusBarHeight = APP.getInstance().getResources().getDimensionPixelSize(x);
+            statusBarHeight = APP.get().getResources().getDimensionPixelSize(x);
         } catch (Exception e1) {
             e1.printStackTrace();
         }

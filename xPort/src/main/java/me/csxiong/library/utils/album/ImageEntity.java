@@ -3,6 +3,10 @@ package me.csxiong.library.utils.album;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+/**
+ * @Desc : 简单的数据实体
+ * @Author : csxiong create on 2019/7/16
+ */
 public class ImageEntity implements Parcelable {
 
     private static final long serialVersionUID = -422977773784519140L;

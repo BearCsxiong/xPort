@@ -13,6 +13,10 @@ import android.view.WindowManager;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @Desc : 设备工具,主要提供设备工具
+ * @Author : csxiong create on 2019/7/16
+ */
 public class DeviceUtils {
     private DeviceUtils() {
         throw new IllegalStateException("you can't instantiate me!");
