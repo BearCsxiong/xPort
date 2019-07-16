@@ -8,9 +8,10 @@ import me.csxiong.library.utils.GsonUtils;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 /**
- * Created by csxiong on 2019/2/11.
+ * @Desc : 结合OkHttpLogger打印的Logger
+ *
+ * @Author : csxiong create on 2019/7/16
  */
-
 public class HttpLogger implements HttpLoggingInterceptor.Logger {
 
     private StringBuilder mMessage = new StringBuilder();

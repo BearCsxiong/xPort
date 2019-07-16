@@ -37,12 +37,11 @@ dependencies {
     api dagger2android
     api dagger2androidsupport
     annotationProcessor dagger2androidprocessor
-    api arouterapi
+    api arouter
     annotationProcessor aroutercompiler
     api butterknife
     annotationProcessor butterknifecompiler
 
-    //流式Fragment
     api 'me.yokeyword:fragmentation:1.3.6'
 }
 
@@ -53,7 +52,7 @@ publish {
     artifactId = 'XPort'// library的名字
     version = '1.0.0'// 版本
     description = 'help build apps quickly!'
-    website = "https://github.com/Walten55/Fastgo-MVP-Integration-Master"
+    website = "https://github.com/csxiong/xPort"
     repoName = 'XPort'//repository name
 //upload your bintray ./gradlew clean build bintrayUpload -PbintrayUser=名字 -PbintrayKey=KEY -PdryRun=false
 }

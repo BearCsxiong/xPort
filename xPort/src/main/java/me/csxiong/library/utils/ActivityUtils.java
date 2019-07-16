@@ -8,8 +8,8 @@ import java.util.NoSuchElementException;
 import java.util.Stack;
 
 /**
- * Desc : Activity栈 控制拉取Activity
- * Author : csxiong - 2019/7/3
+ * @Desc : 活动栈管理
+ * @Author : csxiong create on 2019/7/16
  */
 public class ActivityUtils {
 

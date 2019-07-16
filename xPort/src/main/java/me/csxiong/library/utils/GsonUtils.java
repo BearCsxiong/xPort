@@ -3,21 +3,27 @@ package me.csxiong.library.utils;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-/**-------------------------------------------------------------------------------
-*|
-*| desc : gson 对json格式数据转换工具
-*|
-*|--------------------------------------------------------------------------------
-*| on 2018/9/28 created by csxiong
-*|--------------------------------------------------------------------------------
-*/
+/**
+ * -------------------------------------------------------------------------------
+ * |
+ * | desc : gson 对json格式数据转换工具
+ * |
+ * |--------------------------------------------------------------------------------
+ * | on 2018/9/28 created by csxiong
+ * |--------------------------------------------------------------------------------
+ */
 public class GsonUtils {
+
+    /**
+     * 单例content
+     */
     private static Gson gson;
 
+    /**
+     * 默认创建Gson提供使用
+     */
     static {
-        if (gson == null) {
-            gson = new Gson();
-        }
+        gson = new Gson();
     }
 
     /**
@@ -56,43 +62,10 @@ public class GsonUtils {
     }
 
     /**
-     * @des 去除Bom头与格式多余
-     * @date 2017/8/21 下午3:14
-     */
-    public static String JSONTokener(String str_json) {
-        String istr_json;
-        // consume an optional byte order mark (BOM) if it exists
-        if (str_json != null && str_json.startsWith("\ufeff")) {
-            istr_json = str_json.substring(1);
-        }
-//        如果多出"与/，去除
-        str_json=str_json.replace("\"{","{");
-        str_json=str_json.replace("}\"","}");
-        str_json=str_json.replace("\\","");
-
-        return str_json;
-    }
-
-    /**
-     * @des 去除格式多余"和/
-     * @date 2017/8/21 下午3:14
-     */
-    public static String JSONTokener2(String str_json) {
-//        如果多出"与/，去除
-        str_json=str_json.replace("\\","");
-        str_json=str_json.replace("&",",");
-        str_json=str_json.replace("\"\"","");
-//        str_json=str_json.replace("}\"","}");
-//        str_json=str_json.replace("\\","");
-
-        return str_json;
-    }
-
-    /**
      * @des 转化成JsonObject
      * @date 2017/8/30 下午4:20
      */
-    public static JsonObject toJsonObject(Object obj){
+    public static JsonObject toJsonObject(Object obj) {
         return gson.toJsonTree(obj).getAsJsonObject();
     }
 
@@ -103,7 +76,9 @@ public class GsonUtils {
      * @return 格式化后的json串
      */
     public static String formatJson(String jsonStr) {
-        if (null == jsonStr || "".equals(jsonStr)) return "";
+        if (null == jsonStr || "".equals(jsonStr)) {
+            return "";
+        }
         StringBuilder sb = new StringBuilder();
         char last = '\0';
         char current = '\0';
@@ -116,14 +91,12 @@ public class GsonUtils {
                 case '{':
                 case '[':
                     sb.append(current);
-//                    sb.append('\n');
                     indent++;
                     addIndentBlank(sb, indent);
                     break;
                 //遇到} ]换行，当前行缩进
                 case '}':
                 case ']':
-//                    sb.append('\n');
                     indent--;
                     addIndentBlank(sb, indent);
                     sb.append(current);
@@ -132,7 +105,6 @@ public class GsonUtils {
                 case ',':
                     sb.append(current);
                     if (last != '\\') {
-//                        sb.append('\n');
                         addIndentBlank(sb, indent);
                     }
                     break;
