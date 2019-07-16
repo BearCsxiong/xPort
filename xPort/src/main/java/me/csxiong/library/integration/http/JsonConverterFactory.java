@@ -12,6 +12,10 @@ import okhttp3.ResponseBody;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
 
+/**
+ * @Desc : 从retrofitAdapter中复制出的ConverterFactory直接添加提供数据装换
+ * @Author : csxiong create on 2019/7/16
+ */
 public class JsonConverterFactory extends Converter.Factory {
 
     public static JsonConverterFactory create() {
@@ -25,7 +29,9 @@ public class JsonConverterFactory extends Converter.Factory {
     private final Gson gson;
 
     private JsonConverterFactory(Gson gson) {
-        if (gson == null) throw new NullPointerException("gson == null");
+        if (gson == null) {
+            throw new NullPointerException("gson == null");
+        }
         this.gson = gson;
     }
 

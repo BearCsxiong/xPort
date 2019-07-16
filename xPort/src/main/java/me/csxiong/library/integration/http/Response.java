@@ -1,11 +1,22 @@
 package me.csxiong.library.integration.http;
 
 /**
- * 请求实体的基类
+ * @Desc : 数据响应体,主要提供数据转换,可根据后台结构独立配置,使用配置{@link me.csxiong.library.utils.RxUtils}
+ * @Author : csxiong create on 2019/7/16
  */
-public class Response<T> implements java.io.Serializable{
+public class Response<T> implements java.io.Serializable {
+
+    /**
+     * 响应码
+     */
     private int errcode;
+    /**
+     * 响应信息
+     */
     private String message;
+    /**
+     * 响应实体
+     */
     private T data;
 
     public int getErrcode() {
@@ -32,7 +43,7 @@ public class Response<T> implements java.io.Serializable{
         this.data = data;
     }
 
-    public boolean isSuccess(){
-        return 200==errcode;
+    public boolean isSuccess() {
+        return 200 == errcode;
     }
 }

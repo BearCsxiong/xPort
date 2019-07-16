@@ -16,21 +16,18 @@ import retrofit2.Converter;
 import static okhttp3.internal.Util.UTF_8;
 
 /**
+ * @Desc : 请求数据装换
+ * @Author : csxiong create on 2019/7/16
  */
 public class JsonRequestBodyConverter<T> implements Converter<T, RequestBody> {
     private static final MediaType MEDIA_TYPE = MediaType.parse("application/json; charset=UTF-8");
     private final Gson gson;
     private final TypeAdapter<T> adapter;
 
-    /**
-     * 构造器
-     */
-
     public JsonRequestBodyConverter(Gson gson, TypeAdapter<T> adapter) {
         this.gson = gson;
         this.adapter = adapter;
     }
-
 
     @Override
     public RequestBody convert(T value) throws IOException {

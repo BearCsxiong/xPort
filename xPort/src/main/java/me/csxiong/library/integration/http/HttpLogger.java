@@ -9,7 +9,6 @@ import okhttp3.logging.HttpLoggingInterceptor;
 
 /**
  * @Desc : 结合OkHttpLogger打印的Logger
- *
  * @Author : csxiong create on 2019/7/16
  */
 public class HttpLogger implements HttpLoggingInterceptor.Logger {

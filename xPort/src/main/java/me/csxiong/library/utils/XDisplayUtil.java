@@ -59,9 +59,6 @@ public class XDisplayUtil {
         return (int) (pxToSp(px) + 0.5f);
     }
 
-    /**
-     * 屏幕密度
-     */
     public static float sDensity = 0f;
 
     public static float getDensity() {
@@ -71,11 +68,6 @@ public class XDisplayUtil {
         return sDensity;
     }
 
-    /**
-     * DisplayMetrics
-     *
-     * @return
-     */
     public static DisplayMetrics getDisplayMetrics() {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((WindowManager) APP.getInstance().getApplicationContext().getSystemService(Context.WINDOW_SERVICE))
@@ -83,29 +75,9 @@ public class XDisplayUtil {
         return displayMetrics;
     }
 
-    /**
-     * 获取屏幕大小
-     *
-     * @return
-     */
     public static int[] getScreenPixelSize() {
         DisplayMetrics metrics = getDisplayMetrics();
         return new int[]{metrics.widthPixels, metrics.heightPixels};
-    }
-
-    public static void hideSoftInputKeyBoard(View focusView) {
-        if (focusView != null) {
-            IBinder binder = focusView.getWindowToken();
-            if (binder != null) {
-                InputMethodManager imd = (InputMethodManager) APP.getInstance().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imd.hideSoftInputFromWindow(binder, InputMethodManager.HIDE_IMPLICIT_ONLY);
-            }
-        }
-    }
-
-    public static void showSoftInputKeyBoard(View focusView) {
-        InputMethodManager imm = (InputMethodManager) APP.getInstance().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(focusView, InputMethodManager.SHOW_FORCED);
     }
 
     public static int getScreenWidth() {

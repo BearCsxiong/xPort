@@ -3,7 +3,7 @@ package me.csxiong.library.di.module;
 
 import android.app.Application;
 
-import me.csxiong.library.integration.ServiceProvider;
+import me.csxiong.library.integration.ApiProvider;
 import me.csxiong.library.integration.lifecycle.ActivityLifecycleForRxLifecycle;
 import me.csxiong.library.integration.lifecycle.FragmentLifecycleActivityProxyer;
 
@@ -44,7 +44,7 @@ public class AppModule {
 
     @Provides
     @Singleton
-    ServiceProvider provideServiceProvider(ServiceProvider provider) {
+    ApiProvider provideServiceProvider(ApiProvider provider) {
         return provider;
     }
 }

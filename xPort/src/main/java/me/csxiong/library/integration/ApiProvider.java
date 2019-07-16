@@ -17,24 +17,21 @@ package me.csxiong.library.integration;
 
 import android.app.Application;
 import android.content.Context;
+import android.support.v4.util.LruCache;
 
 import javax.inject.Inject;
 
 import dagger.Lazy;
-import me.csxiong.library.integration.cache.LruCache;
 import me.csxiong.library.utils.XPreconditions;
 import retrofit2.Retrofit;
 
 /**
- * -------------------------------------------------------------------------------
- * |
- * | desc : retrofit中service缓存
- * |
- * |--------------------------------------------------------------------------------
- * | on 2018/9/27 created by csxiong
- * |--------------------------------------------------------------------------------
+ * @Desc : Api提供者
+ *
+ * @Author : csxiong create on 2019/7/16
  */
-public class ServiceProvider {
+public class ApiProvider {
+
     @Inject
     Lazy<Retrofit> mRetrofit;
     @Inject
@@ -45,7 +42,7 @@ public class ServiceProvider {
     private final String CACHE_KEY_RETROFIT = "RETROFIT";
 
     @Inject
-    public ServiceProvider() {
+    public ApiProvider() {
     }
 
     /**

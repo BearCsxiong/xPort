@@ -11,15 +11,9 @@ import java.util.List;
 import me.csxiong.library.BuildConfig;
 import me.csxiong.library.base.delegate.GlobalConfig;
 
-
 /**
- * -------------------------------------------------------------------------------
- * |
- * | desc : ManifestParser praser content like {Key:Value} content
- * |
- * |--------------------------------------------------------------------------------
- * | on 2018/9/26 created by csxiong
- * |--------------------------------------------------------------------------------
+ * @Desc : 解析AndroidManifest文件,主要提供解析部分metadata功能,使用{@link GlobalConfig}
+ * @Author : csxiong create on 2019/7/16
  */
 public final class ManifestParser<T> {
     private static final String MODULE_VALUE = "GlobalConfig";
