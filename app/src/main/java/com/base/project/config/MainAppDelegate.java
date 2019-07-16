@@ -13,9 +13,9 @@ import me.csxiong.library.base.APP;
 import me.csxiong.library.base.delegate.IAppDelegate;
 
 /**
- * Created by csxiong on 2018/8/8.
+ * @Desc : Application Main代理
+ * @Author : csxiong create on 2019/7/17
  */
-
 public class MainAppDelegate implements IAppDelegate {
     @Override
     public void attachBaseContext(@NonNull Context context) {

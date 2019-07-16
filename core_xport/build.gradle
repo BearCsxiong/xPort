@@ -42,7 +42,6 @@ dependencies {
     api butterknife
     annotationProcessor butterknifecompiler
 
-    api 'me.yokeyword:fragmentation:1.3.6'
 }
 
 //与android、dependencies在同一级

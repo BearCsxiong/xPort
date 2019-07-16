@@ -1,4 +1,3 @@
 include ':app',
         ':module_login',
-        ':library_ui',
-        ':xPort'
+        ':core_xport'

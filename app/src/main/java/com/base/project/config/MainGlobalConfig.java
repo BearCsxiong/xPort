@@ -4,18 +4,19 @@ import android.app.Application;
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
 
-import me.csxiong.library.base.delegate.GlobalConfig;
-import me.csxiong.library.base.delegate.IAppDelegate;
-import me.csxiong.library.di.module.ClientModule;
-import me.csxiong.library.di.module.GlobalConfigModule;
 import com.orhanobut.logger.PrettyFormatStrategy;
 
 import java.util.List;
 
-/**
- * Created by csxiong on 2018/8/8.
- */
+import me.csxiong.library.base.delegate.GlobalConfig;
+import me.csxiong.library.base.delegate.IAppDelegate;
+import me.csxiong.library.di.module.ClientModule;
+import me.csxiong.library.di.module.GlobalConfigModule;
 
+/**
+ * @Desc : Main全局配置
+ * @Author : csxiong create on 2019/7/17
+ */
 public class MainGlobalConfig implements GlobalConfig {
 
     @Override

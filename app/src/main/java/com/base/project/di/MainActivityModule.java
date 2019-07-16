@@ -1,16 +1,19 @@
-package com.base.project.di.module;
+package com.base.project.di;
 
-import com.base.project.main.MainActivity;
+import android.app.Activity;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 import me.csxiong.library.di.scope.ActivityScope;
 
-
+/**
+ * @Desc : Activity注入
+ * @Author : csxiong create on 2019/7/17
+ */
 @Module
 public abstract class MainActivityModule {
 
     @ActivityScope
     @ContributesAndroidInjector
-    abstract MainActivity injectMain();
+    abstract Activity inject();
 }

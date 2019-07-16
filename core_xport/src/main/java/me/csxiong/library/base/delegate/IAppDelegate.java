@@ -10,9 +10,24 @@ import android.support.annotation.NonNull;
  */
 public interface IAppDelegate {
 
+    /**
+     * Application生命周期
+     *
+     * @param context
+     */
     void attachBaseContext(@NonNull Context context);
 
+    /**
+     * Application生命周期
+     *
+     * @param application
+     */
     void onCreate(@NonNull Application application);
 
+    /**
+     * Application生命周期
+     *
+     * @param application
+     */
     void onTerminate(@NonNull Application application);
 }

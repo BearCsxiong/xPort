@@ -7,7 +7,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
-    api project(':xPort')
+    api project(':core_xport')
     api project(':module_login')
     annotationProcessor aroutercompiler
     annotationProcessor butterknifecompiler
