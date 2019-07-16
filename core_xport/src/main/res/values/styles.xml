@@ -11,42 +11,4 @@
         <item name="android:actionMenuTextColor">@color/colorPrimary</item>
     </style>
 
-    <style name="NoTitleFullscreen" parent="BaseAppTheme">
-        <item name="android:windowNoTitle">true</item>
-        <item name="windowActionBar">false</item>
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowContentOverlay">@null</item>
-    </style>
-
-    <style name="horizontal_line">
-        <item name="android:layout_height">1px</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:background">#FFF2F4F6</item>
-    </style>
-
-    <style name="dialog_transition">
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowEnterAnimation">@anim/fade_in</item>
-        <item name="android:windowExitAnimation">@anim/fade_out</item>
-    </style>
-
-    <style name="dialog_zoom">
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowEnterAnimation">@anim/scale_in</item>
-        <item name="android:windowExitAnimation">@anim/scale_out</item>
-    </style>
-
-    <style name="dialog_bottom_transition">
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowEnterAnimation">@anim/bottom_in</item>
-        <item name="android:windowExitAnimation">@anim/bottom_out</item>
-    </style>
-
-    <style name="dialog_sheet_bottom" parent="@style/dialog_bottom_transition">
-        <item name="android:background">@android:color/transparent</item>
-    </style>
-
 </resources>

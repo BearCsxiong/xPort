@@ -4,7 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import me.csxiong.library.base.delegate.IAppDelegate;
+import me.csxiong.library.base.IAppDelegate;
 
 /**
  * Created by csxiong on 2018/8/8.

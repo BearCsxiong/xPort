@@ -1,11 +1,8 @@
 package me.csxiong.library.utils;
 
-import android.app.Activity;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
-
-import me.csxiong.library.base.SimpleActivity;
 
 /**
  * @Desc : 控制工具
@@ -33,13 +30,6 @@ public final class XPreconditions {
     public static void checkArgument(boolean expression, @Nullable String errorMessageTemplate, @Nullable Object... errorMessageArgs) {
         if (!expression) {
             throw new IllegalArgumentException(format(errorMessageTemplate, errorMessageArgs));
-        }
-    }
-
-    public static void checkActicityState(Activity act, String msg) {
-        if (act instanceof SimpleActivity) {
-        } else {
-            throw new IllegalStateException(msg);
         }
     }
 

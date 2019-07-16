@@ -18,7 +18,6 @@ import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
 import dagger.android.support.HasSupportFragmentInjector;
-import me.csxiong.library.base.delegate.AppDelegateManager;
 import me.csxiong.library.di.component.AppComponent;
 
 /**

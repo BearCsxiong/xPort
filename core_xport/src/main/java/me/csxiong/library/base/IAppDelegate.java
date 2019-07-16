@@ -1,4 +1,4 @@
-package me.csxiong.library.base.delegate;
+package me.csxiong.library.base;
 
 import android.app.Application;
 import android.content.Context;

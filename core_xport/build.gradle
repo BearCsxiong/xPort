@@ -11,9 +11,6 @@ dependencies {
     api supportv4
     api cardviewv7
     api logger2
-    api rxlifecycle
-    api rxlifecycle_android
-    api rxlifecycle_components
     api rxjava2
     api rxandroid2
     api retrofit2_adapter_rxjava2

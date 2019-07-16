@@ -7,10 +7,10 @@ import android.support.multidex.MultiDex;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.base.project.BuildConfig;
-import com.base.project.di.component.DaggerUIComponent;
+import com.base.project.di.DaggerUIComponent;
 
 import me.csxiong.library.base.APP;
-import me.csxiong.library.base.delegate.IAppDelegate;
+import me.csxiong.library.base.IAppDelegate;
 
 /**
  * @Desc : Application Main代理

@@ -192,7 +192,7 @@ public class XToast {
             return;
         }
         Toast currentToast = new Toast(context);
-        LinearLayout contentWrap = (LinearLayout) LayoutInflater.from(APP.get()).inflate(R.layout.toast_layout, null);
+        LinearLayout contentWrap = (LinearLayout) LayoutInflater.from(APP.get()).inflate(R.layout.x_toast_layout, null);
 
         ImageView imageView = contentWrap.findViewById(R.id.toast_icon);
         //添加ICON

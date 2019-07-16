@@ -8,8 +8,8 @@ import com.orhanobut.logger.PrettyFormatStrategy;
 
 import java.util.List;
 
-import me.csxiong.library.base.delegate.GlobalConfig;
-import me.csxiong.library.base.delegate.IAppDelegate;
+import me.csxiong.library.base.GlobalConfig;
+import me.csxiong.library.base.IAppDelegate;
 import me.csxiong.library.di.module.ClientModule;
 import me.csxiong.library.di.module.GlobalConfigModule;
 

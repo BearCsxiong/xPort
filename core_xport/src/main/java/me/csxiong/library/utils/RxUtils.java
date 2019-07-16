@@ -10,7 +10,6 @@ import io.reactivex.ObservableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import me.csxiong.library.base.IView;
 import me.csxiong.library.integration.http.ApiException;
 import me.csxiong.library.integration.http.Response;
 
@@ -19,32 +18,6 @@ import me.csxiong.library.integration.http.Response;
  * @Author : csxiong create on 2019/7/16
  */
 public class RxUtils {
-
-    /**
-     * Http默认请求转换模板
-     * 1.线程切换
-     * 2.生命周期管理
-     * 3.结果接收转换
-     * <p>
-     * ps : 此方法不广适用,此为设计业务系统请求转换的模板,待开发者自己整理一套自己的转换逻辑
-     * <p>
-     * 含有多个请求嵌套的情况最适合使用FlowableTransformer进行内容转换链式请求结果
-     *
-     * @param view
-     * @param <T>
-     * @return
-     */
-    public static <T> ObservableTransformer<Response<T>, T> doDefaultHttpTransformer(final IView view, Class<T> classes) {
-        return new ObservableTransformer<Response<T>, T>() {
-            @Override
-            public Observable<T> apply(Observable<Response<T>> observable) {
-                return observable
-                        .compose(RxUtils.onHandleResult(new DefaultApiHandleResult()))
-                        .compose(RxLifecycleUtil.bindUntilEvent(view))
-                        .compose(RxUtils.onRxThread());
-            }
-        };
-    }
 
     /**
      * 切换线程

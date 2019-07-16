@@ -3,15 +3,11 @@ package me.csxiong.library.di.module;
 
 import android.app.Application;
 
-import me.csxiong.library.integration.ApiProvider;
-import me.csxiong.library.integration.lifecycle.ActivityLifecycleForRxLifecycle;
-import me.csxiong.library.integration.lifecycle.FragmentLifecycleActivityProxyer;
-
-import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import me.csxiong.library.integration.ApiProvider;
 
 /**
  * @Desc : 主App模块 提供部分拓展参数的注入
@@ -32,20 +28,12 @@ public class AppModule {
         return application;
     }
 
-    @Provides
-    @Singleton
-    @Named("ActivityLifecycle")
-    Application.ActivityLifecycleCallbacks provideActivityLifecycleForRxLifecycle(ActivityLifecycleForRxLifecycle activityLifecycleForRxLifecycle) {
-        return activityLifecycleForRxLifecycle;
-    }
-
-    @Provides
-    @Singleton
-    @Named("FragmentLifecycle")
-    Application.ActivityLifecycleCallbacks provideFragmentLifecycleForRxLifecycle(FragmentLifecycleActivityProxyer fragmentLifecycleActivityProxyer) {
-        return fragmentLifecycleActivityProxyer;
-    }
-
+    /**
+     * 提供ApiService
+     *
+     * @param provider
+     * @return
+     */
     @Provides
     @Singleton
     ApiProvider provideServiceProvider(ApiProvider provider) {

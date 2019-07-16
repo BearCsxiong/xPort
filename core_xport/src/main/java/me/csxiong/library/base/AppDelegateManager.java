@@ -1,4 +1,4 @@
-package me.csxiong.library.base.delegate;
+package me.csxiong.library.base;
 
 import android.app.Application;
 import android.content.Context;
@@ -10,10 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import me.csxiong.library.R;
-import me.csxiong.library.base.IApp;
 import me.csxiong.library.di.component.AppComponent;
 import me.csxiong.library.di.component.DaggerAppComponent;
 import me.csxiong.library.di.module.AppModule;
@@ -27,17 +25,16 @@ import me.csxiong.library.utils.XPreconditions;
  * @Author : csxiong create on 2019/7/17
  */
 public class AppDelegateManager implements IApp, IAppDelegate {
+
+    /**
+     * 当前Application
+     */
     private Application mApplication;
 
+    /**
+     * 当前Application注入器
+     */
     private AppComponent mAppComponent;
-
-    @Inject
-    @Named("FragmentLifecycle")
-    Application.ActivityLifecycleCallbacks mFragmentLifecycle;
-
-    @Inject
-    @Named("ActivityLifecycle")
-    Application.ActivityLifecycleCallbacks mActivityLifecycle;
 
     @Inject
     PrettyFormatStrategy formatStrategy;
@@ -88,8 +85,6 @@ public class AppDelegateManager implements IApp, IAppDelegate {
                 .build();
         mAppComponent.inject(this);
         this.mModules = null;
-        mApplication.registerActivityLifecycleCallbacks(mActivityLifecycle);
-        mApplication.registerActivityLifecycleCallbacks(mFragmentLifecycle);
         for (Application.ActivityLifecycleCallbacks lifecycle : mActivityLifecycles) {
             mApplication.registerActivityLifecycleCallbacks(lifecycle);
         }
@@ -107,12 +102,6 @@ public class AppDelegateManager implements IApp, IAppDelegate {
 
     @Override
     public void onTerminate(@NonNull Application application) {
-        if (mActivityLifecycle != null) {
-            mApplication.unregisterActivityLifecycleCallbacks(mActivityLifecycle);
-        }
-        if (mFragmentLifecycle != null) {
-            mApplication.unregisterActivityLifecycleCallbacks(mFragmentLifecycle);
-        }
         if (mActivityLifecycles != null && mActivityLifecycles.size() > 0) {
             for (Application.ActivityLifecycleCallbacks lifecycle : mActivityLifecycles) {
                 mApplication.unregisterActivityLifecycleCallbacks(lifecycle);
@@ -124,8 +113,6 @@ public class AppDelegateManager implements IApp, IAppDelegate {
             }
         }
         this.mAppComponent = null;
-        this.mActivityLifecycle = null;
-        this.mFragmentLifecycle = null;
         this.mActivityLifecycles = null;
         this.mIAppLifecycles = null;
         this.mApplication = null;

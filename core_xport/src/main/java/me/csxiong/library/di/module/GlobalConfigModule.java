@@ -11,7 +11,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import me.csxiong.library.BuildConfig;
-import me.csxiong.library.base.delegate.GlobalConfig;
+import me.csxiong.library.base.GlobalConfig;
 import okhttp3.HttpUrl;
 
 /**

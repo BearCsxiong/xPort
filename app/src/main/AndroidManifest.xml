@@ -34,13 +34,13 @@
     <application
         android:name="me.csxiong.library.base.APP"
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/BaseAppTheme">
 
-        <activity android:name="com.base.project.main.MainActivity">
+        <activity android:name="com.base.project.ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -9,7 +9,7 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 import io.reactivex.Scheduler;
-import me.csxiong.library.base.delegate.AppDelegateManager;
+import me.csxiong.library.base.AppDelegateManager;
 import me.csxiong.library.di.module.AppModule;
 import me.csxiong.library.di.module.ClientModule;
 import me.csxiong.library.di.module.GlobalConfigModule;
