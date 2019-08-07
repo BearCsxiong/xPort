@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.graphics.Point;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -19,12 +18,22 @@ public class AdvertisingLayoutManager extends RecyclerView.LayoutManager {
     /**
      * 缩放因子
      */
-    private static float SCALE_FACTOR = 0.012f;
+    private final static float SCALE_FACTOR = 0.008f;
 
     /**
      * 位移因子
      */
-    private static float TRANSLATE_FACTOR = 20;
+    private final static float TRANSLATE_FACTOR = 15;
+
+    /**
+     * 缩放因子
+     */
+    private float mScaleFactor = SCALE_FACTOR;
+
+    /**
+     * 位移因子
+     */
+    private float mTranslateFactor = TRANSLATE_FACTOR;
 
     /**
      * 目标Rv
@@ -101,7 +110,6 @@ public class AdvertisingLayoutManager extends RecyclerView.LayoutManager {
                 int progressX = (int) (animationX * fraction);
                 layoutChildren(null, progressX - dx);
                 dx = progressX;
-                Log.e("dx", dx + ":" + animationX);
             }
         }
     };
@@ -133,22 +141,22 @@ public class AdvertisingLayoutManager extends RecyclerView.LayoutManager {
                 animationX = offsetX + baseDistance * (getItemCount() - 1);
             } else {
                 if (isLeftDrag) {
-                    //想要显示next
+                    // 想要显示next
                     if (currentPer >= 0.20f) {
-                        //向上level
+                        // 向上level
                         animationX = (int) +(baseDistance * (1 - currentPer));
                     } else {
-                        //向下level
+                        // 向下level
                         animationX = (int) -(baseDistance * currentPer);
                     }
                 } else {
-                    //想要显示last
+                    // 想要显示last
                     if (currentPer <= 0.80f) {
-                        //向下level
+                        // 向下level
                         animationX = (int) -(baseDistance * currentPer);
                     } else {
                         animationX = (int) +(baseDistance * (1 - currentPer));
-                        //向上level
+                        // 向上level
                     }
                 }
 
@@ -156,19 +164,20 @@ public class AdvertisingLayoutManager extends RecyclerView.LayoutManager {
         }
     };
 
-    /**
-     * 广告布局管理器
-     *
-     * @param recyclerView
-     */
-    public AdvertisingLayoutManager(RecyclerView recyclerView) {
+    public AdvertisingLayoutManager(RecyclerView recyclerView, float scaleFactor, float translateFactor) {
         if (recyclerView == null) {
             throw new NullPointerException("can't be null");
         }
         this.mRv = recyclerView;
+        this.mScaleFactor = scaleFactor;
+        this.mTranslateFactor = translateFactor;
         mSpringBackAnimator.setDuration(200);
         mSpringBackAnimator.addUpdateListener(animatorUpdateListener);
         mSpringBackAnimator.addListener(animatorListener);
+    }
+
+    public AdvertisingLayoutManager(RecyclerView recyclerView) {
+        this(recyclerView, SCALE_FACTOR, TRANSLATE_FACTOR);
     }
 
     /**
@@ -196,10 +205,10 @@ public class AdvertisingLayoutManager extends RecyclerView.LayoutManager {
             return;
         }
         centerPoint = new Point(getWidth() / 2, getHeight() / 2);
-        //动态创建符合个数的points
+        // 动态创建符合个数的points
         itemCenterPoints = new Point[itemCount];
 
-        //因为只是广告栏,itemCount个数不多,直接排列出所有的子view,
+        // 因为只是广告栏,itemCount个数不多,直接排列出所有的子view,
         for (int i = 0; i < itemCount; i++) {
             View view = recycler.getViewForPosition(i);
             addView(view);
@@ -210,14 +219,14 @@ public class AdvertisingLayoutManager extends RecyclerView.LayoutManager {
             int heightSpace = getHeight() - getDecoratedMeasuredHeight(view);
 
             if (baseDistance == -1) {
-                //间隔距离
+                // 间隔距离
                 baseDistance = viewWidth + widthSpace / 4;
             }
-            //记录某个View中心的位置
-            itemCenterPoints[i] = new Point(widthSpace / 2 + baseDistance * i + viewWidth / 2, heightSpace / 2 + viewHeight / 2);
+            // 记录某个View中心的位置
+            itemCenterPoints[i] =
+                    new Point(widthSpace / 2 + baseDistance * i + viewWidth / 2, heightSpace / 2 + viewHeight / 2);
             layoutDecoratedWithMargins(view, widthSpace / 2 + baseDistance * i, heightSpace / 2,
-                    widthSpace / 2 + viewWidth + baseDistance * i,
-                    heightSpace / 2 + viewHeight);
+                    widthSpace / 2 + viewWidth + baseDistance * i, heightSpace / 2 + viewHeight);
         }
     }
 
@@ -241,8 +250,8 @@ public class AdvertisingLayoutManager extends RecyclerView.LayoutManager {
      */
     @Override
     public int scrollHorizontallyBy(int dx, RecyclerView.Recycler recycler, RecyclerView.State state) {
-        //这个内部view个数有限 也就是说广告个数有限 我们考虑到回收机制的问题，回收机制可以这么做 预滑动 检测到不在屏幕内容的 在滑动过后回收对象
-        //计算每个人的位移量
+        // 这个内部view个数有限 也就是说广告个数有限 我们考虑到回收机制的问题，回收机制可以这么做 预滑动 检测到不在屏幕内容的 在滑动过后回收对象
+        // 计算每个人的位移量
         if (isDraging) {
             layoutChildren(recycler, dx);
         }
@@ -258,21 +267,20 @@ public class AdvertisingLayoutManager extends RecyclerView.LayoutManager {
     public void onScrollStateChanged(int state) {
         isDraging = state == RecyclerView.SCROLL_STATE_DRAGGING;
         if (lastState == RecyclerView.SCROLL_STATE_IDLE && state == RecyclerView.SCROLL_STATE_DRAGGING) {
-            //取消动画
+            // 取消动画
             cancelAnimator();
         } else if (lastState == RecyclerView.SCROLL_STATE_DRAGGING && state == RecyclerView.SCROLL_STATE_SETTLING) {
-            //手释放 进入fling
-            //现在把它做成直接到下一个level
+            // 手释放 进入fling
+            // 现在把它做成直接到下一个level
             checkRelease();
         } else if (lastState == RecyclerView.SCROLL_STATE_SETTLING && state == RecyclerView.SCROLL_STATE_IDLE) {
-            //fling停止 check springback
+            // fling停止 check springback
             checkRelease();
         } else if (lastState == RecyclerView.SCROLL_STATE_DRAGGING && state == RecyclerView.SCROLL_STATE_IDLE) {
-            //draging停止 check springback
+            // draging停止 check springback
             checkRelease();
         }
         lastState = state;
-        Log.e("ScrollState", state + "");
         super.onScrollStateChanged(state);
     }
 
@@ -284,26 +292,24 @@ public class AdvertisingLayoutManager extends RecyclerView.LayoutManager {
      */
     public void layoutChildren(RecyclerView.Recycler recycler, int dx) {
         offsetX -= dx;
-        Log.e("dx", "offsetX ->" + offsetX);
         isLeftDrag = dx > 0;
-        Log.e("isLeft", isLeftDrag + "");
-        //当前滚动的层级
+        // 当前滚动的层级
         if (offsetX < 0) {
             currentLevel = Math.abs(offsetX / baseDistance);
         } else {
             currentLevel = -1;
         }
-        //当前百分比进度
+        // 当前百分比进度
         currentPer = -(offsetX + baseDistance * currentLevel) / (float) baseDistance;
         for (int i = 0; i < getItemCount(); i++) {
             View view = mRv.getChildAt(i);
             if (i <= currentLevel) {
                 float factorLevel = currentLevel - i + currentPer;
                 int centerX = (view.getLeft() + view.getRight()) / 2;
-                view.setScaleX(1 - factorLevel * SCALE_FACTOR);
-                view.setScaleY(1 - factorLevel * SCALE_FACTOR);
-                float targetX = centerPoint.x - factorLevel * TRANSLATE_FACTOR;
-                //左移目标进度的差值
+                view.setScaleX(1 - factorLevel * mScaleFactor);
+                view.setScaleY(1 - factorLevel * mScaleFactor);
+                float targetX = centerPoint.x - factorLevel * mTranslateFactor;
+                // 左移目标进度的差值
                 view.offsetLeftAndRight((int) -(centerX - targetX));
             } else {
                 view.setScaleX(1);
@@ -320,7 +326,6 @@ public class AdvertisingLayoutManager extends RecyclerView.LayoutManager {
      */
     public void checkRelease() {
         isDraging = false;
-        Log.e("currentPer", currentPer + "");
         if (!mSpringBackAnimator.isRunning()) {
             mSpringBackAnimator.start();
         }
