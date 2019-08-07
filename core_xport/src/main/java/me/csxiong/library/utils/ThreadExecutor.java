@@ -67,6 +67,16 @@ public class ThreadExecutor {
     }
 
     /**
+     * 简单的切换线程,切换到主线程
+     *
+     * @param runnable
+     * @param delay    延迟
+     */
+    public void runOnUiThread(Runnable runnable, long delay) {
+        handler.postDelayed(runnable, delay);
+    }
+
+    /**
      * 简单的切换线程,切换到后台运作
      *
      * @param runnable
