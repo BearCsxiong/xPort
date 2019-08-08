@@ -10,12 +10,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
 import com.base.project.R;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import me.csxiong.library.utils.DeviceUtils;
+import me.csxiong.library.utils.XDisplayUtil;
 
 public class MainActivity extends Activity {
 
@@ -39,9 +43,22 @@ public class MainActivity extends Activity {
         list.add("sfdgs");
         list.add("sdfg");
         mRv = findViewById(R.id.rv);
+        mRv.setPadding(XDisplayUtil.getScreenWidth() / 2 - XDisplayUtil.dpToPxInt(98) / 2, 0, XDisplayUtil.getScreenWidth() / 2 - XDisplayUtil.dpToPxInt(98) / 2, 0);
 
+        SelectItemDecoration itemde = new SelectItemDecoration(mRv);
+        itemde.setOnPageListener(new SelectItemDecoration.OnPageListener() {
+            @Override
+            public void onPageAttach(int position) {
+                Log.e("onPage", "attach" + position);
+            }
+
+            @Override
+            public void onPageDetach(int position) {
+                Log.e("onPage", "detach" + position);
+            }
+        });
         mRv.setLayoutManager(new SelectItemLayoutManager(this));
-        mRv.addItemDecoration(new SelectItemDecoration());
+        mRv.addItemDecoration(itemde);
         mRv.setAdapter(new RecyclerView.Adapter() {
 
             @NonNull
