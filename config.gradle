@@ -11,6 +11,11 @@ android {
     dexOptions {
         javaMaxHeapSize "4g"
     }
+
+    dataBinding{
+        enabled = true
+    }
+
     aaptOptions.cruncherEnabled = false
     aaptOptions.useNewCruncher = false
     defaultConfig {
