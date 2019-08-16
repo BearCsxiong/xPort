@@ -36,9 +36,6 @@ dependencies {
     annotationProcessor dagger2androidprocessor
     api arouter
     annotationProcessor aroutercompiler
-    api butterknife
-    annotationProcessor butterknifecompiler
-
 }
 
 //与android、dependencies在同一级

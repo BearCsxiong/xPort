@@ -15,7 +15,6 @@ buildscript {
     dependencies {
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         classpath 'com.android.tools.build:gradle:3.3.1'
-        classpath 'com.jakewharton:butterknife-gradle-plugin:9.0.0'
         classpath "io.realm:realm-gradle-plugin:5.4.1"
         classpath "com.alibaba:arouter-register:1.0.2"
         classpath "io.objectbox:objectbox-gradle-plugin:2.3.4"
@@ -29,7 +28,7 @@ allprojects {
     repositories {
         maven { url "https://jitpack.io" }
 //         maven { url "{private maven url}"}
-         maven { url "https://dl.bintray.com/csxiong/BaseBuild"}
+         maven { url "https://dl.bintray.com/csxiong/XPort"}
         jcenter()
         google()
     }

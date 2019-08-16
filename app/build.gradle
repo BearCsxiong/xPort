@@ -10,7 +10,6 @@ dependencies {
     api project(':core_xport')
     api project(':module_login')
     annotationProcessor aroutercompiler
-    annotationProcessor butterknifecompiler
     annotationProcessor dagger2compiler
     annotationProcessor dagger2androidprocessor
 }

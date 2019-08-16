@@ -1,27 +1,26 @@
 package com.base.project.ui;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
 import com.base.project.R;
+import com.base.project.databinding.ActivityMainBinding;
+import com.base.project.ui.main.MainViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import me.csxiong.library.utils.DeviceUtils;
+import me.csxiong.library.base.XActivity;
 import me.csxiong.library.utils.XDisplayUtil;
 
-public class MainActivity extends Activity {
+public class MainActivity extends XActivity<ActivityMainBinding, MainViewModel> {
 
     RecyclerView mRv;
 
@@ -30,7 +29,6 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         list.add("asdfa");
         list.add("fasdf");
         list.add("adsf");
@@ -80,6 +78,23 @@ public class MainActivity extends Activity {
                 return list.size();
             }
         });
+    }
+
+    @Override
+    public int getLayoutId() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    public void initView() {
+        mBinding.setStudent("CloseingBackGroup");
+        mBinding.setViewModel(mViewModel);
+        mViewModel.getShowLoadingEvent();
+    }
+
+    @Override
+    public void initData() {
+
     }
 
     public class BaseViewHolder extends RecyclerView.ViewHolder {

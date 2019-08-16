@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
+import dagger.android.support.AndroidSupportInjection;
+
 /**
  * @Desc : MVVM基类Fragment
  * @Author : csxiong create on 2019/7/22
@@ -26,6 +28,7 @@ public abstract class XFragment<T extends ViewDataBinding, K extends AndroidView
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        AndroidSupportInjection.inject(this);
         View view = inflater.inflate(getLayoutId(), null);
         mBinding = DataBindingUtil.bind(view);
         return view;

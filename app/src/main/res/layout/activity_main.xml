@@ -1,17 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/main_drawer"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv"
+    <data>
+
+        <import type="com.base.project.ui.main.MainViewModel" />
+
+        <variable
+            name="student"
+            type="String" />
+
+        <variable
+            name="viewModel"
+            type="com.base.project.ui.main.MainViewModel" />
+
+    </data>
+
+    <LinearLayout
+        android:id="@+id/main_drawer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:clipChildren="false"
-        android:clipToPadding="false">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    </android.support.v7.widget.RecyclerView>
+        <TextView
+            android:id="@+id/tv_show_loading"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:gravity="center"
+            android:onClick="@{viewModel.showLoading}"
+            android:text="ShowLoading" />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/tv_close_loading"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:gravity="center"
+            android:text='@{"发生地方" + student}' />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:clipChildren="false"
+            android:clipToPadding="false">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </LinearLayout>
+</layout>

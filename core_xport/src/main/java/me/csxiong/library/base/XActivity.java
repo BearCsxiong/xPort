@@ -8,6 +8,8 @@ import android.support.annotation.Nullable;
 
 import javax.inject.Inject;
 
+import dagger.android.AndroidInjection;
+
 /**
  * @Desc : MVVM基类结构
  * @Author : csxiong create on 2019/7/22
@@ -22,6 +24,7 @@ public abstract class XActivity<T extends ViewDataBinding, K extends AndroidView
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AndroidInjection.inject(this);
         mBinding = DataBindingUtil.setContentView(this, getLayoutId());
         initView();
         initData();
