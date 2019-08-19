@@ -1,6 +1,7 @@
 package me.csxiong.library.base;
 
 import android.arch.lifecycle.AndroidViewModel;
+import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
@@ -10,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import javax.inject.Inject;
+import java.lang.reflect.ParameterizedType;
 
 import dagger.android.support.AndroidSupportInjection;
 
@@ -22,7 +23,6 @@ public abstract class XFragment<T extends ViewDataBinding, K extends AndroidView
 
     public T mBinding;
 
-    @Inject
     public K mViewModel;
 
     @Nullable
@@ -31,6 +31,8 @@ public abstract class XFragment<T extends ViewDataBinding, K extends AndroidView
         AndroidSupportInjection.inject(this);
         View view = inflater.inflate(getLayoutId(), null);
         mBinding = DataBindingUtil.bind(view);
+        Class<K> classK = (Class<K>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1];
+        mViewModel = ViewModelProviders.of(getActivity()).get(classK);
         return view;
     }
 

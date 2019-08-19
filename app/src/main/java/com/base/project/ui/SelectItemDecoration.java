@@ -206,7 +206,7 @@ public class SelectItemDecoration extends RecyclerView.ItemDecoration {
             for (int i = firstVisibleItem; i <= lastVisibleItem; i++) {
                 View view = llm.findViewByPosition(i);
                 //手势趋势因子
-                int xFraction = isScrollLeft ? (int) (-i * gestureFactor * centerX) : (int) (+i * gestureFactor * centerX);
+                int xFraction = isScrollLeft ? (int) (-i * gestureFactor * centerX) : (int) (i * gestureFactor * centerX);
                 int tempOffsetX = Math.abs((view.getLeft() + view.getRight()) / 2 - centerX) + xFraction;
                 if (offsetX > tempOffsetX) {
                     offsetX = tempOffsetX;

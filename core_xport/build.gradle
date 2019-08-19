@@ -36,6 +36,8 @@ dependencies {
     annotationProcessor dagger2androidprocessor
     api arouter
     annotationProcessor aroutercompiler
+
+    api "android.arch.lifecycle:extensions:1.1.1"
 }
 
 //与android、dependencies在同一级

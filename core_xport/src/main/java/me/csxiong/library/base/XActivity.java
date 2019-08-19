@@ -1,12 +1,13 @@
 package me.csxiong.library.base;
 
 import android.arch.lifecycle.AndroidViewModel;
+import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import javax.inject.Inject;
+import java.lang.reflect.ParameterizedType;
 
 import dagger.android.AndroidInjection;
 
@@ -18,7 +19,6 @@ public abstract class XActivity<T extends ViewDataBinding, K extends AndroidView
 
     public T mBinding;
 
-    @Inject
     public K mViewModel;
 
     @Override
@@ -26,6 +26,8 @@ public abstract class XActivity<T extends ViewDataBinding, K extends AndroidView
         super.onCreate(savedInstanceState);
         AndroidInjection.inject(this);
         mBinding = DataBindingUtil.setContentView(this, getLayoutId());
+        Class<K> classK = (Class<K>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1];
+        mViewModel = ViewModelProviders.of(this).get(classK);
         initView();
         initData();
     }
