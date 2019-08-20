@@ -35,4 +35,13 @@ public abstract class XFragment<T extends ViewDataBinding, K extends XViewModel>
         return view;
     }
 
+    @Override
+    public void startLoading(String msg) {
+
+    }
+
+    @Override
+    public void stopLoading() {
+        
+    }
 }

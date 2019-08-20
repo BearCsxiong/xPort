@@ -89,7 +89,6 @@ public class MainActivity extends XActivity<ActivityMainBinding, MainViewModel> 
     public void initView() {
         mBinding.setStudent("CloseingBackGroup");
         mBinding.setViewModel(mViewModel);
-        mViewModel.getShowLoadingEvent();
     }
 
     @Override

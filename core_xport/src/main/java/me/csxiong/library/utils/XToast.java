@@ -255,17 +255,19 @@ public class XToast {
     }
 
     public static final void setBackground(@NonNull View view, Drawable drawable) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             view.setBackground(drawable);
-        else
+        } else {
             view.setBackgroundDrawable(drawable);
+        }
     }
 
     public static final Drawable getDrawable(@NonNull Context context, @DrawableRes int id) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             return context.getDrawable(id);
-        else
+        } else {
             return context.getResources().getDrawable(id);
+        }
     }
 
 }

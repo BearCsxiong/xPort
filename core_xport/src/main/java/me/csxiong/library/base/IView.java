@@ -22,4 +22,30 @@ public interface IView {
      * 初始化数据
      */
     void initData();
+
+    /**
+     * 开始Loading
+     *
+     * @param msg loading描述
+     */
+    void startLoading(String msg);
+
+    /**
+     * 停止Loading
+     */
+    void stopLoading();
+
+    /**
+     * 开始进度
+     *
+     * @param progress 进度
+     * @param des      描述
+     */
+    void startProcessing(int progress, String des);
+
+    /**
+     * 停止进度
+     */
+    void stopProcessing();
+
 }

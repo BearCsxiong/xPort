@@ -12,5 +12,10 @@ import me.csxiong.library.utils.ThreadExecutor;
 @Component(dependencies = AppComponent.class)
 public interface SystemComponent {
 
+    /**
+     * 系统组件 线程切换
+     *
+     * @param threadExecutors
+     */
     void inject(ThreadExecutor threadExecutors);
 }

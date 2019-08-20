@@ -30,6 +30,9 @@ public class MainAppDelegate implements IAppDelegate {
             ARouter.openDebug();
         }
 
+        /**
+         * 所有UI组件反注入到APP中的Injector中
+         */
         DaggerUIComponent.builder()
                 .appComponent(APP.get().getAppComponent())
                 .build()

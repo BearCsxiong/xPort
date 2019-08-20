@@ -41,8 +41,9 @@ public final class ManifestParser<T> {
             throw new RuntimeException("Unable to find metadata to parse GlobalConfig", e);
         }
         for (T t : modules) {
-            if (BuildConfig.DEBUG)
+            if (BuildConfig.DEBUG) {
                 Log.e("Manifest", "init APP delegate -> " + t.getClass().getName());
+            }
         }
         return modules;
     }
@@ -53,7 +54,9 @@ public final class ManifestParser<T> {
                     .getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
             if (appInfo.metaData != null) {
                 for (String key : appInfo.metaData.keySet()) {
-                    if (manifestTargetName.equals(key)) return appInfo.metaData.getString(key);
+                    if (manifestTargetName.equals(key)) {
+                        return appInfo.metaData.getString(key);
+                    }
                 }
             }
         } catch (PackageManager.NameNotFoundException e) {
