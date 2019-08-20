@@ -4,12 +4,10 @@ package me.csxiong.library.utils;
 import android.text.TextUtils;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
+import me.csxiong.library.base.APP;
 import me.csxiong.library.integration.http.ApiException;
 import me.csxiong.library.integration.http.Response;
 
@@ -26,13 +24,8 @@ public class RxUtils {
      * @return
      */
     public static <T> ObservableTransformer<T, T> onRxThread() {
-        return new ObservableTransformer<T, T>() {
-            @Override
-            public Observable<T> apply(Observable<T> observable) {
-                return observable.subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread());
-            }
-        };
+        return observable -> observable.subscribeOn(APP.get().getAppComponent().provideScheduler())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     /**
@@ -43,12 +36,7 @@ public class RxUtils {
      * @return
      */
     private static <T> Observable<T> formatData(final T t) {
-        return Observable.create(new ObservableOnSubscribe<T>() {
-            @Override
-            public void subscribe(ObservableEmitter<T> emitter) throws Exception {
-                emitter.onNext(t);
-            }
-        });
+        return Observable.create(emitter -> emitter.onNext(t));
     }
 
     /**
@@ -74,15 +62,12 @@ public class RxUtils {
     public static class DefaultApiHandleResult<T> implements ObservableTransformer<Response<T>, T> {
         @Override
         public Observable<T> apply(Observable<Response<T>> httpResponseFlowable) {
-            return httpResponseFlowable.flatMap(new Function<Response<T>, Observable<T>>() {
-                @Override
-                public Observable<T> apply(Response<T> response) {
-                    if (response.getErrcode() == 200) {
-                        return formatData(response.getData());
-                    } else {
-                        return Observable.error(new ApiException(TextUtils.isEmpty(response.getMessage())
-                                ? "服务器错误" : response.getMessage()));
-                    }
+            return httpResponseFlowable.flatMap((Function<Response<T>, Observable<T>>) response -> {
+                if (response.getErrcode() == 200) {
+                    return formatData(response.getData());
+                } else {
+                    return Observable.error(new ApiException(TextUtils.isEmpty(response.getMessage())
+                            ? "服务器错误" : response.getMessage()));
                 }
             });
         }

@@ -13,18 +13,22 @@ import android.view.WindowManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.csxiong.library.base.APP;
+
 /**
  * @Desc : 设备工具,主要提供设备工具
  * @Author : csxiong create on 2019/7/16
  */
 public class DeviceUtils {
+
     private DeviceUtils() {
         throw new IllegalStateException("you can't instantiate me!");
     }
 
     @TargetApi(13)
     public static Point getScreenSize(Context context) {
-        @SuppressLint("WrongConstant") WindowManager windowManager = (WindowManager) context.getSystemService("window");
+        @SuppressLint("WrongConstant")
+        WindowManager windowManager = (WindowManager) context.getSystemService("window");
         Display display = windowManager.getDefaultDisplay();
         if (VERSION.SDK_INT < 13) {
             return new Point(display.getWidth(), display.getHeight());
@@ -58,13 +62,12 @@ public class DeviceUtils {
     /**
      * 检查手机上是否安装了指定的软件
      *
-     * @param context
      * @param packageName：应用包名
      * @return
      */
-    public static boolean isAvilible(Context context, String packageName) {
+    public static boolean isInstalled(String packageName) {
         //获取packagemanager
-        final PackageManager packageManager = context.getPackageManager();
+        final PackageManager packageManager = APP.get().getPackageManager();
         //获取所有已安装程序的包信息
         List<PackageInfo> packageInfos = packageManager.getInstalledPackages(0);
         //用于存储所有已安装程序的包名
@@ -78,6 +81,15 @@ public class DeviceUtils {
         }
         //判断packageNames中是否有目标程序的包名，有TRUE，没有FALSE
         return packageNames.contains(packageName);
+    }
+
+    /**
+     * 获取手机当前CPU数量
+     *
+     * @return
+     */
+    public static int getCPUCount() {
+        return Runtime.getRuntime().availableProcessors();
     }
 
 }

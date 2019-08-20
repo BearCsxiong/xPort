@@ -5,12 +5,8 @@ import android.app.Application;
 import android.content.Context;
 import android.support.annotation.Nullable;
 
-import com.alibaba.android.arouter.thread.DefaultThreadFactory;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
 import com.google.gson.LongSerializationPolicy;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
@@ -20,14 +16,10 @@ import com.orhanobut.logger.PrettyFormatStrategy;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.security.cert.CertificateException;
 import java.util.Date;
-import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -45,6 +37,7 @@ import me.csxiong.library.BuildConfig;
 import me.csxiong.library.integration.http.HttpLogger;
 import me.csxiong.library.integration.http.JsonConverterFactory;
 import me.csxiong.library.integration.scheduler.XThreadFactory;
+import me.csxiong.library.utils.DeviceUtils;
 import okhttp3.ConnectionPool;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -139,11 +132,14 @@ public class ClientModule {
     @Singleton
     @Provides
     ExecutorService provideExecutor() {
-        return new ThreadPoolExecutor(10, 30, 30, TimeUnit.SECONDS, new LinkedBlockingDeque<>(), new XThreadFactory());
+        //TODO 核心线程数 大概是当前手机的手机CPU个数 最大线程数 大概可以是CPU个数两倍多一些
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(Math.max(5, DeviceUtils.getCPUCount()), Math.max(10, DeviceUtils.getCPUCount()), 30, TimeUnit.SECONDS, new PriorityBlockingQueue<>(), new XThreadFactory(), new ThreadPoolExecutor.DiscardOldestPolicy());
+        executor.allowCoreThreadTimeOut(true);
+        return executor;
     }
 
     /**
-     * RxJava2 bask Scheduler
+     * RxJava2 base Scheduler
      *
      * @param service
      * @return
@@ -215,12 +211,7 @@ public class ClientModule {
         }
         gsonBuilder.setLongSerializationPolicy(LongSerializationPolicy.STRING);
         // Register an adapter to manage the date types as long values
-        gsonBuilder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-            @Override
-            public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                return new Date(json.getAsJsonPrimitive().getAsLong());
-            }
-        });
+        gsonBuilder.registerTypeAdapter(Date.class, (JsonDeserializer<Date>) (json, typeOfT, context) -> new Date(json.getAsJsonPrimitive().getAsLong()));
 
         gsonBuilder.registerTypeAdapter(boolean.class, new TypeAdapter<Boolean>() {
             @Override
@@ -265,17 +256,14 @@ public class ClientModule {
             }
         });
 
-        gsonBuilder.registerTypeAdapter(String.class, new JsonDeserializer<String>() {
-            @Override
-            public String deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
-                String string;
-                try {
-                    string = json.getAsString();
-                } catch (Exception e) {
-                    return "";
-                }
-                return string;
+        gsonBuilder.registerTypeAdapter(String.class, (JsonDeserializer<String>) (json, typeOfT, context) -> {
+            String string;
+            try {
+                string = json.getAsString();
+            } catch (Exception e) {
+                return "";
             }
+            return string;
         });
         return gsonBuilder;
     }

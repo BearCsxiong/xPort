@@ -29,7 +29,7 @@ public abstract class XFragment<T extends ViewDataBinding, K extends AndroidView
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         AndroidSupportInjection.inject(this);
-        View view = inflater.inflate(getLayoutId(), null);
+        View view = inflater.inflate(getLayoutId(), null, false);
         mBinding = DataBindingUtil.bind(view);
         Class<K> classK = (Class<K>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1];
         mViewModel = ViewModelProviders.of(getActivity()).get(classK);
