@@ -6,9 +6,20 @@ package me.csxiong.library.base;
  */
 public interface IView {
 
+    /**
+     * 获取布局ID
+     *
+     * @return
+     */
     int getLayoutId();
 
+    /**
+     * 初始化View
+     */
     void initView();
 
+    /**
+     * 初始化数据
+     */
     void initData();
 }

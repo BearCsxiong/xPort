@@ -1,6 +1,5 @@
 package me.csxiong.library.base;
 
-import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
@@ -15,7 +14,7 @@ import dagger.android.AndroidInjection;
  * @Desc : MVVM基类结构
  * @Author : csxiong create on 2019/7/22
  */
-public abstract class XActivity<T extends ViewDataBinding, K extends AndroidViewModel> extends BaseActivity implements IView {
+public abstract class XActivity<T extends ViewDataBinding, K extends XViewModel> extends BaseActivity implements IView {
 
     public T mBinding;
 

@@ -1,6 +1,5 @@
 package me.csxiong.library.base;
 
-import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
@@ -19,7 +18,7 @@ import dagger.android.support.AndroidSupportInjection;
  * @Desc : MVVM基类Fragment
  * @Author : csxiong create on 2019/7/22
  */
-public abstract class XFragment<T extends ViewDataBinding, K extends AndroidViewModel> extends BaseFragment implements IView {
+public abstract class XFragment<T extends ViewDataBinding, K extends XViewModel> extends BaseFragment implements IView {
 
     public T mBinding;
 
