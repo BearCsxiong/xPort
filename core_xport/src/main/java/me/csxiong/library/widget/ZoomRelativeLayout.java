@@ -1,7 +1,6 @@
 package me.csxiong.library.widget;
 
 import android.content.Context;
-import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
@@ -32,11 +31,6 @@ public class ZoomRelativeLayout extends RelativeLayout {
         super(context, attrs);
         SCROLL_THRESHOLD = ViewConfiguration.get(context).getScaledTouchSlop();
         init();
-    }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
     private void init() {
@@ -78,8 +72,9 @@ public class ZoomRelativeLayout extends RelativeLayout {
                     State = NORAML;
                 }
                 if (!isPressed && isOnClick) {
-                    if (mOnClickListener != null)
+                    if (mOnClickListener != null) {
                         mOnClickListener.onClick(ZoomRelativeLayout.this);
+                    }
                 }
             }
 
@@ -91,12 +86,6 @@ public class ZoomRelativeLayout extends RelativeLayout {
 
 
     }
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-    }
-
 
     @Override
     public void setOnClickListener(OnClickListener l) {
@@ -119,13 +108,14 @@ public class ZoomRelativeLayout extends RelativeLayout {
                 synchronized (ZoomRelativeLayout.this) {
                     State = ZOOMIN;
                 }
-                startAnimation(zoomInAnimation);//执行动画
+                startAnimation(zoomInAnimation);
                 break;
             case MotionEvent.ACTION_UP:
                 isPressed = false;
                 if (State == NORAML && isOnClick) {
-                    if (mOnClickListener != null)
+                    if (mOnClickListener != null) {
                         mOnClickListener.onClick(ZoomRelativeLayout.this);
+                    }
                 }
                 return false;
             case MotionEvent.ACTION_MOVE:

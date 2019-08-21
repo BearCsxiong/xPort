@@ -1,7 +1,6 @@
 package me.csxiong.library.base;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,9 +17,7 @@ import dagger.android.support.AndroidSupportInjection;
  * @Desc : MVVM基类Fragment
  * @Author : csxiong create on 2019/7/22
  */
-public abstract class XFragment<T extends ViewDataBinding, K extends XViewModel> extends BaseFragment implements IView {
-
-    public T mBinding;
+public abstract class XFragment<T extends ViewDataBinding, K extends XViewModel> extends BaseFragment<T> implements IPage {
 
     public K mViewModel;
 
@@ -28,20 +25,11 @@ public abstract class XFragment<T extends ViewDataBinding, K extends XViewModel>
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         AndroidSupportInjection.inject(this);
-        View view = inflater.inflate(getLayoutId(), null, false);
-        mBinding = DataBindingUtil.bind(view);
         Class<K> classK = (Class<K>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1];
         mViewModel = ViewModelProviders.of(getActivity()).get(classK);
-        return view;
+        mViewModel.setView(this);
+        getLifecycle().addObserver(mViewModel);
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
-    @Override
-    public void startLoading(String msg) {
-
-    }
-
-    @Override
-    public void stopLoading() {
-        
-    }
 }

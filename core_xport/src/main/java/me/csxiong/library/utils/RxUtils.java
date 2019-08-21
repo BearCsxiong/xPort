@@ -1,6 +1,7 @@
 package me.csxiong.library.utils;
 
 
+import android.os.Looper;
 import android.text.TextUtils;
 
 import io.reactivex.Observable;
@@ -16,6 +17,17 @@ import me.csxiong.library.integration.http.Response;
  * @Author : csxiong create on 2019/7/16
  */
 public class RxUtils {
+
+    /**
+     * 是否是主线程
+     * @return
+     */
+    public static boolean isUIThread() {
+        if (Looper.myLooper() != null && Looper.myLooper() == Looper.getMainLooper()) {
+            return true;
+        }
+        return false;
+    }
 
     /**
      * 切换线程

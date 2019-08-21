@@ -37,9 +37,11 @@ public class ThreadExecutor {
      * @return
      */
     public static ThreadExecutor get() {
-        synchronized (ThreadExecutor.class) {
-            if (executor == null) {
-                executor = new ThreadExecutor();
+        if (executor == null) {
+            synchronized (ThreadExecutor.class) {
+                if (executor == null) {
+                    executor = new ThreadExecutor();
+                }
             }
         }
         return executor;

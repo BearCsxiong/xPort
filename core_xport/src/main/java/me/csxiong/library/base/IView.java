@@ -1,27 +1,12 @@
 package me.csxiong.library.base;
 
+import android.support.annotation.IntRange;
+
 /**
- * @Desc : 基本View的操作
- * @Author : csxiong create on 2019/7/22
+ * @Desc : 部分抽象View操作
+ * @Author : csxiong create on 2019/8/21
  */
 public interface IView {
-
-    /**
-     * 获取布局ID
-     *
-     * @return
-     */
-    int getLayoutId();
-
-    /**
-     * 初始化View
-     */
-    void initView();
-
-    /**
-     * 初始化数据
-     */
-    void initData();
 
     /**
      * 开始Loading
@@ -41,7 +26,7 @@ public interface IView {
      * @param progress 进度
      * @param des      描述
      */
-    void startProcessing(int progress, String des);
+    void startProcessing(@IntRange(from = 0, to = 100) int progress, String des);
 
     /**
      * 停止进度
