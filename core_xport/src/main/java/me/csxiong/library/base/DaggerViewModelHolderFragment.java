@@ -30,7 +30,7 @@ public class DaggerViewModelHolderFragment extends Fragment {
         if (fg == null) {
             fg = new DaggerViewModelHolderFragment();
             fragmentManager.beginTransaction().add(fg, HolderFragmentTag)
-                    .commitNow();
+                    .commitNowAllowingStateLoss();
         }
         return ((DaggerViewModelHolderFragment) fg).getDaggerViewModelStore();
     }

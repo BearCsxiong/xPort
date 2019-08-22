@@ -27,7 +27,6 @@ import retrofit2.Retrofit;
 
 /**
  * @Desc : Api提供者
- *
  * @Author : csxiong create on 2019/7/16
  */
 public class ApiProvider {
@@ -36,13 +35,14 @@ public class ApiProvider {
     Lazy<Retrofit> mRetrofit;
     @Inject
     Application mApplication;
-    @Inject
-    Lazy<LruCache<String, Object>> mCache;
+
+    LruCache<String, Object> mCache;
 
     private final String CACHE_KEY_RETROFIT = "RETROFIT";
 
     @Inject
     public ApiProvider() {
+        mCache = new LruCache<>(10);
     }
 
     /**
@@ -54,10 +54,10 @@ public class ApiProvider {
      */
     public synchronized <T> T get(Class<T> service) {
         XPreconditions.checkNotNull(service, "retrofit service不允许为空");
-        if (mCache.get().get(CACHE_KEY_RETROFIT + service.getCanonicalName()) == null) {
-            mCache.get().put(CACHE_KEY_RETROFIT + service.getCanonicalName(), mRetrofit.get().create(service));
+        if (mCache.get(CACHE_KEY_RETROFIT + service.getCanonicalName()) == null) {
+            mCache.put(CACHE_KEY_RETROFIT + service.getCanonicalName(), mRetrofit.get().create(service));
         }
-        return (T) mCache.get().get(CACHE_KEY_RETROFIT + service.getCanonicalName());
+        return (T) mCache.get(CACHE_KEY_RETROFIT + service.getCanonicalName());
     }
 
     public Context getContext() {

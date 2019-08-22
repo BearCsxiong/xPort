@@ -54,4 +54,5 @@ public class XViewModel extends AndroidViewModel implements IView, LifecycleObse
             mView.stopProcessing();
         }
     }
+
 }
