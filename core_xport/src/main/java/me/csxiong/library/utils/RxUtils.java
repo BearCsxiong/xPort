@@ -20,6 +20,7 @@ public class RxUtils {
 
     /**
      * 是否是主线程
+     *
      * @return
      */
     public static boolean isUIThread() {
@@ -37,7 +38,18 @@ public class RxUtils {
      */
     public static <T> ObservableTransformer<T, T> onRxThread() {
         return observable -> observable.subscribeOn(APP.get().getAppComponent().provideScheduler())
+                .unsubscribeOn(APP.get().getAppComponent().provideScheduler())
                 .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * @param <T>
+     * @return
+     */
+    public static <T> ObservableTransformer<T, T> onBackgroundThread() {
+        return observable -> observable.subscribeOn(APP.get().getAppComponent().provideScheduler())
+                .unsubscribeOn(APP.get().getAppComponent().provideScheduler())
+                .observeOn(APP.get().getAppComponent().provideScheduler());
     }
 
     /**
