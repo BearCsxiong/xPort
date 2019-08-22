@@ -1,6 +1,5 @@
 package me.csxiong.library.base;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,6 +10,9 @@ import android.view.ViewGroup;
 
 import java.lang.reflect.ParameterizedType;
 
+import javax.inject.Inject;
+
+import dagger.Lazy;
 import dagger.android.support.AndroidSupportInjection;
 
 /**
@@ -19,6 +21,9 @@ import dagger.android.support.AndroidSupportInjection;
  */
 public abstract class XFragment<T extends ViewDataBinding, K extends XViewModel> extends BaseFragment<T> implements IPage {
 
+    @Inject
+    public Lazy<K> lazyViewModelCreator;
+
     public K mViewModel;
 
     @Nullable
@@ -26,7 +31,7 @@ public abstract class XFragment<T extends ViewDataBinding, K extends XViewModel>
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         AndroidSupportInjection.inject(this);
         Class<K> classK = (Class<K>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1];
-        mViewModel = ViewModelProviders.of(getActivity()).get(classK);
+        mViewModel = DaggerViewModelProviders.of(getActivity()).get(classK, lazyViewModelCreator);
         mViewModel.setView(this);
         getLifecycle().addObserver(mViewModel);
         return super.onCreateView(inflater, container, savedInstanceState);

@@ -1,12 +1,14 @@
 package me.csxiong.library.base;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import java.lang.reflect.ParameterizedType;
 
+import javax.inject.Inject;
+
+import dagger.Lazy;
 import dagger.android.AndroidInjection;
 
 /**
@@ -15,13 +17,16 @@ import dagger.android.AndroidInjection;
  */
 public abstract class XActivity<T extends ViewDataBinding, K extends XViewModel> extends BaseActivity<T> implements IPage {
 
+    @Inject
+    public Lazy<K> lazyViewModelCreator;
+
     public K mViewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         AndroidInjection.inject(this);
         Class<K> classK = (Class<K>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1];
-        mViewModel = ViewModelProviders.of(this).get(classK);
+        mViewModel = DaggerViewModelProviders.of(this).get(classK, lazyViewModelCreator);
         mViewModel.setView(this);
         getLifecycle().addObserver(mViewModel);
         super.onCreate(savedInstanceState);
