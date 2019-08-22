@@ -4,14 +4,20 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <android.support.v7.widget.CardView
-        android:layout_width="88dp"
-        android:layout_height="68dp"
+    <RelativeLayout
+        android:layout_width="237dp"
+        android:layout_height="350dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
         android:layout_centerInParent="true"
-        android:layout_margin="5dp"
-        app:cardBackgroundColor="#ffffff"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="2dp">
+        android:layout_margin="5dp">
+
+        <ImageView
+            android:id="@+id/iv_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerInside"
+            android:src="@mipmap/icon_card" />
 
         <TextView
             android:id="@+id/tv_position"
@@ -23,7 +29,7 @@
             android:textColor="#000000"
             android:visibility="visible" />
 
-    </android.support.v7.widget.CardView>
+    </RelativeLayout>
 
 
 </RelativeLayout>

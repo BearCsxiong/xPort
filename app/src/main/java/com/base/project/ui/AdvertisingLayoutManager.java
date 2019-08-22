@@ -18,7 +18,7 @@ public class AdvertisingLayoutManager extends RecyclerView.LayoutManager {
     /**
      * 缩放因子
      */
-    private final static float SCALE_FACTOR = 0.008f;
+    private final static float SCALE_FACTOR = 0.01f;
 
     /**
      * 位移因子
@@ -44,11 +44,6 @@ public class AdvertisingLayoutManager extends RecyclerView.LayoutManager {
      * 基准一次滑动的距离
      */
     private int baseDistance = -1;
-
-    /**
-     * 每个Item的中心位置
-     */
-    private Point[] itemCenterPoints;
 
     /**
      * 中心位置
@@ -205,8 +200,6 @@ public class AdvertisingLayoutManager extends RecyclerView.LayoutManager {
             return;
         }
         centerPoint = new Point(getWidth() / 2, getHeight() / 2);
-        // 动态创建符合个数的points
-        itemCenterPoints = new Point[itemCount];
 
         // 因为只是广告栏,itemCount个数不多,直接排列出所有的子view,
         for (int i = 0; i < itemCount; i++) {
@@ -220,11 +213,9 @@ public class AdvertisingLayoutManager extends RecyclerView.LayoutManager {
 
             if (baseDistance == -1) {
                 // 间隔距离
-                baseDistance = viewWidth + widthSpace / 4;
+//                baseDistance = viewWidth + widthSpace / 4;
+                baseDistance = viewWidth;
             }
-            // 记录某个View中心的位置
-            itemCenterPoints[i] =
-                    new Point(widthSpace / 2 + baseDistance * i + viewWidth / 2, heightSpace / 2 + viewHeight / 2);
             layoutDecoratedWithMargins(view, widthSpace / 2 + baseDistance * i, heightSpace / 2,
                     widthSpace / 2 + viewWidth + baseDistance * i, heightSpace / 2 + viewHeight);
         }

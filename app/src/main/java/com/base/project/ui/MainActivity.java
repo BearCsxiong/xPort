@@ -4,11 +4,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import com.base.project.R;
 import com.base.project.databinding.ActivityMainBinding;
@@ -18,45 +17,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.csxiong.library.base.XActivity;
-import me.csxiong.library.utils.XDisplayUtil;
 
 public class MainActivity extends XActivity<ActivityMainBinding, MainViewModel> {
 
     RecyclerView mRv;
 
-    private List<String> list = new ArrayList<>();
+    private List<Integer> list = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        list.add("asdfa");
-        list.add("fasdf");
-        list.add("adsf");
-        list.add("aghdgfh");
-        list.add("qwrqwr");
-        list.add("twfgs");
-        list.add("sbxvb");
-        list.add("fgsfd");
-        list.add("sgfdgsf");
-        list.add("sfdgs");
-        list.add("sdfg");
+        list.add(R.mipmap.icon_card);
+        list.add(R.mipmap.icon_card_1);
+        list.add(R.mipmap.icon_card_2);
+        list.add(R.mipmap.icon_card_3);
         mRv = findViewById(R.id.rv);
-        mRv.setPadding(XDisplayUtil.getScreenWidth() / 2 - XDisplayUtil.dpToPxInt(98) / 2, 0, XDisplayUtil.getScreenWidth() / 2 - XDisplayUtil.dpToPxInt(98) / 2, 0);
+//        mRv.setPadding(XDisplayUtil.getScreenWidth() / 2 - XDisplayUtil.dpToPxInt(98) / 2, 0, XDisplayUtil.getScreenWidth() / 2 - XDisplayUtil.dpToPxInt(98) / 2, 0);
 
-        SelectItemDecoration itemde = new SelectItemDecoration(mRv);
-        itemde.setOnPageListener(new SelectItemDecoration.OnPageListener() {
-            @Override
-            public void onPageAttach(int position) {
-                Log.e("onPage", "attach" + position);
-            }
-
-            @Override
-            public void onPageDetach(int position) {
-                Log.e("onPage", "detach" + position);
-            }
-        });
-        mRv.setLayoutManager(new SelectItemLayoutManager(this));
-        mRv.addItemDecoration(itemde);
+//        SelectItemDecoration itemde = new SelectItemDecoration(mRv);
+//        itemde.setOnPageListener(new SelectItemDecoration.OnPageListener() {
+//            @Override
+//            public void onPageAttach(int position) {
+//                Log.e("onPage", "attach" + position);
+//            }
+//
+//            @Override
+//            public void onPageDetach(int position) {
+//                Log.e("onPage", "detach" + position);
+//            }
+//        });
+        mRv.setLayoutManager(new AdvertisingLayoutManager(mRv, 0.02f, 20));
+//        mRv.addItemDecoration(itemde);
         mRv.setAdapter(new RecyclerView.Adapter() {
 
             @NonNull
@@ -68,9 +59,9 @@ public class MainActivity extends XActivity<ActivityMainBinding, MainViewModel> 
 
             @Override
             public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-                TextView textView = viewHolder.itemView.findViewById(R.id.tv_position);
-                String str = list.get(i);
-                textView.setText(str);
+                ImageView iv = viewHolder.itemView.findViewById(R.id.iv_content);
+                Integer str = list.get(i);
+                iv.setImageResource(str);
             }
 
             @Override
