@@ -15,38 +15,66 @@
 
     </data>
 
-    <LinearLayout
-        android:id="@+id/main_drawer"
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nsv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tv_show_loading"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:gravity="center"
-            android:onClick="@{viewModel.showLoading}"
-            android:text="ShowLoading" />
-
-        <TextView
-            android:id="@+id/tv_close_loading"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:gravity="center"
-            android:text='@{"发生地方" + student}' />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv"
+        <LinearLayout
+            android:id="@+id/main_drawer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:clipChildren="false"
-            android:clipToPadding="false">
+            android:orientation="vertical">
 
-        </android.support.v7.widget.RecyclerView>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:background="@mipmap/icon_card" />
 
-    </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:background="@mipmap/icon_card" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:background="@mipmap/icon_card" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:background="@mipmap/icon_card" />
+
+            <TextView
+                android:id="@+id/tv_show_loading"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:gravity="center"
+                android:onClick="@{viewModel.showLoading}"
+                android:text="ShowLoading" />
+
+            <TextView
+                android:id="@+id/tv_close_loading"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:gravity="center"
+                android:text='@{"发生地方" + student}' />
+
+            <com.base.project.ui.AdvertisingViewPager
+                android:id="@+id/avp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:clipChildren="false"
+                android:clipToPadding="false">
+
+            </com.base.project.ui.AdvertisingViewPager>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
 </layout>
