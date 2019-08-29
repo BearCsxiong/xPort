@@ -18,6 +18,8 @@ import me.csxiong.library.utils.XDisplayUtil;
  */
 public class AdvertisingViewPager extends FrameLayout {
 
+    private FrameLayout mFlBackground;
+
     /**
      * 背景recyclerView
      */
@@ -48,8 +50,13 @@ public class AdvertisingViewPager extends FrameLayout {
             //主要寻找逻辑
             if (curState != RecyclerView.SCROLL_STATE_IDLE && newState == RecyclerView.SCROLL_STATE_IDLE) {
                 //停止滚动
-
-                mBackgroundRv.postDelayed(() -> mBackgroundRv.smoothScrollToPosition(((LinearLayoutManager) mFrontRv.getLayoutManager()).findFirstVisibleItemPosition()), 50);
+                if (mBackgroundRv != null) {
+                    mBackgroundRv.postDelayed(() -> {
+                        if (mBackgroundRv != null && mFrontRv != null) {
+                            mBackgroundRv.smoothScrollToPosition(((LinearLayoutManager) mFrontRv.getLayoutManager()).findFirstVisibleItemPosition());
+                        }
+                    }, 50);
+                }
             }
             curState = newState;
         }
@@ -80,9 +87,11 @@ public class AdvertisingViewPager extends FrameLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         //创建两个RecyclerView
+        mFlBackground = new FrameLayout(getContext());
         mBackgroundRv = new RecyclerView(getContext());
         mBackgroundRv.setLayoutParams(new LayoutParams(-1, -1));
-        addView(mBackgroundRv);
+        mFlBackground.addView(mBackgroundRv);
+        addView(mFlBackground, new FrameLayout.LayoutParams(-1, -1));
 
         mFrontRv = new RecyclerView(getContext());
         LayoutParams lp = new LayoutParams(-1, -1);
@@ -103,11 +112,13 @@ public class AdvertisingViewPager extends FrameLayout {
      * @param frontAdapter
      */
     public void setAdapter(RecyclerView.Adapter backgroundAdapter, RecyclerView.Adapter frontAdapter) {
-        mBackgroundRv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        mFrontRv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        if (mBackgroundRv != null && mFrontRv != null) {
+            mBackgroundRv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+            mFrontRv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
-        mBackgroundRv.setAdapter(backgroundAdapter);
-        mFrontRv.setAdapter(frontAdapter);
+            mBackgroundRv.setAdapter(backgroundAdapter);
+            mFrontRv.setAdapter(frontAdapter);
+        }
     }
 
     boolean isNormal = true;
@@ -126,8 +137,9 @@ public class AdvertisingViewPager extends FrameLayout {
         int measuredHeight = mBackgroundRv.getMeasuredHeight();
         int measuredWidth = mBackgroundRv.getMeasuredWidth();
 
-        mBackgroundRv.animate().cancel();
-        mBackgroundRv.animate().scaleX(isNormal ? 1.0f : width / measuredWidth).scaleY(isNormal ? 1.0f : height / measuredHeight).setDuration(200)
+        mFlBackground.animate().cancel();
+        //内部的所有viewholder都需要做当个内容缩放
+        mFlBackground.animate().scaleX(isNormal ? 1.0f : width / measuredWidth).scaleY(isNormal ? 1.0f : height / measuredHeight).setDuration(200)
                 .setInterpolator(new DecelerateInterpolator())
                 .start();
     }

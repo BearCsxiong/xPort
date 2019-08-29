@@ -95,7 +95,7 @@ public class MainActivity extends XActivity<ActivityMainBinding, MainViewModel> 
             mBinding.nsv.setOnScrollChangeListener((View.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
                 Rect rect = new Rect();
                 mBinding.avp.getGlobalVisibleRect(rect);
-                Log.e("Height",rect.height() + "");
+                Log.e("Height", rect.height() + "");
                 mBinding.avp.scaleContent(rect.height() > 300);
             });
         }

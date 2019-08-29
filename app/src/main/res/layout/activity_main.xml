@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -65,13 +66,20 @@
 
             <com.base.project.ui.AdvertisingViewPager
                 android:id="@+id/avp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_centerInParent="true"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
                 android:clipChildren="false"
                 android:clipToPadding="false">
 
             </com.base.project.ui.AdvertisingViewPager>
+
+            <me.csxiong.library.widget.CirclePageIndicator
+                android:id="@+id/ci"
+                app:cpi_ratio="3"
+                app:cpi_select_color="#ff0000"
+                app:cpi_radius="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp" />
 
         </LinearLayout>
 
