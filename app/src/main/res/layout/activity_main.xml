@@ -2,87 +2,90 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
-
-        <import type="com.base.project.ui.main.MainViewModel" />
-
-        <variable
-            name="student"
-            type="String" />
-
-        <variable
-            name="viewModel"
-            type="com.base.project.ui.main.MainViewModel" />
-
-    </data>
-
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/nsv"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#000000">
 
         <LinearLayout
-            android:id="@+id/main_drawer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:id="@+id/ll"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/x300"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x20"
+            android:orientation="horizontal">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="400dp"
-                android:background="@mipmap/icon_card" />
+            <me.csxiong.library.widget.NumberView
+                android:id="@+id/h_1"
+                android:layout_width="@dimen/x150"
+                android:layout_height="@dimen/x300" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="400dp"
-                android:background="@mipmap/icon_card" />
+            <me.csxiong.library.widget.NumberView
+                android:id="@+id/h_2"
+                android:layout_width="@dimen/x150"
+                android:layout_height="@dimen/x300" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="400dp"
-                android:background="@mipmap/icon_card" />
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/cl"
+                android:layout_width="@dimen/x30"
+                android:layout_height="match_parent">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="400dp"
-                android:background="@mipmap/icon_card" />
+                <me.csxiong.library.widget.round.RoundFrameLayout
+                    android:id="@+id/rfl1"
+                    android:layout_width="@dimen/x12"
+                    android:layout_height="@dimen/x12"
+                    app:layout_constraintBottom_toTopOf="@+id/rfl2"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:rv_backgroundColor="#ffffff"
+                    app:rv_isRadiusHalfHeight="true" />
 
-            <TextView
-                android:id="@+id/tv_show_loading"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="?android:attr/selectableItemBackground"
-                android:gravity="center"
-                android:onClick="@{viewModel.showLoading}"
-                android:text="ShowLoading" />
+                <me.csxiong.library.widget.round.RoundFrameLayout
+                    android:id="@+id/rfl2"
+                    android:layout_width="@dimen/x12"
+                    android:layout_height="@dimen/x12"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rfl1"
+                    app:rv_backgroundColor="#ffffff"
+                    app:rv_isRadiusHalfHeight="true" />
 
-            <TextView
-                android:id="@+id/tv_close_loading"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="?android:attr/selectableItemBackground"
-                android:gravity="center"
-                android:text='@{"发生地方" + student}' />
+            </android.support.constraint.ConstraintLayout>
 
-            <com.base.project.ui.AdvertisingViewPager
-                android:id="@+id/avp"
-                android:layout_width="300dp"
-                android:layout_height="300dp"
-                android:clipChildren="false"
-                android:clipToPadding="false">
+            <me.csxiong.library.widget.NumberView
+                android:id="@+id/m_1"
+                android:layout_width="@dimen/x150"
+                android:layout_height="@dimen/x300" />
 
-            </com.base.project.ui.AdvertisingViewPager>
-
-            <me.csxiong.library.widget.CirclePageIndicator
-                android:id="@+id/ci"
-                app:cpi_ratio="3"
-                app:cpi_select_color="#ff0000"
-                app:cpi_radius="15dp"
-                android:layout_width="match_parent"
-                android:layout_height="50dp" />
+            <me.csxiong.library.widget.NumberView
+                android:id="@+id/m_2"
+                android:layout_width="@dimen/x150"
+                android:layout_height="@dimen/x300" />
 
         </LinearLayout>
 
-    </android.support.v4.widget.NestedScrollView>
+        <LinearLayout
+            android:layout_width="@dimen/x80"
+            android:layout_height="@dimen/x80"
+            android:layout_marginRight="@dimen/x20"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
+
+            <me.csxiong.library.widget.NumberView
+                android:id="@+id/s_1"
+                android:layout_width="@dimen/x40"
+                android:layout_height="@dimen/x80" />
+
+            <me.csxiong.library.widget.NumberView
+                android:id="@+id/s_2"
+                android:layout_width="@dimen/x40"
+                android:layout_height="@dimen/x80" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </layout>

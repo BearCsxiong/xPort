@@ -12,14 +12,14 @@ import android.support.v4.app.FragmentActivity;
  */
 public abstract class BaseActivity<T extends ViewDataBinding> extends FragmentActivity implements IPage,IView {
 
-    public T mBinding;
+    public T mViewBinding;
 
     private ViewDelegate mViewDelegate;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = DataBindingUtil.setContentView(this, getLayoutId());
+        mViewBinding = DataBindingUtil.setContentView(this, getLayoutId());
         if (mViewDelegate != null) {
             mViewDelegate.release();
         } else {

@@ -1,108 +1,52 @@
 package com.base.project.ui;
 
-import android.graphics.Rect;
-import android.os.Build;
+import android.animation.ObjectAnimator;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.view.WindowManager;
 
 import com.base.project.R;
 import com.base.project.databinding.ActivityMainBinding;
 import com.base.project.ui.main.MainViewModel;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
 import me.csxiong.library.base.XActivity;
+import me.csxiong.library.utils.XDisplayUtil;
+import me.csxiong.library.utils.XTimerTools;
 
 public class MainActivity extends XActivity<ActivityMainBinding, MainViewModel> {
-
-    private List<Integer> list = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        list.add(R.mipmap.icon_card);
-        list.add(R.mipmap.icon_card_1);
-        list.add(R.mipmap.icon_card_2);
-        list.add(R.mipmap.icon_card_3);
-//        mRv.setPadding(XDisplayUtil.getScreenWidth() / 2 - XDisplayUtil.dpToPxInt(98) / 2, 0, XDisplayUtil.getScreenWidth() / 2 - XDisplayUtil.dpToPxInt(98) / 2, 0);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-//        SelectItemDecoration itemde = new SelectItemDecoration(mRv);
-//        itemde.setOnPageListener(new SelectItemDecoration.OnPageListener() {
-//            @Override
-//            public void onPageAttach(int position) {
-//                Log.e("onPage", "attach" + position);
-//            }
-//
-//            @Override
-//            public void onPageDetach(int position) {
-//                Log.e("onPage", "detach" + position);
-//            }
-//        });
-//        .setLayoutManager(new AdvertisingLayoutManager(mRv, 0.02f, 20));
-//        mRv.addItemDecoration(itemde);
-        mBinding.avp.setAdapter(new RecyclerView.Adapter() {
-
-            @NonNull
-            @Override
-            public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-                View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.item_background, viewGroup, false);
-                return new BaseViewHolder(view);
+        mViewBinding.s1.setWidth(XDisplayUtil.dpToPxInt(4));
+        mViewBinding.s2.setWidth(XDisplayUtil.dpToPxInt(4));
+        mViewBinding.h1.setWidth(XDisplayUtil.dpToPxInt(12));
+        mViewBinding.h2.setWidth(XDisplayUtil.dpToPxInt(12));
+        mViewBinding.m1.setWidth(XDisplayUtil.dpToPxInt(12));
+        mViewBinding.m2.setWidth(XDisplayUtil.dpToPxInt(12));
+        //轮训
+        XTimerTools.infinite(() -> {
+            if (mViewBinding != null) {
+                long t = System.currentTimeMillis();
+                Date date = new Date(t);
+                mViewBinding.h1.setNumber(date.getHours() / 10);
+                mViewBinding.h2.setNumber(date.getHours() % 10);
+                mViewBinding.m1.setNumber(date.getMinutes() / 10);
+                mViewBinding.m2.setNumber(date.getMinutes() % 10);
+                mViewBinding.s1.setNumber(date.getSeconds() / 10);
+                mViewBinding.s2.setNumber(date.getSeconds() % 10);
+                ObjectAnimator.ofFloat(mViewBinding.cl, "Alpha", 1, 0, 1)
+                        .setDuration(1000)
+                        .start();
             }
-
-            @Override
-            public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-                ImageView iv = viewHolder.itemView.findViewById(R.id.iv_content);
-                Integer str = list.get(i);
-                iv.setImageResource(str);
-            }
-
-            @Override
-            public int getItemCount() {
-                return list.size();
-            }
-        }, new RecyclerView.Adapter() {
-
-            @NonNull
-            @Override
-            public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-                View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.item_page, viewGroup, false);
-                return new BaseViewHolder(view);
-            }
-
-            @Override
-            public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-                TextView iv = viewHolder.itemView.findViewById(R.id.tv_position);
-                Integer str = list.get(i);
-                iv.setText(str + "");
-            }
-
-            @Override
-            public int getItemCount() {
-                return list.size();
-            }
-        });
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            mBinding.nsv.setOnScrollChangeListener((View.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-                Rect rect = new Rect();
-                mBinding.avp.getGlobalVisibleRect(rect);
-                Log.e("Height", rect.height() + "");
-                mBinding.avp.scaleContent(rect.height() > 300);
-            });
-        }
-
+        }, 1000)
+                .start();
     }
-
-    int scrollY;
 
     @Override
     public int getLayoutId() {
@@ -111,20 +55,11 @@ public class MainActivity extends XActivity<ActivityMainBinding, MainViewModel> 
 
     @Override
     public void initView() {
-        mBinding.setStudent("CloseingBackGroup");
-        mBinding.setViewModel(mViewModel);
     }
 
     @Override
     public void initData() {
 
-    }
-
-    public class BaseViewHolder extends RecyclerView.ViewHolder {
-
-        public BaseViewHolder(@NonNull View itemView) {
-            super(itemView);
-        }
     }
 
 }

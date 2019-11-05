@@ -40,7 +40,9 @@
         android:supportsRtl="true"
         android:theme="@style/BaseAppTheme">
 
-        <activity android:name="com.base.project.ui.MainActivity">
+        <activity
+            android:name="com.base.project.ui.MainActivity"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
