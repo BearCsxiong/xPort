@@ -3,6 +3,7 @@ package com.base.project.ui;
 import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.Window;
 import android.view.WindowManager;
 
 import com.base.project.R;
@@ -17,6 +18,10 @@ import me.csxiong.library.utils.XTimerTools;
 
 public class MainActivity extends XActivity<ActivityMainBinding, MainViewModel> {
 
+    private Date time = new Date();
+
+    private ObjectAnimator animator;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,23 +34,33 @@ public class MainActivity extends XActivity<ActivityMainBinding, MainViewModel> 
         mViewBinding.h2.setWidth(XDisplayUtil.dpToPxInt(12));
         mViewBinding.m1.setWidth(XDisplayUtil.dpToPxInt(12));
         mViewBinding.m2.setWidth(XDisplayUtil.dpToPxInt(12));
+        animator = ObjectAnimator.ofFloat(mViewBinding.cl, "Alpha", 1, 0, 0, 0, 0, 0, 0, 1)
+                .setDuration(1000);
         //轮训
         XTimerTools.infinite(() -> {
             if (mViewBinding != null) {
                 long t = System.currentTimeMillis();
-                Date date = new Date(t);
-                mViewBinding.h1.setNumber(date.getHours() / 10);
-                mViewBinding.h2.setNumber(date.getHours() % 10);
-                mViewBinding.m1.setNumber(date.getMinutes() / 10);
-                mViewBinding.m2.setNumber(date.getMinutes() % 10);
-                mViewBinding.s1.setNumber(date.getSeconds() / 10);
-                mViewBinding.s2.setNumber(date.getSeconds() % 10);
-                ObjectAnimator.ofFloat(mViewBinding.cl, "Alpha", 1, 0, 1)
-                        .setDuration(1000)
-                        .start();
+                time.setTime(t);
+                mViewBinding.h1.setNumber(time.getHours() / 10);
+                mViewBinding.h2.setNumber(time.getHours() % 10);
+                mViewBinding.m1.setNumber(time.getMinutes() / 10);
+                mViewBinding.m2.setNumber(time.getMinutes() % 10);
+                mViewBinding.s1.setNumber(time.getSeconds() / 10);
+                mViewBinding.s2.setNumber(time.getSeconds() % 10);
+                animator.start();
             }
         }, 1000)
                 .start();
+
+
+        setWindowBrightness(255);
+    }
+
+    private void setWindowBrightness(int brightness) {
+        Window window = getWindow();
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.screenBrightness = brightness / 255.0f;
+        window.setAttributes(lp);
     }
 
     @Override

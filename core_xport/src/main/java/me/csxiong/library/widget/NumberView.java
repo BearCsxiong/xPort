@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.support.annotation.IntRange;
+import android.support.annotation.UiThread;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -112,6 +113,7 @@ public class NumberView extends View {
         }
     }
 
+    @UiThread
     public void setNumber(@IntRange(from = 0, to = 9) int number) {
         switch (number) {
             case 0:
@@ -143,6 +145,9 @@ public class NumberView extends View {
                 break;
             case 9:
                 this.number = Number.NINE;
+                break;
+            default:
+                this.number = null;
                 break;
         }
         invalidate();
@@ -179,7 +184,7 @@ public class NumberView extends View {
 
     public Path getHorizontalPath(int startX, int startY) {
         horizontalPath.reset();
-        int halfWidth = width/2;
+        int halfWidth = width / 2;
         horizontalPath.moveTo(startX, startY);
         horizontalPath.lineTo(startX + halfWidth, startY - halfWidth);
         horizontalPath.lineTo(startX + halfWidth + length, startY - halfWidth);
@@ -193,7 +198,7 @@ public class NumberView extends View {
 
     public Path getVerticalPath(int startX, int startY) {
         verticalPath.reset();
-        int halfWidth = width/2;
+        int halfWidth = width / 2;
         verticalPath.moveTo(startX, startY);
         verticalPath.lineTo(startX + halfWidth, startY + halfWidth);
         verticalPath.lineTo(startX + halfWidth, startY + length + halfWidth);
