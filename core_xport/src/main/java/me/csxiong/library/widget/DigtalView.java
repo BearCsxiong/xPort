@@ -17,7 +17,7 @@ import me.csxiong.library.utils.XDisplayUtil;
  * @Desc : 闹钟的Number
  * @Author : csxiong - 2019-11-05
  */
-public class NumberView extends View {
+public class DigtalView extends View {
 
     private int color = Color.WHITE;
 
@@ -45,15 +45,15 @@ public class NumberView extends View {
 
     private Number number;
 
-    public NumberView(Context context) {
+    public DigtalView(Context context) {
         this(context, null);
     }
 
-    public NumberView(Context context, AttributeSet attrs) {
+    public DigtalView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public NumberView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public DigtalView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
@@ -110,6 +110,7 @@ public class NumberView extends View {
                 path = getHorizontalPath(indexBL.x + space, indexBL.y);
                 canvas.drawPath(path, mPaint);
             }
+
         }
     }
 

@@ -63,3 +63,7 @@ Dagger2|DataBinding|RxJava2|AndroidAutoSize|Room|OkHttp3<br>Retrofit|LiveData|Mv
 |权限|[IPermission](https://github.com/csxiong/IPermission)|[csxiong](https://www.jianshu.com/u/9022fb039221)|1
 
 - 许多优质的框架可因项目需要而添加,未完待续...
+
+## 以上属于结构框架因为工作原因 暂时未在项目中补充完整 
+## 下面记录一些软性框架的思想和业务的关系,只是自己的理解
+ > 一个业务对另一个业务需要屏蔽细节代码 隔离代码

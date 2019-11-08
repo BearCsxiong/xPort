@@ -13,7 +13,6 @@ import com.base.project.ui.main.MainViewModel;
 import java.util.Date;
 
 import me.csxiong.library.base.XActivity;
-import me.csxiong.library.utils.XDisplayUtil;
 import me.csxiong.library.utils.XTimerTools;
 
 public class MainActivity extends XActivity<ActivityMainBinding, MainViewModel> {
@@ -28,12 +27,6 @@ public class MainActivity extends XActivity<ActivityMainBinding, MainViewModel> 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        mViewBinding.s1.setWidth(XDisplayUtil.dpToPxInt(4));
-        mViewBinding.s2.setWidth(XDisplayUtil.dpToPxInt(4));
-        mViewBinding.h1.setWidth(XDisplayUtil.dpToPxInt(12));
-        mViewBinding.h2.setWidth(XDisplayUtil.dpToPxInt(12));
-        mViewBinding.m1.setWidth(XDisplayUtil.dpToPxInt(12));
-        mViewBinding.m2.setWidth(XDisplayUtil.dpToPxInt(12));
         animator = ObjectAnimator.ofFloat(mViewBinding.cl, "Alpha", 1, 0, 0, 0, 0, 0, 0, 1)
                 .setDuration(1000);
         //轮训
