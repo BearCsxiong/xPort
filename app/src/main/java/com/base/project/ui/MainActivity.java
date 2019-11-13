@@ -1,60 +1,30 @@
 package com.base.project.ui;
 
-import android.animation.ObjectAnimator;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.Window;
-import android.view.WindowManager;
+import android.support.v7.widget.LinearLayoutManager;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.base.project.R;
 import com.base.project.databinding.ActivityMainBinding;
 import com.base.project.ui.main.MainViewModel;
 
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 import me.csxiong.library.base.XActivity;
-import me.csxiong.library.utils.XTimerTools;
+import me.csxiong.library.integration.adapter.AdapterDataBuilder;
+import me.csxiong.library.integration.adapter.XRecyclerViewAdapter;
 
+/**
+ * @Desc : 主页
+ * @Author : csxiong - 2019-11-13
+ */
+@Route(path = "/app/main", name = "主页")
 public class MainActivity extends XActivity<ActivityMainBinding, MainViewModel> {
 
-    private Date time = new Date();
+    private XRecyclerViewAdapter mAdapter;
 
-    private ObjectAnimator animator;
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-        animator = ObjectAnimator.ofFloat(mViewBinding.cl, "Alpha", 1, 0, 0, 0, 0, 0, 0, 1)
-                .setDuration(1000);
-        //轮训
-        XTimerTools.infinite(() -> {
-            if (mViewBinding != null) {
-                long t = System.currentTimeMillis();
-                time.setTime(t);
-                mViewBinding.h1.setNumber(time.getHours() / 10);
-                mViewBinding.h2.setNumber(time.getHours() % 10);
-                mViewBinding.m1.setNumber(time.getMinutes() / 10);
-                mViewBinding.m2.setNumber(time.getMinutes() % 10);
-                mViewBinding.s1.setNumber(time.getSeconds() / 10);
-                mViewBinding.s2.setNumber(time.getSeconds() % 10);
-                animator.start();
-            }
-        }, 1000)
-                .start();
-
-
-        setWindowBrightness(255);
-    }
-
-    private void setWindowBrightness(int brightness) {
-        Window window = getWindow();
-        WindowManager.LayoutParams lp = window.getAttributes();
-        lp.screenBrightness = brightness / 255.0f;
-        window.setAttributes(lp);
-    }
+    private List<FeatureBean> mDataList = new ArrayList<>();
 
     @Override
     public int getLayoutId() {
@@ -63,11 +33,25 @@ public class MainActivity extends XActivity<ActivityMainBinding, MainViewModel> 
 
     @Override
     public void initView() {
+        mAdapter = new XRecyclerViewAdapter(this);
+        mViewBinding.rv.setLayoutManager(new LinearLayoutManager(this));
+        mViewBinding.rv.setAdapter(mAdapter);
     }
 
     @Override
     public void initData() {
+        mDataList.add(new FeatureBean("多人拍照的手势控件", "/login/capture"));
+        mAdapter.updateItemEntities(AdapterDataBuilder.create()
+                .addEntities(mDataList, FeatureViewHolder.class).build());
 
+        mAdapter.setOnItemChildClickListener((position, item, view) -> {
+            Object entity = item.getEntity();
+            if (entity instanceof FeatureBean) {
+                ARouter.getInstance()
+                        .build(((FeatureBean) entity).getRoute())
+                        .navigation(this);
+            }
+        });
     }
 
 }

@@ -24,11 +24,11 @@ public class MainAppDelegate implements IAppDelegate {
 
     @Override
     public void onCreate(@NonNull Application application) {
-        ARouter.init(application);
         if (BuildConfig.DEBUG) {
             ARouter.openLog();
             ARouter.openDebug();
         }
+        ARouter.init(application);
 
         /**
          * 所有UI组件反注入到APP中的Injector中

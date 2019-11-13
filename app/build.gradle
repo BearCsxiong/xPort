@@ -7,11 +7,11 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
-    api project(':core_xport')
-    api project(':module_login')
     annotationProcessor aroutercompiler
     annotationProcessor dagger2compiler
     annotationProcessor dagger2androidprocessor
+    api project(':core_xport')
+    api project(':module_login')
 }
 
 android.applicationVariants.all { variant ->

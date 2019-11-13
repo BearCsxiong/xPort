@@ -42,13 +42,15 @@
 
         <activity
             android:name="com.base.project.ui.MainActivity"
-            android:screenOrientation="landscape">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name="com.example.widget.CaptureViewActivity" />
 
         <meta-data
             android:name="com.base.project.config.MainGlobalConfig"

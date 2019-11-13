@@ -7,7 +7,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
     api project(':core_xport')
-    annotationProcessor aroutercompiler
     annotationProcessor dagger2compiler
     annotationProcessor dagger2androidprocessor
+    annotationProcessor aroutercompiler
 }
