@@ -11,6 +11,7 @@
         android:layout_height="match_parent">
 
         <me.csxiong.library.widget.CaptureView
+            android:id="@+id/cv"
             android:layout_width="@dimen/x375"
             android:layout_height="@dimen/x375"
             android:layout_gravity="center" />

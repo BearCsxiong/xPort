@@ -2,7 +2,7 @@ ext {
 
     _versionCode = 1
     _versionName = "1.0.1"
-    _minSdkVersion = 16
+    _minSdkVersion = 19
     _targetSdkVersion = 23
     _compileSdkVersion = 28
     _buildToolsVersion = "28.0.2"
