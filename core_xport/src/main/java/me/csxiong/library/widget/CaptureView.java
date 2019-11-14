@@ -94,13 +94,16 @@ public class CaptureView extends View {
     private int expandAlpha = 255;
 
     //收缩的内部透明度
-    private int shrinkAlpha = 50;
+    private int shrinkAlpha = 26;
 
     //外部半径
     private float outRadius;
 
     //内部手势的半径
     private float inRadius;
+
+    //面部指示器的半径
+    private float faceRadius;
 
     //内部手势的透明读
     private int alpha;
@@ -370,9 +373,9 @@ public class CaptureView extends View {
         canvas.drawCircle(0, -outRadius + 30, 50, mFacePaint);
         //中心点（0,-outRadius + 40）
         if (faceDrawable != null) {
-
+            faceRadius = 30 - lastProgress / 100f * 10;
             faceDrawable.setAlpha(faceAlpha);
-            faceDrawable.setBounds(-30, (int) -outRadius, 30, (int) -outRadius + 60);
+            faceDrawable.setBounds((int) -faceRadius, (int) (-outRadius + 30 - faceRadius), (int) faceRadius, (int) (-outRadius + 30 + faceRadius));
             faceDrawable.draw(canvas);
         }
     }
@@ -467,7 +470,7 @@ public class CaptureView extends View {
 
         center.set(width / 2, height / 2);
 
-        backGradient = new LinearGradient(0, 0, width, height, new int[]{0xFFFF48B1, 0xFFFE537F, 0xFFFD5A5C, 0xFFFD5A5C, 0xFFFD5A5C, 0xFFFD5A5C, 0xFFFD5A5C, 0xFFFD5A5C},
+        backGradient = new LinearGradient(0, 0, width, height, new int[]{0xFFFF48B1, 0xFFFE537F, 0xFFFD5A5C, 0xFFFD5A5C, 0xFFFD5A5C},
 //                    new float[]{0.0f, 0.59f, 1.0f},
                 null,
                 Shader.TileMode.CLAMP);
