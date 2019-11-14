@@ -4,13 +4,11 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -24,6 +22,7 @@ import android.view.View;
 import me.csxiong.library.R;
 import me.csxiong.library.base.APP;
 import me.csxiong.library.utils.XDisplayUtil;
+
 
 /**
  * @Desc : 一个采集的手势View
@@ -50,18 +49,18 @@ public class CaptureView extends View {
     /**
      * 过滑阻尼
      */
-    private final static int OVERSCROLL_DAMPING_ALPHA = 4;
+    private final static int OVERSCROLL_DAMPING_ALPHA = 5;
     /**
      * 手势阻尼
      */
-    private final static float GESTURE_DAMPING_ALPHA = 2f;
+    private final static float GESTURE_DAMPING_ALPHA = 2.5f;
     /**
      * 手势触发时间
      */
     private final static long HAND_TOUCH_TIME = 80;
 
     //渐变色
-    LinearGradient backGradient;
+    private LinearGradient backGradient;
 
     //画笔
     private Paint mBackgroundPaint;
@@ -77,6 +76,18 @@ public class CaptureView extends View {
 
     //面部画笔
     private Paint mFacePaint;
+
+    //选中弧度画笔
+    private Paint mArcPaint;
+
+    //常规scale的长度
+    private int scaleLength;
+
+    //扩张scale的长度
+    private int expandScaleLength;
+
+    //弧度宽度
+    private float sweepWidth;
 
     //扩张的半径
     private float expandOutRadius;
@@ -140,6 +151,16 @@ public class CaptureView extends View {
     private Point end = new Point();
 
     /**
+     * 绘制圆弧的矩阵
+     */
+    private RectF arcRectf = new RectF();
+
+    /**
+     * 顶部指示器的矩阵
+     */
+    private RectF roundRectf = new RectF();
+
+    /**
      * FIXME 是否是按压状态
      */
     private boolean isPress;
@@ -196,11 +217,11 @@ public class CaptureView extends View {
             .setDuration(200);
 
     /**
-     * 动画更新回调
+     * 动画更新回调 当前进度 0~1
      */
     private ValueAnimator.AnimatorUpdateListener updateListener = animation -> {
+        //动画因子
         float fract = animation.getAnimatedFraction();
-        //当前进度 0~1
         outRadius = differOutRadius * fract + startOutRadius;
         inRadius = differInRadius * fract + startInRadius;
         alpha = (int) (fract * differAlpha + startAlpha);
@@ -304,6 +325,12 @@ public class CaptureView extends View {
         mFacePaint.setColor(0xffffffff);
         mFacePaint.setAlpha(0);
 
+        mArcPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mArcPaint.setStyle(Paint.Style.STROKE);
+        mArcPaint.setStrokeWidth(45);
+        mArcPaint.setColor(0xffffffff);
+        mArcPaint.setAlpha(80);
+
         changeAnimator.addUpdateListener(updateListener);
         changeAnimator.addListener(listenerAdapter);
 
@@ -313,46 +340,66 @@ public class CaptureView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.translate(width / 2, height / 2);
-        //绘制底部圆盘
+        //1.位移至中心
+        canvas.translate(width / 2f, height / 2f);
+
+        //2.绘制底部圆盘 这里需要旋转的原因的渐变色需要随角度变化
         canvas.save();
         canvas.rotate(degree);
         canvas.drawCircle(0, 0, outRadius, mBackgroundPaint);
         canvas.restore();
-        //绘制中间透明图标
+
+        //2.绘制当前进度圆弧 透明弧度
+        canvas.save();
+        canvas.rotate(degree);
+        float arcDegree = degree;
+        if (arcDegree > 180) {
+            arcDegree = 180;
+        } else if (arcDegree < 0) {
+            arcDegree = 0;
+        }
+        arcRectf.set(-outRadius + sweepWidth / 2f, -outRadius + sweepWidth / 2f, outRadius - sweepWidth / 2f, outRadius - sweepWidth / 2f);
+        canvas.drawArc(arcRectf, -90, -arcDegree, false, mArcPaint);
+        canvas.restore();
+
+        //3.绘制中间透明图标
         mGesturePaint.setAlpha(alpha);
         canvas.drawCircle(0, 0, inRadius, mGesturePaint);
-        //绘制刻度
+
+        //4.绘制刻度
         for (int i = 0; i <= 100; i++) {
             canvas.save();
             float scale = i * 1.8f;
+            //动态计算横扫过的面积 填充刻度
             boolean isNeedFill = degree > scale;
             canvas.rotate(degree - scale);
             int point = i % 25;
-            if (i == 0 || i == 100 || point == 0) {
+            //25分割
+            if (point == 0) {
                 mScalePaint.setAlpha(SCALE_TEXT_ALPHA);
-                canvas.drawLine(0, -outRadius + 50, 0, -outRadius + 5, mScalePaint);
+                canvas.drawLine(0, -outRadius + expandScaleLength, 0, -outRadius + 5, mScalePaint);
             } else {
                 if (isNeedFill) {
                     mScalePaint.setAlpha(SCALE_TEXT_ALPHA);
                 } else {
                     mScalePaint.setAlpha(SCALE_ALPHA);
                 }
-                canvas.drawLine(0, -outRadius + 40, 0, -outRadius + 5, mScalePaint);
+                canvas.drawLine(0, -outRadius + scaleLength, 0, -outRadius + 5, mScalePaint);
             }
 
             if (i == 0 || i == 50 || i == 100) {
                 mScalePaint.setAlpha(SCALE_ALPHA);
-                canvas.drawText(i + "", 0, -outRadius + 100, mScalePaint);
+                canvas.drawText(i + "", 0, -outRadius + expandScaleLength + 50, mScalePaint);
             }
             canvas.restore();
         }
 
-        //绘制标尺刻度
+        //5.绘制标尺刻度 存在切换动画
         mCenterPaint.setAlpha(255 - faceAlpha);
-        canvas.drawRoundRect(-4, -outRadius + 50, 4, -outRadius - 10, 20, 20, mCenterPaint);
+        roundRectf.set(-4, -outRadius + expandScaleLength, 4, -outRadius - 10);
+        canvas.drawRoundRect(roundRectf, 20, 20, mCenterPaint);
 
-        //绘制指示刻度
+        //6.绘制指示刻度
         float tempDegree = degree;
         if (tempDegree > MAX_DEGREE) {
             tempDegree = MAX_DEGREE;
@@ -368,7 +415,7 @@ public class CaptureView extends View {
         mCenterPaint.setAlpha(255);
         canvas.drawText(String.valueOf(progress), 0, -outRadius + 130, mCenterPaint);
 
-        //绘制面部指示器
+        //7.绘制面部指示器 存在切换动画
         mFacePaint.setAlpha(faceAlpha);
         canvas.drawCircle(0, -outRadius + 30, 50, mFacePaint);
         //中心点（0,-outRadius + 40）
@@ -455,14 +502,24 @@ public class CaptureView extends View {
         onInitSize(right - left, bottom - top);
     }
 
-    private void onInitSize(int width, int heigt) {
+    private void onInitSize(int width, int height) {
         this.width = width;
-        this.height = heigt;
-        expandOutRadius = width / 2.72f;
-        shrinkOutRadius = width / 3;
+        this.height = height;
+        //计算所有尺寸参数
+        //以下调整UI
+        //半径需要除2
+        expandOutRadius = width / 1.136f / 2;
+        shrinkOutRadius = width / 1.25f / 2;
 
-        expandInRadius = width / 4.55f;
-        shrinkInRadius = width / 5f;
+        expandInRadius = width / 1.89f / 2;
+        shrinkInRadius = width / 2.08f / 2;
+
+        //计算刻度的比例长度
+        scaleLength = (int) (width * 0.04f);
+        expandScaleLength = (int) (width * 0.05f);
+
+        sweepWidth = scaleLength + 5;
+        mArcPaint.setStrokeWidth(sweepWidth);
 
         outRadius = shrinkOutRadius;
         inRadius = shrinkInRadius;
@@ -486,7 +543,7 @@ public class CaptureView extends View {
      * @param second
      * @return
      */
-    public float angle(Point cen, Point first, Point second) {
+    private float angle(Point cen, Point first, Point second) {
         float dx1, dx2, dy1, dy2;
 
         dx1 = first.x - cen.x;
@@ -529,7 +586,7 @@ public class CaptureView extends View {
     }
 
     /**
-     * 进度改变监听
+     * 进度改变监听 0~100仅在进度切换发送监听
      */
     public interface OnProgressChangeListener {
 
