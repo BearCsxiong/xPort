@@ -4,18 +4,25 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.Shader;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.FloatRange;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import me.csxiong.library.R;
+import me.csxiong.library.base.APP;
 import me.csxiong.library.utils.XDisplayUtil;
 
 /**
@@ -68,6 +75,9 @@ public class CaptureView extends View {
     //手势盘画笔
     private Paint mGesturePaint;
 
+    //面部画笔
+    private Paint mFacePaint;
+
     //扩张的半径
     private float expandOutRadius;
 
@@ -94,6 +104,9 @@ public class CaptureView extends View {
 
     //内部手势的透明读
     private int alpha;
+
+    //面部透明度
+    private int faceAlpha;
 
     //程度值
     private float degree;
@@ -153,9 +166,20 @@ public class CaptureView extends View {
     private float differDegree;
 
     /**
+     * 指示器透明度动画改造
+     */
+    private int startFaceAlpha;
+    private int differFaceAlpha;
+
+    /**
      * 上一次的进度
      */
     private int lastProgress;
+
+    /**
+     * 面部bitmap
+     */
+    private Drawable faceDrawable;
 
     /**
      * 进度改变监听
@@ -180,6 +204,7 @@ public class CaptureView extends View {
         if (!isPress) {
             degree = fract * differDegree + startDegree;
         }
+        faceAlpha = (int) (fract * differFaceAlpha + startFaceAlpha);
         invalidate();
     };
 
@@ -194,6 +219,7 @@ public class CaptureView extends View {
             differInRadius = 0;
             differAlpha = 0;
             differDegree = 0;
+            differFaceAlpha = 0;
         }
 
         @Override
@@ -203,6 +229,7 @@ public class CaptureView extends View {
             differInRadius = 0;
             differAlpha = 0;
             differDegree = 0;
+            differFaceAlpha = 0;
         }
 
         @Override
@@ -212,14 +239,17 @@ public class CaptureView extends View {
             startInRadius = inRadius;
             startAlpha = alpha;
             startDegree = degree;
+            startFaceAlpha = faceAlpha;
             if (isPress) {
                 differAlpha = expandAlpha - startAlpha;
                 differOutRadius = expandOutRadius - outRadius;
                 differInRadius = expandInRadius - inRadius;
+                differFaceAlpha = 255 - faceAlpha;
             } else {
                 differAlpha = shrinkAlpha - startAlpha;
                 differOutRadius = shrinkOutRadius - outRadius;
                 differInRadius = shrinkInRadius - inRadius;
+                differFaceAlpha = 0 - faceAlpha;
 
                 if (degree > MAX_DEGREE) {
                     differDegree = MAX_DEGREE - degree;
@@ -267,37 +297,44 @@ public class CaptureView extends View {
         mGesturePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mGesturePaint.setColor(0xffffffff);
 
+        mFacePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mFacePaint.setColor(0xffffffff);
+        mFacePaint.setAlpha(0);
+
         changeAnimator.addUpdateListener(updateListener);
         changeAnimator.addListener(listenerAdapter);
+
+        faceDrawable = ContextCompat.getDrawable(APP.get(), R.mipmap.icon_face);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (backGradient == null) {
-            backGradient = new LinearGradient(width, height, 0, 0, new int[]{0xFFFE537F, 0xFFFF48B1},
-                    null,
-                    Shader.TileMode.CLAMP);
-            mBackgroundPaint.setShader(backGradient);
-        }
         canvas.translate(width / 2, height / 2);
         //绘制底部圆盘
+        canvas.save();
+        canvas.rotate(degree);
         canvas.drawCircle(0, 0, outRadius, mBackgroundPaint);
+        canvas.restore();
         //绘制中间透明图标
         mGesturePaint.setAlpha(alpha);
         canvas.drawCircle(0, 0, inRadius, mGesturePaint);
-
-        canvas.save();
         //绘制刻度
         for (int i = 0; i <= 100; i++) {
             canvas.save();
-            canvas.rotate(degree - i * 1.8f);
+            float scale = i * 1.8f;
+            boolean isNeedFill = degree > scale;
+            canvas.rotate(degree - scale);
             int point = i % 25;
             if (i == 0 || i == 100 || point == 0) {
                 mScalePaint.setAlpha(SCALE_TEXT_ALPHA);
                 canvas.drawLine(0, -outRadius + 50, 0, -outRadius + 5, mScalePaint);
             } else {
-                mScalePaint.setAlpha(SCALE_ALPHA);
+                if (isNeedFill) {
+                    mScalePaint.setAlpha(SCALE_TEXT_ALPHA);
+                } else {
+                    mScalePaint.setAlpha(SCALE_ALPHA);
+                }
                 canvas.drawLine(0, -outRadius + 40, 0, -outRadius + 5, mScalePaint);
             }
 
@@ -309,8 +346,10 @@ public class CaptureView extends View {
         }
 
         //绘制标尺刻度
-        canvas.drawRoundRect(-4, -outRadius + 20, 4, -outRadius - 20, 20, 20, mCenterPaint);
-        //绘制文字
+        mCenterPaint.setAlpha(255 - faceAlpha);
+        canvas.drawRoundRect(-4, -outRadius + 50, 4, -outRadius - 10, 20, 20, mCenterPaint);
+
+        //绘制指示刻度
         float tempDegree = degree;
         if (tempDegree > MAX_DEGREE) {
             tempDegree = MAX_DEGREE;
@@ -323,7 +362,19 @@ public class CaptureView extends View {
             onProgressChangeListener.onProgressChange(lastProgress, progress);
         }
         lastProgress = progress;
-        canvas.drawText(String.valueOf(progress), 0, -outRadius + 80, mCenterPaint);
+        mCenterPaint.setAlpha(255);
+        canvas.drawText(String.valueOf(progress), 0, -outRadius + 130, mCenterPaint);
+
+        //绘制面部指示器
+        mFacePaint.setAlpha(faceAlpha);
+        canvas.drawCircle(0, -outRadius + 30, 50, mFacePaint);
+        //中心点（0,-outRadius + 40）
+        if (faceDrawable != null) {
+
+            faceDrawable.setAlpha(faceAlpha);
+            faceDrawable.setBounds(-30, (int) -outRadius, 30, (int) -outRadius + 60);
+            faceDrawable.draw(canvas);
+        }
     }
 
     /**
@@ -404,17 +455,24 @@ public class CaptureView extends View {
     private void onInitSize(int width, int heigt) {
         this.width = width;
         this.height = heigt;
-        expandOutRadius = width / 2.5f;
+        expandOutRadius = width / 2.72f;
         shrinkOutRadius = width / 3;
 
-        expandInRadius = width / 4;
-        shrinkInRadius = width / 4.5f;
+        expandInRadius = width / 4.55f;
+        shrinkInRadius = width / 5f;
 
         outRadius = shrinkOutRadius;
         inRadius = shrinkInRadius;
         alpha = shrinkAlpha;
 
         center.set(width / 2, height / 2);
+
+        backGradient = new LinearGradient(0, 0, width, height, new int[]{0xFFFF48B1, 0xFFFE537F, 0xFFFD5A5C, 0xFFFD5A5C, 0xFFFD5A5C, 0xFFFD5A5C, 0xFFFD5A5C, 0xFFFD5A5C},
+//                    new float[]{0.0f, 0.59f, 1.0f},
+                null,
+                Shader.TileMode.CLAMP);
+        mBackgroundPaint.setShader(backGradient);
+        mBackgroundPaint.setShadowLayer(20, 0, 0, 0xFFFD5A5C);
     }
 
     /**
