@@ -23,7 +23,6 @@ import android.view.animation.LinearInterpolator;
 
 import me.csxiong.library.R;
 import me.csxiong.library.base.APP;
-import me.csxiong.library.utils.ThreadExecutor;
 import me.csxiong.library.utils.XDisplayUtil;
 
 
@@ -571,20 +570,18 @@ public class NewCaptureView extends View {
                 angle /= OVERSCROLL_DAMPING_ALPHA;
             }
             degree += angle;
-            ThreadExecutor.get().runOnUiThread(() -> {
-                //临时角度 计算当前进度
-                float tempDegree = degree;
-                if (tempDegree > MAX_DEGREE) {
-                    tempDegree = MAX_DEGREE;
-                } else if (tempDegree < MIN_DEGREE) {
-                    tempDegree = MIN_DEGREE;
-                }
-                int newProgress = (int) ((tempDegree / 180) * 100);
-                if (progress != newProgress && onProgressChangeListener != null) {
-                    onProgressChangeListener.onProgressChange(progress, newProgress, isPress);
-                }
-                progress = newProgress;
-            });
+            //临时角度 计算当前进度
+            float tempDegree = degree;
+            if (tempDegree > MAX_DEGREE) {
+                tempDegree = MAX_DEGREE;
+            } else if (tempDegree < MIN_DEGREE) {
+                tempDegree = MIN_DEGREE;
+            }
+            int newProgress = (int) ((tempDegree / 180) * 100);
+            if (progress != newProgress && onProgressChangeListener != null) {
+                onProgressChangeListener.onProgressChange(progress, newProgress, isPress);
+            }
+            progress = newProgress;
             invalidate();
         } else if (event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_UP) {
             time = 0;
