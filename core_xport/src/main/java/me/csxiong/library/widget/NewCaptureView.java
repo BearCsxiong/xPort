@@ -435,7 +435,7 @@ public class NewCaptureView extends View {
      * @return
      */
     private int getIndicatorColor(float fract, int startColor, boolean isPress) {
-        return (int) argbEvaluator.evaluate(fract, startColor, isPress ? 0xFFFD5A5C : 0xFFFFFFFF);
+        return (int) argbEvaluator.evaluate(fract, startColor, isPress ? 0xFFFE537F : 0xFFFFFFFF);
     }
 
     @Override
@@ -486,14 +486,13 @@ public class NewCaptureView extends View {
         }
 
 
-
         canvas.save();
         canvas.rotate(-90 + degree);
         //5.绘制标尺刻度 存在切换动画
         roundRectf.set(-4, -outRadius + expandScaleLength, 4, -outRadius - 10);
         canvas.drawRoundRect(roundRectf, 20, 20, mCenterPaint);
         //6.绘制指示刻度
-        canvas.drawText(String.valueOf(progress), 0, -outRadius + 130, mCenterPaint);
+        canvas.drawText((isPress ? "+" : "") + progress, 0, -outRadius + 130, mCenterPaint);
         //7.绘制内部指示点 存在颜色渐变
         mIndicatorPaint.setColor(indicatorColor);
         canvas.drawCircle(0, -inRadius + 30, 8, mIndicatorPaint);
