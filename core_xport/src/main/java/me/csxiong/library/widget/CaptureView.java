@@ -12,15 +12,17 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.FloatRange;
+import android.support.annotation.IntRange;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 
 import me.csxiong.library.R;
 import me.csxiong.library.base.APP;
+import me.csxiong.library.utils.ThreadExecutor;
 import me.csxiong.library.utils.XDisplayUtil;
 
 
@@ -57,7 +59,7 @@ public class CaptureView extends View {
     /**
      * 手势触发时间
      */
-    private final static long HAND_TOUCH_TIME = 80;
+    private final static long HAND_TOUCH_TIME = 120;
 
     //渐变色
     private LinearGradient backGradient;
@@ -97,6 +99,9 @@ public class CaptureView extends View {
 
     //扩张的内圈半径
     private float expandInRadius;
+
+    //正常的内圈半径
+    private float normalInRadius;
 
     //收缩的内圈半径
     private float shrinkInRadius;
@@ -196,9 +201,21 @@ public class CaptureView extends View {
     private int differFaceAlpha;
 
     /**
-     * 上一次的进度
+     * 拍摄时 单击的动画变量
      */
-    private int lastProgress;
+    private float captureStartInRadius;
+    private float captureDifferInRadius;
+
+    /**
+     * 拍摄时 单击的透明度变化
+     */
+    private int captureStartAlpha;
+    private int captureDifferAlpha;
+
+    /**
+     * 上一次的进度 用于比较进度
+     */
+    private int progress;
 
     /**
      * 面部bitmap
@@ -206,15 +223,57 @@ public class CaptureView extends View {
     private Drawable faceDrawable;
 
     /**
-     * 进度改变监听
+     * 相机单击动画
      */
-    private OnProgressChangeListener onProgressChangeListener;
+    private ValueAnimator captureAnimator = ValueAnimator.ofFloat(0f, 1f, 0f)
+            .setDuration(300);
+
 
     /**
      * 改变动画 都是从0～1变化 内部因子使用 自己控制差值
      */
-    private ValueAnimator changeAnimator = ValueAnimator.ofFloat(0, 1)
+    private ValueAnimator changeAnimator = ValueAnimator.ofFloat(0f, 1f)
             .setDuration(200);
+
+    /**
+     * 相机单击更新
+     */
+    private ValueAnimator.AnimatorUpdateListener captureUpdateListener = animation -> {
+        float value = (float) animation.getAnimatedValue();
+        inRadius = captureStartInRadius + value * captureDifferInRadius;
+        alpha = (int) (captureStartAlpha + value * captureDifferAlpha);
+        invalidate();
+    };
+
+    /**
+     * 相机单击监听
+     */
+    private AnimatorListenerAdapter captureListener = new AnimatorListenerAdapter() {
+
+        @Override
+        public void onAnimationCancel(Animator animation) {
+            super.onAnimationCancel(animation);
+            inRadius = normalInRadius;
+            alpha = shrinkAlpha;
+        }
+
+        @Override
+        public void onAnimationEnd(Animator animation) {
+            super.onAnimationEnd(animation);
+            inRadius = normalInRadius;
+            alpha = shrinkAlpha;
+        }
+
+        @Override
+        public void onAnimationStart(Animator animation) {
+            super.onAnimationStart(animation);
+            captureStartInRadius = inRadius;
+            captureStartAlpha = alpha;
+
+            captureDifferInRadius = shrinkInRadius - inRadius;
+            captureDifferAlpha = 255 - alpha;
+        }
+    };
 
     /**
      * 动画更新回调 当前进度 0~1
@@ -272,7 +331,7 @@ public class CaptureView extends View {
             } else {
                 differAlpha = shrinkAlpha - startAlpha;
                 differOutRadius = shrinkOutRadius - outRadius;
-                differInRadius = shrinkInRadius - inRadius;
+                differInRadius = normalInRadius - inRadius;
                 differFaceAlpha = 0 - faceAlpha;
 
                 if (degree > MAX_DEGREE) {
@@ -333,6 +392,10 @@ public class CaptureView extends View {
 
         changeAnimator.addUpdateListener(updateListener);
         changeAnimator.addListener(listenerAdapter);
+
+        captureAnimator.setInterpolator(new LinearInterpolator());
+        captureAnimator.addUpdateListener(captureUpdateListener);
+        captureAnimator.addListener(captureListener);
 
         faceDrawable = ContextCompat.getDrawable(APP.get(), R.mipmap.icon_face);
     }
@@ -400,18 +463,6 @@ public class CaptureView extends View {
         canvas.drawRoundRect(roundRectf, 20, 20, mCenterPaint);
 
         //6.绘制指示刻度
-        float tempDegree = degree;
-        if (tempDegree > MAX_DEGREE) {
-            tempDegree = MAX_DEGREE;
-        } else if (tempDegree < MIN_DEGREE) {
-            tempDegree = MIN_DEGREE;
-        }
-
-        int progress = (int) ((tempDegree / 180) * 100);
-        if (progress != lastProgress && onProgressChangeListener != null) {
-            onProgressChangeListener.onProgressChange(lastProgress, progress);
-        }
-        lastProgress = progress;
         mCenterPaint.setAlpha(255);
         canvas.drawText(String.valueOf(progress), 0, -outRadius + 130, mCenterPaint);
 
@@ -420,7 +471,7 @@ public class CaptureView extends View {
         canvas.drawCircle(0, -outRadius + 30, 50, mFacePaint);
         //中心点（0,-outRadius + 40）
         if (faceDrawable != null) {
-            faceRadius = 30 - lastProgress / 100f * 10;
+            faceRadius = 30 - progress / 100f * 10;
             faceDrawable.setAlpha(faceAlpha);
             faceDrawable.setBounds((int) -faceRadius, (int) (-outRadius + 30 - faceRadius), (int) faceRadius, (int) (-outRadius + 30 + faceRadius));
             faceDrawable.draw(canvas);
@@ -428,12 +479,12 @@ public class CaptureView extends View {
     }
 
     /**
-     * 设置程度值 TODO 可修改 根据需要修改
+     * 设置程度值
      *
-     * @param ratio
+     * @param progress
      */
-    public void setDegree(@FloatRange(from = 0f, to = 1f) float ratio) {
-        degree = MAX_DEGREE * ratio;
+    public void setProgress(@IntRange(from = 0, to = 100) int progress) {
+        degree = progress / 100f * MAX_DEGREE;
         invalidate();
     }
 
@@ -448,11 +499,18 @@ public class CaptureView extends View {
     private int lastX;
     private int lastY;
 
+    /**
+     * 需要检测是否在内圈点击
+     */
+    private boolean isInCircle;
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             lastX = (int) event.getX();
             lastY = (int) event.getY();
+            isInCircle = Math.sqrt(Math.pow(lastX - center.x, 2) + Math.pow(lastY - center.y, 2)) < normalInRadius;
+            Log.e("isInCircle", isInCircle + "");
             time = System.currentTimeMillis();
             return true;
         } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
@@ -460,6 +518,7 @@ public class CaptureView extends View {
             long _time = System.currentTimeMillis();
             if (!isPress && _time - time > HAND_TOUCH_TIME) {
                 isPress = true;
+                captureAnimator.cancel();
                 changeAnimator.cancel();
                 changeAnimator.start();
                 time = 0;
@@ -479,13 +538,38 @@ public class CaptureView extends View {
                 angle /= OVERSCROLL_DAMPING_ALPHA;
             }
             degree += angle;
-            Log.e("degree", degree + "");
+            ThreadExecutor.get().runOnUiThread(() -> {
+                //临时角度 计算当前进度
+                float tempDegree = degree;
+                if (tempDegree > MAX_DEGREE) {
+                    tempDegree = MAX_DEGREE;
+                } else if (tempDegree < MIN_DEGREE) {
+                    tempDegree = MIN_DEGREE;
+                }
+                int newProgress = (int) ((tempDegree / 180) * 100);
+                if (progress != newProgress && onProgressChangeListener != null) {
+                    onProgressChangeListener.onProgressChange(progress, newProgress, isPress);
+                }
+                progress = newProgress;
+            });
             invalidate();
         } else if (event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_UP) {
             time = 0;
-            isPress = false;
-            changeAnimator.cancel();
-            changeAnimator.start();
+            if (isInCircle && !isPress) {
+                //触发动画收缩
+                captureAnimator.cancel();
+                changeAnimator.cancel();
+                captureAnimator.start();
+                if (onCaptureTouchListener != null) {
+                    onCaptureTouchListener.onCaptureTouch();
+                }
+            } else {
+                isInCircle = false;
+                isPress = false;
+                captureAnimator.cancel();
+                changeAnimator.cancel();
+                changeAnimator.start();
+            }
         }
         return super.onTouchEvent(event);
     }
@@ -512,7 +596,8 @@ public class CaptureView extends View {
         shrinkOutRadius = width / 1.25f / 2;
 
         expandInRadius = width / 1.89f / 2;
-        shrinkInRadius = width / 2.08f / 2;
+        normalInRadius = width / 2.08f / 2;
+        shrinkInRadius = width / 2.3f / 2;
 
         //计算刻度的比例长度
         scaleLength = (int) (width * 0.04f);
@@ -522,7 +607,7 @@ public class CaptureView extends View {
         mArcPaint.setStrokeWidth(sweepWidth);
 
         outRadius = shrinkOutRadius;
-        inRadius = shrinkInRadius;
+        inRadius = normalInRadius;
         alpha = shrinkAlpha;
 
         center.set(width / 2, height / 2);
@@ -577,6 +662,17 @@ public class CaptureView extends View {
     }
 
     /**
+     * 进度改变监听
+     */
+    private OnProgressChangeListener onProgressChangeListener;
+
+    /**
+     * 采集点击事件
+     */
+    private OnCaptureTouchListener onCaptureTouchListener;
+
+
+    /**
      * 设置进度改变监听
      *
      * @param onProgressChangeListener
@@ -586,11 +682,34 @@ public class CaptureView extends View {
     }
 
     /**
+     * 设置采集点击事件
+     *
+     * @param onCaptureTouchListener
+     */
+    public void setOnCaptureTouchListener(OnCaptureTouchListener onCaptureTouchListener) {
+        this.onCaptureTouchListener = onCaptureTouchListener;
+    }
+
+    /**
      * 进度改变监听 0~100仅在进度切换发送监听
      */
     public interface OnProgressChangeListener {
 
-        void onProgressChange(int lastProgress, int progress);
+        /**
+         * 手势滑动进度改变
+         *
+         * @param lastProgress
+         * @param progress
+         */
+        void onProgressChange(int lastProgress, int progress, boolean isFromUser);
+
+    }
+
+    public interface OnCaptureTouchListener {
+        /**
+         * 相机点击
+         */
+        void onCaptureTouch();
 
     }
 }
