@@ -4,6 +4,10 @@
 
     <application>
 
+        <activity android:name="com.example.widget.CaptureViewActivity"/>
+
+        <activity android:name="com.example.widget.NewCaptureViewActivity"/>
+
         <meta-data
             android:name="com.example.login.config.LoginGlobalConfig"
             android:value="ConfigModule" />

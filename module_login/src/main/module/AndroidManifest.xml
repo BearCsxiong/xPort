@@ -2,6 +2,11 @@
     package="com.example.login">
 
     <application>
+
+        <activity android:name="com.example.widget.CaptureViewActivity"/>
+
+        <activity android:name="com.example.widget.NewCaptureViewActivity"/>
+
         <meta-data
             android:name="com.base.multi.config.LoginGlobalConfig"
             android:value="ConfigModule" />

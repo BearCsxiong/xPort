@@ -41,6 +41,7 @@ public class MainActivity extends XActivity<ActivityMainBinding, MainViewModel> 
     @Override
     public void initData() {
         mDataList.add(new FeatureBean("多人拍照的手势控件", "/login/capture"));
+        mDataList.add(new FeatureBean("新多人拍照的手势控件", "/login/new/capture"));
         mAdapter.updateItemEntities(AdapterDataBuilder.create()
                 .addEntities(mDataList, FeatureViewHolder.class).build());
 
