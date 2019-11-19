@@ -12,17 +12,13 @@ import android.graphics.Point;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.IntRange;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 
-import me.csxiong.library.R;
-import me.csxiong.library.base.APP;
 import me.csxiong.library.utils.XDisplayUtil;
 
 
@@ -231,11 +227,6 @@ public class NewCaptureView extends View {
     private int indicatorColor = 0xFFFFFFFF;
 
     /**
-     * 面部bitmap
-     */
-    private Drawable faceDrawable;
-
-    /**
      * 颜色渐变计算
      */
     private ArgbEvaluator argbEvaluator;
@@ -423,7 +414,6 @@ public class NewCaptureView extends View {
 
         argbEvaluator = new ArgbEvaluator();
 
-        faceDrawable = ContextCompat.getDrawable(APP.get(), R.mipmap.icon_face);
     }
 
     /**
@@ -478,7 +468,8 @@ public class NewCaptureView extends View {
             }
 
             if (i == 0 || i == 50 || i == 100) {
-                mScalePaint.setAlpha(SCALE_ALPHA);
+                int alpha = getAlpha(progress, i);
+                mScalePaint.setAlpha(alpha);
                 canvas.drawText(i + "", 0, -outRadius + expandScaleLength + 50, mScalePaint);
             }
             canvas.restore();
@@ -511,6 +502,45 @@ public class NewCaptureView extends View {
     }
 
     /**
+     * 获取透明度
+     *
+     * @param progress
+     * @return
+     */
+    public int getAlpha(int progress, int index) {
+        if (index == 0) {
+            if (progress < 5) {
+                return 0;
+            } else if (progress <= 10) {
+                return (int) ((progress - 5) / 5f * SCALE_ALPHA);
+            } else {
+                return SCALE_ALPHA;
+            }
+        }
+        if (index == 50) {
+            if (progress > 40 && progress < 45) {
+                return (int) ((45 - progress) / 5f * SCALE_ALPHA);
+            } else if (progress >= 45 && progress <= 55) {
+                return 0;
+            } else if (progress > 55 && progress < 60) {
+                return (int) ((progress - 55) / 5f * SCALE_ALPHA);
+            } else {
+                return SCALE_ALPHA;
+            }
+        }
+        if (index == 100) {
+            if (progress >= 90 && progress < 95) {
+                return (int) ((95 - progress) / 5f * SCALE_ALPHA);
+            } else if (progress >= 95) {
+                return 0;
+            } else {
+                return SCALE_ALPHA;
+            }
+        }
+        return SCALE_ALPHA;
+    }
+
+    /**
      * 设置程度值
      *
      * @param progress
@@ -518,6 +548,15 @@ public class NewCaptureView extends View {
     public void setProgress(@IntRange(from = 0, to = 100) int progress) {
         degree = progress / 100f * MAX_DEGREE;
         invalidate();
+    }
+
+    /**
+     * 获取当前进度
+     *
+     * @return
+     */
+    public int getProgress() {
+        return progress;
     }
 
     /**
@@ -549,6 +588,9 @@ public class NewCaptureView extends View {
             //FIXME 这边目前是200毫秒开始需求点改动
             long _time = System.currentTimeMillis();
             if (!isPress && _time - time > HAND_TOUCH_TIME) {
+                if (onProgressChangeListener != null) {
+                    onProgressChangeListener.onTouchStateChange(true, false);
+                }
                 isPress = true;
                 captureAnimator.cancel();
                 changeAnimator.cancel();
@@ -578,6 +620,9 @@ public class NewCaptureView extends View {
                 tempDegree = MIN_DEGREE;
             }
             int newProgress = (int) ((tempDegree / 180) * 100);
+            if (onProgressChangeListener != null) {
+                onProgressChangeListener.onTouchStateChange(false, false);
+            }
             if (progress != newProgress && onProgressChangeListener != null) {
                 onProgressChangeListener.onProgressChange(progress, newProgress, isPress);
             }
@@ -596,6 +641,9 @@ public class NewCaptureView extends View {
             } else {
                 isInCircle = false;
                 isPress = false;
+                if (onProgressChangeListener != null) {
+                    onProgressChangeListener.onTouchStateChange(false, true);
+                }
                 captureAnimator.cancel();
                 changeAnimator.cancel();
                 changeAnimator.start();
@@ -724,6 +772,14 @@ public class NewCaptureView extends View {
      * 进度改变监听 0~100仅在进度切换发送监听
      */
     public interface OnProgressChangeListener {
+
+        /**
+         * touch 状态改变
+         *
+         * @param isStart
+         * @param isEnd
+         */
+        void onTouchStateChange(boolean isStart, boolean isEnd);
 
         /**
          * 手势滑动进度改变

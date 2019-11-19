@@ -9,6 +9,7 @@ import com.example.login.databinding.ActivityNewCaptureBinding;
 import me.csxiong.library.base.BaseActivity;
 import me.csxiong.library.utils.VibratorUtils;
 import me.csxiong.library.utils.XToast;
+import me.csxiong.library.widget.NewCaptureView;
 
 @Route(path = "/login/new/capture", name = "新多人拍照手势控件")
 public class NewCaptureViewActivity extends BaseActivity<ActivityNewCaptureBinding> {
@@ -21,8 +22,16 @@ public class NewCaptureViewActivity extends BaseActivity<ActivityNewCaptureBindi
     @Override
     public void initView() {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        mViewBinding.cv.setOnProgressChangeListener((lastProgress, progress, isFromUser) -> {
-            VibratorUtils.onShot(4);
+        mViewBinding.cv.setOnProgressChangeListener(new NewCaptureView.OnProgressChangeListener() {
+            @Override
+            public void onTouchStateChange(boolean isStart, boolean isEnd) {
+
+            }
+
+            @Override
+            public void onProgressChange(int lastProgress, int progress, boolean isFromUser) {
+                VibratorUtils.onShot(4);
+            }
         });
 
         mViewBinding.cv.setOnCaptureTouchListener(() -> XToast.show("Capture"));
