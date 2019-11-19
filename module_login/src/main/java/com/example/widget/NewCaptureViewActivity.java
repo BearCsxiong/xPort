@@ -23,15 +23,12 @@ public class NewCaptureViewActivity extends BaseActivity<ActivityNewCaptureBindi
     public void initView() {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         mViewBinding.cv.setOnProgressChangeListener(new NewCaptureView.OnProgressChangeListener() {
-            @Override
-            public void onTouchStateChange(boolean isStart, boolean isEnd) {
-
-            }
 
             @Override
-            public void onProgressChange(int lastProgress, int progress, boolean isFromUser) {
+            public void onProgressChange(int lastProgress, int progress, boolean isFromUser, int state) {
                 VibratorUtils.onShot(4);
             }
+
         });
 
         mViewBinding.cv.setOnCaptureTouchListener(() -> XToast.show("Capture"));
