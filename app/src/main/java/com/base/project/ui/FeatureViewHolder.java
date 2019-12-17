@@ -16,13 +16,10 @@ import me.csxiong.library.integration.adapter.XViewHolder;
  * @Desc : 功能点的ViewHolder
  * @Author : csxiong - 2019-11-13
  */
-public class FeatureViewHolder extends XViewHolder<FeatureBean> {
-
-    private ItemFeatureBinding mViewBinding;
+public class FeatureViewHolder extends XViewHolder<ItemFeatureBinding, FeatureBean> {
 
     public FeatureViewHolder(Context context, ViewGroup parent) {
         super(context, parent, R.layout.item_feature);
-        mViewBinding = DataBindingUtil.bind(itemView);
     }
 
     @Override

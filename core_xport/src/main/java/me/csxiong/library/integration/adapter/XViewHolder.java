@@ -1,6 +1,8 @@
 package me.csxiong.library.integration.adapter;
 
 import android.content.Context;
+import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +16,7 @@ import java.util.List;
  * @Desc :
  * @Author : csxiong - 2019-11-13
  */
-public abstract class XViewHolder<T> extends RecyclerView.ViewHolder {
+public abstract class XViewHolder<K extends ViewDataBinding, T> extends RecyclerView.ViewHolder {
 
     public interface OnItemClickListener {
 
@@ -29,6 +31,10 @@ public abstract class XViewHolder<T> extends RecyclerView.ViewHolder {
      * 对应的数据Item。
      */
     private XItem<T> item;
+    /**
+     * 界面ViewBinding
+     */
+    public K mViewBinding;
     /**
      * 上下文
      */
@@ -51,6 +57,7 @@ public abstract class XViewHolder<T> extends RecyclerView.ViewHolder {
      */
     protected XViewHolder(Context context, ViewGroup parent, @LayoutRes int layoutId) {
         super(inflateView(context, parent, layoutId));
+        mViewBinding = DataBindingUtil.bind(itemView);
         mContext = context;
         // 创建的时候需要设置监听。
         itemView.setOnClickListener(v -> {

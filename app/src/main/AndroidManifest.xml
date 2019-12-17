@@ -51,10 +51,6 @@
             </intent-filter>
         </activity>
 
-        <!--<activity android:name="com.example.widget.CaptureViewActivity" />-->
-
-        <!--<activity android:name="com.example.widget.NewCaptureViewActivity" />-->
-
         <meta-data
             android:name="com.base.project.config.MainGlobalConfig"
             android:value="@string/GlobalConfig" />

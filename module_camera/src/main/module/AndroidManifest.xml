@@ -2,6 +2,6 @@
     package="me.csxiong.camera">
 
     <application>
-
+        <activity android:name=".ui.album.AlbumActivity" />
     </application>
 </manifest>

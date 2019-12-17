@@ -3,6 +3,7 @@ package com.base.project.di;
 import com.example.login.di.LoginUIModule;
 
 import dagger.Component;
+import me.csxiong.camera.di.CameraUIModule;
 import me.csxiong.library.base.APP;
 import me.csxiong.library.di.component.AppComponent;
 import me.csxiong.library.di.scope.AppScope;
@@ -16,6 +17,7 @@ import me.csxiong.library.di.scope.AppScope;
         modules = {
                 MainUIModule.class,
                 LoginUIModule.class,
+                CameraUIModule.class,
         })
 public interface UIComponent {
 

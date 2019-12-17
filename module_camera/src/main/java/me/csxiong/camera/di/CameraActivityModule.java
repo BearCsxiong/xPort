@@ -1,16 +1,15 @@
-package com.example.login.di;
-
-import com.example.widget.CaptureViewActivity;
+package me.csxiong.camera.di;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
+import me.csxiong.camera.ui.album.AlbumActivity;
 import me.csxiong.library.di.scope.ActivityScope;
 
 @Module
-public  abstract class LoginActivityModule {
+public  abstract class CameraActivityModule {
 
     @ActivityScope
     @ContributesAndroidInjector
-    abstract CaptureViewActivity injectCapture();
+    abstract AlbumActivity injectAlbum();
 
 }

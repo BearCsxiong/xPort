@@ -12,6 +12,7 @@ dependencies {
     annotationProcessor dagger2androidprocessor
     api project(':core_xport')
     api project(':module_login')
+    api project(':module_camera')
 }
 
 android.applicationVariants.all { variant ->
