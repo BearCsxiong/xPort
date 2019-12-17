@@ -1,3 +1,4 @@
 include ':app',
         ':module_login',
+        ':module_camera',
         ':core_xport'

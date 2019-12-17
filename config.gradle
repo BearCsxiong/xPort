@@ -11,7 +11,7 @@ android {
         javaMaxHeapSize "4g"
     }
 
-    dataBinding{
+    dataBinding {
         enabled = true
     }
 
@@ -157,6 +157,10 @@ def isIndependent() {
         return isExampleModule
     }
     if (this.name.contains("module_login")) {
+        println("this module's name is module , this.name = ${this.name}")
+        return isExampleModule
+    }
+    if (this.name.contains("module_camera")) {
         println("this module's name is module , this.name = ${this.name}")
         return isExampleModule
     }
