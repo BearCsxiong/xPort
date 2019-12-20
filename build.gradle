@@ -27,8 +27,7 @@ allprojects {
     //仓库地址
     repositories {
         maven { url "https://jitpack.io" }
-//         maven { url "{private maven url}"}
-         maven { url "https://dl.bintray.com/csxiong/XPort"}
+        maven { url "https://dl.bintray.com/csxiong/XPort" }
         jcenter()
         google()
     }

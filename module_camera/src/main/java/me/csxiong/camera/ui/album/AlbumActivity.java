@@ -1,16 +1,20 @@
 package me.csxiong.camera.ui.album;
 
+import android.Manifest;
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 
+import java.util.List;
+
 import me.csxiong.camera.R;
 import me.csxiong.camera.databinding.ActivityAlbumBinding;
+import me.csxiong.ipermission.EnsureAllPermissionCallBack;
+import me.csxiong.ipermission.IPermission;
 import me.csxiong.library.base.XActivity;
 import me.csxiong.library.integration.adapter.AdapterDataBuilder;
 import me.csxiong.library.integration.adapter.XRecyclerViewAdapter;
@@ -49,7 +53,21 @@ public class AlbumActivity extends XActivity<ActivityAlbumBinding, AlbumViewMode
             }
         });
         mViewBinding.rv.setAdapter(mAdapter);
-        mViewModel.loadData();
+        new IPermission(this)
+                .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .excute(new EnsureAllPermissionCallBack() {
+                    @Override
+                    public void onAllPermissionEnable(boolean isEnable) {
+                        if (isEnable) {
+                            mViewModel.loadData();
+                        }
+                    }
+
+                    @Override
+                    public void onPreRequest(List<String> requestList) {
+
+                    }
+                });
     }
 
     @Override

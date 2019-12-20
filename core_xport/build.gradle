@@ -29,6 +29,8 @@ dependencies {
     api fresco_animated_webp
     api fresco_webpsupport
 
+    api ipermission
+
     api dagger2
     annotationProcessor dagger2compiler
     api dagger2android

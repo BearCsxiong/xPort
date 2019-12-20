@@ -28,6 +28,7 @@ ext {
             rxlifecycle       : "2.2.1",
             exoplayerVersion  : "2.9.0",
             objectboxVersion  : "2.3.4",
+            ipermission       : "1.6.0",
     ]
     //support library
     appcompatv7 = "com.android.support:appcompat-v7:$supportLibraryVersion"
@@ -82,5 +83,7 @@ ext {
     //json parse
     gson = "com.google.code.gson:gson:${version.gsonVersion}"
     okio = "com.squareup.okio:okio:${version.okioVersion}"
+    //permission
+    ipermission = "com.github.csxiong:IPermission:${version.ipermission}"
 }
 
