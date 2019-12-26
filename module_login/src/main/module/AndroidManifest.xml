@@ -7,6 +7,8 @@
 
         <activity android:name="com.example.widget.NewCaptureViewActivity"/>
 
+        <activity android:name="com.example.widget.PolygonActivity"/>
+
         <meta-data
             android:name="com.base.multi.config.LoginGlobalConfig"
             android:value="ConfigModule" />
