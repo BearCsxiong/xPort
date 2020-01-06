@@ -18,6 +18,7 @@ public class LoginAppDelegate implements IAppDelegate {
 
     @Override
     public void onCreate(@NonNull Application application) {
+
     }
 
     @Override

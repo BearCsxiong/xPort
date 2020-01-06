@@ -9,6 +9,10 @@
 
         <activity android:name="com.example.widget.PolygonActivity"/>
 
+        <activity android:name="com.example.widget.LeakViewPagerActivity"/>
+
+        <activity android:name="com.example.widget.RadarActivity"/>
+
         <meta-data
             android:name="com.base.multi.config.LoginGlobalConfig"
             android:value="ConfigModule" />
