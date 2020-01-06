@@ -24,7 +24,7 @@ public class RadarActivity extends BaseActivity<ActivityRadarBinding> {
             @Override
             public void onClick(View v) {
                 i++;
-                if (i > 5) {
+                if (i > 9) {
                     i = 1;
                 }
                 switch (i) {
@@ -35,13 +35,25 @@ public class RadarActivity extends BaseActivity<ActivityRadarBinding> {
                         mViewBinding.rv.updateData(new float[]{4, 3, 1, 3, 4});
                         break;
                     case 3:
-                        mViewBinding.rv.updateData(new float[]{1, 3, 5, 2, 1});
+                        mViewBinding.rv.updateData(new float[]{1, 1, 1, 1, 1});
                         break;
                     case 4:
                         mViewBinding.rv.updateData(new float[]{1, 3, 4, 5, 2});
                         break;
                     case 5:
-                        mViewBinding.rv.updateData(new float[]{2, 5, 1, 2, 4});
+                        mViewBinding.rv.updateData(new float[]{4, 4, 4, 4, 4});
+                        break;
+                    case 6:
+                        mViewBinding.rv.updateData(new float[]{1, 2, 3, 4, 5});
+                        break;
+                    case 7:
+                        mViewBinding.rv.updateData(new float[]{5, 5, 5, 5, 5});
+                        break;
+                    case 8:
+                        mViewBinding.rv.updateData(new float[]{2, 3, 4, 1, 5});
+                        break;
+                    case 9:
+                        mViewBinding.rv.updateData(new float[]{2, 2, 2, 2, 2});
                         break;
                 }
             }
