@@ -49,10 +49,14 @@ public class RadarView extends View {
     //期望到达的值
     private float[] forwardData = new float[level];
 
+    private String[] descs = new String[]{
+            "击杀", "金钱", "防御", "魔法", "物理"
+    };
+
     private Matrix rotateMatrix = new Matrix();
 
     private ValueAnimator processAnimator = ValueAnimator.ofFloat(0, 1)
-            .setDuration(200);
+            .setDuration(350);
 
     private boolean isStart;
 
@@ -114,6 +118,8 @@ public class RadarView extends View {
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setStrokeWidth(XDisplayUtil.dpToPxInt(2));
+        mPaint.setTextAlign(Paint.Align.CENTER);
+        mPaint.setTextSize(XDisplayUtil.dpToPx(16));
         mPaint.setColor(Color.RED);
 
         mYellowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -153,10 +159,18 @@ public class RadarView extends View {
                 float curLevel = curData[l - 1];
                 canvas.drawLine(0, 0, -per, radius, mPaint);
                 canvas.drawLine(-per, radius, per, radius, mYellowPaint);
+
+                //绘制文字
+                if (l == 4) {
+                    String desc = descs[i];
+                    canvas.translate(-per * 1.5f, radius * 1.5f);
+                    canvas.rotate(-(float) (perDegree * i));
+                    canvas.drawText(desc, 0, 0, mPaint);
+                }
+
                 canvas.restore();
             }
         }
-
 
         path.reset();
         mPaint.setAlpha(100);
@@ -179,6 +193,8 @@ public class RadarView extends View {
             }
             canvas.restore();
         }
+
+        canvas.drawText("", 0, 0, mPaint);
 
         path.close();
         canvas.drawPath(path, mPaint);
