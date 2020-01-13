@@ -36,6 +36,19 @@ public class SeekBarActivity extends BaseActivity<ActivitySeekBarBinding> {
             }
         });
 
+        mViewBinding.xsb.setEnableStroke(false);
+        mViewBinding.xsb.setBackgroundColor(0xffE5E5E5);
+        mViewBinding.xsb.setProgressColor(0xffFB5986);
+
+        mViewBinding.xsb1.setEnableCenterPoint(false);
+        mViewBinding.xsb1.setCenterPointPercent(0);
+        mViewBinding.xsb1.setMinProgress(0);
+        mViewBinding.xsb1.setMaxProgress(100);
+
+        mViewBinding.xsb2.setCenterPointPercent(0.3f);
+        mViewBinding.xsb2.setMinProgress(-33);
+        mViewBinding.xsb2.setMaxProgress(67);
+
         mViewBinding.btn
                 .setOnClickListener(new View.OnClickListener() {
                     @Override

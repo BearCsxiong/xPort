@@ -7,6 +7,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.support.annotation.ColorInt;
+import android.support.annotation.FloatRange;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,6 +20,26 @@ import me.csxiong.library.utils.XDisplayUtil;
  * @Author : csxiong - 2020-01-13
  */
 public class XSeekBar extends View {
+    /**
+     * 是否允许描边
+     */
+    private boolean isEnableStroke = true;
+    /**
+     * 是否需要中心点
+     */
+    private boolean isEnableCenterPoint = true;
+    /**
+     * 背景颜色
+     */
+    private int backgroundColor = 0x80F2F2F2;
+    /**
+     * 描边颜色
+     */
+    private int strokeColor = 0x33000000;
+    /**
+     * 进度颜色
+     */
+    private int progressColor = 0xffffffff;
     /**
      * 图钉半径
      */
@@ -158,16 +180,16 @@ public class XSeekBar extends View {
 
     private void init() {
         mBackgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mBackgroundPaint.setColor(0x80F2F2F2);
+        mBackgroundPaint.setColor(backgroundColor);
         mBackgroundPaint.setStyle(Paint.Style.FILL_AND_STROKE);
 
         mStrokePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mStrokePaint.setColor(0x33000000);
+        mStrokePaint.setColor(strokeColor);
 //        mStrokePaint.setStrokeWidth(XDisplayUtil.dpToPxInt(1));
         mStrokePaint.setStyle(Paint.Style.STROKE);
 
         mProgressPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mProgressPaint.setColor(0xffffffff);
+        mProgressPaint.setColor(progressColor);
         mProgressPaint.setStyle(Paint.Style.FILL_AND_STROKE);
 
         animator.addListener(animatorListener);
@@ -181,15 +203,22 @@ public class XSeekBar extends View {
         canvas.drawRoundRect(mBackgroundRectf, 50, 50, mBackgroundPaint);
         //绘制进度
         canvas.drawRoundRect(mProgressRectf, 50, 50, mProgressPaint);
-        //绘制描边
-        canvas.drawRoundRect(mBackgroundRectf, 50, 50, mStrokePaint);
+        if (isEnableStroke) {
+            //绘制描边
+            canvas.drawRoundRect(mBackgroundRectf, 50, 50, mStrokePaint);
+        }
         //绘制中心点
         canvas.drawRoundRect(mCenterPointRectf, 50, 50, mProgressPaint);
-        //绘制中心描边
-        canvas.drawRoundRect(mCenterPointRectf, 50, 50, mStrokePaint);
+        if (isEnableStroke) {
+            //绘制中心描边
+            canvas.drawRoundRect(mCenterPointRectf, 50, 50, mStrokePaint);
+        }
         //绘制手指拖动的thumb
         canvas.drawCircle(mThumbRadius + barWidth * progressPercent, height / 2f, mThumbRadius, mProgressPaint);
-        canvas.drawCircle(mThumbRadius + barWidth * progressPercent, height / 2f, mThumbRadius, mStrokePaint);
+        if (isEnableStroke) {
+            //描边
+            canvas.drawCircle(mThumbRadius + barWidth * progressPercent, height / 2f, mThumbRadius, mStrokePaint);
+        }
 
     }
 
@@ -198,14 +227,14 @@ public class XSeekBar extends View {
      *
      * @param centerPointPercent
      */
-    public void setCenterPointPercent(float centerPointPercent) {
+    public void setCenterPointPercent(@FloatRange(from = 0.0f, to = 1.0f) float centerPointPercent) {
         this.centerPointPercent = centerPointPercent;
         if (mCenterPointRectf == null) {
             //中心点Rectf
-            mCenterPointRectf = new RectF(width * centerPointPercent - mCenterPointWidth / 2f, height / 2f - mCenterPointHeight / 2f, width * centerPointPercent + mCenterPointWidth / 2f, height / 2f + mCenterPointHeight / 2f);
+            mCenterPointRectf = new RectF(mThumbRadius + (width - mThumbRadius * 2) * centerPointPercent - mCenterPointWidth / 2f, height / 2f - mCenterPointHeight / 2f, mThumbRadius + (width - mThumbRadius * 2) * centerPointPercent + mCenterPointWidth / 2f, height / 2f + mCenterPointHeight / 2f);
         } else {
             //设置中心的Rectf
-            mCenterPointRectf.set(width * centerPointPercent - mCenterPointWidth / 2f, height / 2f - mCenterPointHeight / 2f, width * centerPointPercent + mCenterPointWidth / 2f, height / 2f + mCenterPointHeight / 2f);
+            mCenterPointRectf.set(mThumbRadius + (width - mThumbRadius * 2) * centerPointPercent - mCenterPointWidth / 2f, height / 2f - mCenterPointHeight / 2f, mThumbRadius + (width - mThumbRadius * 2) * centerPointPercent + mCenterPointWidth / 2f, height / 2f + mCenterPointHeight / 2f);
         }
         invalidate();
     }
@@ -232,17 +261,72 @@ public class XSeekBar extends View {
             } else {
                 this.progress = progress;
                 progressPercent = progress / (float) (maxProgress - minProgress) + centerPointPercent;
+                float left = progressPercent > centerPointPercent ? mThumbRadius + centerPointPercent * (width - mThumbRadius * 2) : (width - mThumbRadius * 2) * progressPercent + mThumbRadius;
+                float right = progressPercent > centerPointPercent ? (width - mThumbRadius * 2) * progressPercent + mThumbRadius : mThumbRadius + centerPointPercent * (width - mThumbRadius * 2);
                 if (mProgressRectf == null) {
-                    mProgressRectf = new RectF(mThumbRadius, height / 2f - mSeekBarHeight / 2f, (width - mThumbRadius) * progressPercent, height / 2f + mSeekBarHeight / 2f);
+                    mProgressRectf = new RectF(left, height / 2f - mSeekBarHeight / 2f, right, height / 2f + mSeekBarHeight / 2f);
                 } else {
-                    mProgressRectf.set(mThumbRadius, height / 2f - mSeekBarHeight / 2f, (width - mThumbRadius) * progressPercent, height / 2f + mSeekBarHeight / 2f);
-                }
-                if (onProgressChangeListener != null) {
-                    onProgressChangeListener.onProgressChange(progress, false);
+                    mProgressRectf.set(left, height / 2f - mSeekBarHeight / 2f, right, height / 2f + mSeekBarHeight / 2f);
                 }
                 invalidate();
             }
         }
+    }
+
+    /**
+     * 设置背景颜色
+     *
+     * @param backgroundColor
+     */
+    public void setBackgroundColor(@ColorInt int backgroundColor) {
+        this.backgroundColor = backgroundColor;
+        if (mBackgroundPaint != null) {
+            mBackgroundPaint.setColor(backgroundColor);
+        }
+    }
+
+    /**
+     * 设置进度颜色
+     *
+     * @param progressColor
+     */
+    public void setProgressColor(int progressColor) {
+        this.progressColor = progressColor;
+        if (mProgressPaint != null) {
+            mProgressPaint.setColor(progressColor);
+        }
+    }
+
+    /**
+     * 设置描边颜色
+     *
+     * @param strokeColor
+     */
+    public void setStrokeColor(int strokeColor) {
+        this.strokeColor = strokeColor;
+        if (mStrokePaint != null) {
+            mStrokePaint.setColor(strokeColor);
+        }
+    }
+
+    /**
+     * 是否绘制中心点
+     *
+     * @param enableCenterPoint
+     */
+    public void setEnableCenterPoint(boolean enableCenterPoint) {
+        isEnableCenterPoint = enableCenterPoint;
+        invalidate();
+    }
+
+    /**
+     * 设置是否描边
+     *
+     * @param enableStroke
+     */
+    public void setEnableStroke(boolean enableStroke) {
+        isEnableStroke = enableStroke;
+        invalidate();
     }
 
     /**
@@ -268,7 +352,13 @@ public class XSeekBar extends View {
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
-        initSize(left, top, right, bottom);
+        initSize(right - left, bottom - top);
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        initSize(w, h);
     }
 
     /**
@@ -289,25 +379,24 @@ public class XSeekBar extends View {
         } else if (progressPercent > 1) {
             progressPercent = 1;
         }
-        //计算进度
+        //计算新进度
         int newProgress = (int) ((progressPercent - centerPointPercent) * (maxProgress - minProgress));
-        boolean isProgreeChange = newProgress != progress;
-        if (isProgreeChange) {
-            progress = newProgress;
-        }
         if (action == MotionEvent.ACTION_DOWN) {
             isTouch = true;
+            setProgress(newProgress, true, false);
             if (onProgressChangeListener != null) {
                 onProgressChangeListener.onStartTracking(progress);
             }
             return true;
         } else if (isTouch && action == MotionEvent.ACTION_MOVE) {
-            mProgressRectf.set(mThumbRadius, height / 2f - mSeekBarHeight / 2f, progressPercent * (width - mThumbRadius), height / 2f + mSeekBarHeight / 2f);
-            if (isProgreeChange && onProgressChangeListener != null) {
-                onProgressChangeListener.onProgressChange(progress, true);
+            if (newProgress != progress) {
+                setProgress(newProgress, false, false);
+                if (onProgressChangeListener != null) {
+                    onProgressChangeListener.onProgressChange(progress, false);
+                }
             }
-            invalidate();
         } else if (isTouch && action == MotionEvent.ACTION_UP) {
+            setProgress(newProgress, true, false);
             isTouch = false;
             if (onProgressChangeListener != null) {
                 onProgressChangeListener.onStopTracking(progress, true);
@@ -342,9 +431,12 @@ public class XSeekBar extends View {
         return Math.sqrt(Math.pow(x - progressX, 2) + Math.pow(y - progressY, 2));
     }
 
-    private void initSize(int left, int top, int right, int bottom) {
-        width = right - left;
-        height = bottom - top;
+    /**
+     * 初始化size
+     */
+    private void initSize(int width, int height) {
+        this.width = width;
+        this.height = height;
         barWidth = width - mThumbRadius * 2;
 
         //初始化基础图形结构
