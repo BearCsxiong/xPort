@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.example.widget.seekbar.XSeekBar
+            android:id="@+id/xsb"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x40"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp" />
+
+        <Button
+            android:id="@+id/btn"
+            android:text="random"
+            android:layout_width="@dimen/x100"
+            android:layout_height="@dimen/x80"
+            android:layout_gravity="center_horizontal|bottom" />
+
+    </FrameLayout>
+</layout>

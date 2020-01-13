@@ -27,7 +27,7 @@ public class PolygonActivity extends BaseActivity<ActivityPolygonBinding> {
         mViewBinding.btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (lineSize < 40) {
+                if (lineSize < 20) {
                     lineSize++;
                 } else {
                     lineSize = 1;

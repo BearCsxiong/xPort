@@ -13,6 +13,8 @@
 
         <activity android:name="com.example.widget.RadarActivity"/>
 
+        <activity android:name="com.example.widget.seekbar.SeekBarActivity"/>
+
         <meta-data
             android:name="com.base.multi.config.LoginGlobalConfig"
             android:value="ConfigModule" />
