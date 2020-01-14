@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="XSeekBar">
+        <attr name="isEnableStroke" format="boolean">true</attr>
+        <attr name="isEnableCenterPoint" format="boolean">true</attr>
+        <attr name="xBackgroundColor" format="color"/>
+        <attr name="xStrokeColor" format="color"/>
+        <attr name="xProgressColor" format="color"/>
+        <attr name="xThumbRadius" format="dimension"/>
+        <attr name="xCenterPointWidth" format="dimension"/>
+        <attr name="xCenterPointHeight" format="dimension"/>
+        <attr name="xSeekbarHeight" format="dimension"/>
+        <attr name="xCenterPointPercent" format="float"/>
+        <attr name="xMaxProgress" format="integer"/>
+        <attr name="xMinProgress" format="integer"/>
+        <attr name="xProgress" format="integer"/>
+    </declare-styleable>
+</resources>

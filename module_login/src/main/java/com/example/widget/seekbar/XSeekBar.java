@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
@@ -12,6 +13,8 @@ import android.support.annotation.FloatRange;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.example.login.R;
 
 import me.csxiong.library.utils.XDisplayUtil;
 
@@ -178,21 +181,39 @@ public class XSeekBar extends View {
     };
 
     public XSeekBar(Context context) {
-        super(context);
-        init();
+        this(context, null);
     }
 
     public XSeekBar(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
+        this(context, attrs, 0);
     }
 
     public XSeekBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        init(context, attrs);
     }
 
-    private void init() {
+    private void initAttrs(Context context, AttributeSet attrs) {
+        if (context != null && attrs != null) {
+            TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.XSeekBar);
+            isEnableStroke = ta.getBoolean(R.styleable.XSeekBar_isEnableStroke, true);
+            isEnableCenterPoint = ta.getBoolean(R.styleable.XSeekBar_isEnableCenterPoint, true);
+            backgroundColor = ta.getColor(R.styleable.XSeekBar_xBackgroundColor, 0x80F2F2F2);
+            strokeColor = ta.getColor(R.styleable.XSeekBar_xStrokeColor,0x33000000);
+            progressColor = ta.getColor(R.styleable.XSeekBar_xProgressColor,0xffffffff);
+            mThumbRadius = ta.getDimensionPixelSize(R.styleable.XSeekBar_xThumbRadius,XDisplayUtil.dpToPxInt(9.5f));
+            mCenterPointWidth = ta.getDimensionPixelSize(R.styleable.XSeekBar_xCenterPointWidth,XDisplayUtil.dpToPxInt(3));
+            mCenterPointHeight = ta.getDimensionPixelSize(R.styleable.XSeekBar_xCenterPointHeight,XDisplayUtil.dpToPxInt(7));
+            mSeekBarHeight = ta.getDimensionPixelSize(R.styleable.XSeekBar_xSeekbarHeight,XDisplayUtil.dpToPxInt(3));
+            centerPointPercent = ta.getFloat(R.styleable.XSeekBar_xCenterPointPercent,.5f);
+            maxProgress = ta.getInteger(R.styleable.XSeekBar_xMaxProgress,100);
+            minProgress = ta.getInteger(R.styleable.XSeekBar_xMinProgress,-100);
+            progress = ta.getInteger(R.styleable.XSeekBar_xProgress,0);
+        }
+    }
+
+    private void init(Context context, AttributeSet attrs) {
+        initAttrs(context, attrs);
         mBackgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mBackgroundPaint.setColor(backgroundColor);
         mBackgroundPaint.setStyle(Paint.Style.FILL_AND_STROKE);
