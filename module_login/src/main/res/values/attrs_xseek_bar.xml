@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- 通用Seekbar -->
     <declare-styleable name="XSeekBar">
         <attr name="isEnableStroke" format="boolean">true</attr>
         <attr name="isEnableCenterPoint" format="boolean">true</attr>
