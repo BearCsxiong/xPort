@@ -16,8 +16,9 @@ import android.view.View;
 import me.csxiong.library.utils.XDisplayUtil;
 
 /**
- * @Desc : Seekbar
- * @Author : csxiong - 2020-01-13
+ * @Desc : 一个内容可编辑的Seekbar 比较简易
+ * 添加自动滚动和中心可移动模式
+ * @Author : csxiong - 2020-01-14
  */
 public class XSeekBar extends View {
     /**
@@ -57,13 +58,17 @@ public class XSeekBar extends View {
      */
     private int mSeekBarHeight = XDisplayUtil.dpToPxInt(3);
     /**
-     * 进度百分比
+     * 进度百分比 0~1之间的浮点数
      */
     private float progressPercent = 0.5f;
     /**
-     * 进度
+     * 进度浮点 为了UI渲染在progress范围小时 UI显得卡顿
      */
-    private int progress = 0;
+    private float progress = 0f;
+    /**
+     * 整型进度 回调进度
+     */
+    private int intProgress = 0;
     /**
      * 中心点位于滑杆位置
      */
@@ -121,12 +126,18 @@ public class XSeekBar extends View {
      * 是否开始
      */
     private boolean isStart;
-
-    private int startProgress;
-
-    private int diffProgress;
-
-    private int forwardProgress;
+    /**
+     * 动画其实进度
+     */
+    private float startProgress;
+    /**
+     * 动画差异进度
+     */
+    private float diffProgress;
+    /**
+     * 期望进度
+     */
+    private float forwardProgress;
 
     private ValueAnimator.AnimatorUpdateListener updateListener = new ValueAnimator.AnimatorUpdateListener() {
         @Override
@@ -143,6 +154,9 @@ public class XSeekBar extends View {
         public void onAnimationCancel(Animator animation) {
             super.onAnimationCancel(animation);
             isStart = false;
+            if (onProgressChangeListener != null) {
+                onProgressChangeListener.onProgressChange(intProgress, mThumbRadius + barWidth * progressPercent, false);
+            }
         }
 
         @Override
@@ -150,7 +164,7 @@ public class XSeekBar extends View {
             super.onAnimationEnd(animation);
             isStart = false;
             if (onProgressChangeListener != null) {
-                onProgressChangeListener.onProgressChange(progress, false);
+                onProgressChangeListener.onProgressChange(intProgress, mThumbRadius + barWidth * progressPercent, false);
             }
         }
 
@@ -185,7 +199,7 @@ public class XSeekBar extends View {
 
         mStrokePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mStrokePaint.setColor(strokeColor);
-//        mStrokePaint.setStrokeWidth(XDisplayUtil.dpToPxInt(1));
+        mStrokePaint.setStrokeWidth(XDisplayUtil.dpToPxInt(.5f));
         mStrokePaint.setStyle(Paint.Style.STROKE);
 
         mProgressPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -203,15 +217,17 @@ public class XSeekBar extends View {
         canvas.drawRoundRect(mBackgroundRectf, 50, 50, mBackgroundPaint);
         //绘制进度
         canvas.drawRoundRect(mProgressRectf, 50, 50, mProgressPaint);
+        //绘制描边
         if (isEnableStroke) {
-            //绘制描边
             canvas.drawRoundRect(mBackgroundRectf, 50, 50, mStrokePaint);
         }
         //绘制中心点
-        canvas.drawRoundRect(mCenterPointRectf, 50, 50, mProgressPaint);
-        if (isEnableStroke) {
-            //绘制中心描边
-            canvas.drawRoundRect(mCenterPointRectf, 50, 50, mStrokePaint);
+        if (isEnableCenterPoint) {
+            canvas.drawRoundRect(mCenterPointRectf, 50, 50, mProgressPaint);
+            if (isEnableStroke) {
+                //绘制中心描边
+                canvas.drawRoundRect(mCenterPointRectf, 50, 50, mStrokePaint);
+            }
         }
         //绘制手指拖动的thumb
         canvas.drawCircle(mThumbRadius + barWidth * progressPercent, height / 2f, mThumbRadius, mProgressPaint);
@@ -219,7 +235,6 @@ public class XSeekBar extends View {
             //描边
             canvas.drawCircle(mThumbRadius + barWidth * progressPercent, height / 2f, mThumbRadius, mStrokePaint);
         }
-
     }
 
     /**
@@ -239,27 +254,47 @@ public class XSeekBar extends View {
         invalidate();
     }
 
+    /**
+     * 设置进度
+     *
+     * @param progress
+     */
     public void setProgress(int progress) {
         setProgress(progress, false);
-    }
-
-    public void setProgress(int progress, boolean withAnimation) {
-        setProgress(progress, false, withAnimation);
     }
 
     /**
      * 设置进度
      *
      * @param progress
+     * @param withAnimation
      */
-    private void setProgress(int progress, boolean isReset, boolean withAnimation) {
-        if (isReset || (progress != this.progress && progress >= minProgress && progress <= maxProgress)) {
+    public void setProgress(int progress, boolean withAnimation) {
+        boolean isChange = progress != intProgress;
+        setProgress(progress, false, withAnimation);
+        //手动设置也是需要回调的
+        //若执行动画 会在动画执行之后 回调结果
+        if (isChange && !withAnimation && onProgressChangeListener != null) {
+            onProgressChangeListener.onProgressChange(intProgress, mThumbRadius + barWidth * progressPercent, false);
+        }
+    }
+
+    /**
+     * 设置进度
+     *
+     * @param progress      期望进度
+     * @param isReset       是否重置设置
+     * @param withAnimation 是否执行动画
+     */
+    private void setProgress(float progress, boolean isReset, boolean withAnimation) {
+        if (isReset || (progress >= minProgress && progress <= maxProgress)) {
             if (withAnimation) {
                 forwardProgress = progress;
                 animator.cancel();
                 animator.start();
             } else {
                 this.progress = progress;
+                this.intProgress = (int) progress;
                 progressPercent = progress / (float) (maxProgress - minProgress) + centerPointPercent;
                 float left = progressPercent > centerPointPercent ? mThumbRadius + centerPointPercent * (width - mThumbRadius * 2) : (width - mThumbRadius * 2) * progressPercent + mThumbRadius;
                 float right = progressPercent > centerPointPercent ? (width - mThumbRadius * 2) * progressPercent + mThumbRadius : mThumbRadius + centerPointPercent * (width - mThumbRadius * 2);
@@ -271,6 +306,7 @@ public class XSeekBar extends View {
                 invalidate();
             }
         }
+
     }
 
     /**
@@ -380,26 +416,30 @@ public class XSeekBar extends View {
             progressPercent = 1;
         }
         //计算新进度
-        int newProgress = (int) ((progressPercent - centerPointPercent) * (maxProgress - minProgress));
+        float newProgress = (progressPercent - centerPointPercent) * (maxProgress - minProgress);
+        int intNewProgress = (int) newProgress;
         if (action == MotionEvent.ACTION_DOWN) {
             isTouch = true;
             setProgress(newProgress, true, false);
             if (onProgressChangeListener != null) {
-                onProgressChangeListener.onStartTracking(progress);
+                onProgressChangeListener.onStartTracking(intProgress, mThumbRadius + barWidth * progressPercent);
             }
             return true;
         } else if (isTouch && action == MotionEvent.ACTION_MOVE) {
-            if (newProgress != progress) {
-                setProgress(newProgress, false, false);
+            setProgress(newProgress, false, false);
+            if (intNewProgress != intProgress) {
                 if (onProgressChangeListener != null) {
-                    onProgressChangeListener.onProgressChange(progress, false);
+                    onProgressChangeListener.onProgressChange(intProgress, mThumbRadius + barWidth * progressPercent, false);
                 }
+            }
+            if (onProgressChangeListener != null) {
+                onProgressChangeListener.onPositionChange(intProgress, mThumbRadius + barWidth * progressPercent);
             }
         } else if (isTouch && action == MotionEvent.ACTION_UP) {
             setProgress(newProgress, true, false);
             isTouch = false;
             if (onProgressChangeListener != null) {
-                onProgressChangeListener.onStopTracking(progress, true);
+                onProgressChangeListener.onStopTracking(intProgress, mThumbRadius + barWidth * progressPercent, true);
             }
         }
         return super.onTouchEvent(event);
@@ -407,6 +447,7 @@ public class XSeekBar extends View {
 
     /**
      * 获取接触百分比
+     * 均使用百分比触控计算所有值  因为这样有利控制原点和其他参数的关系
      *
      * @param event
      * @return
@@ -414,21 +455,6 @@ public class XSeekBar extends View {
     private float getTouchPercent(MotionEvent event) {
         float x = event.getX() - mThumbRadius;
         return x / barWidth;
-    }
-
-    /**
-     * 获取手势落点距离进度中心半径
-     *
-     * @param event
-     * @return
-     */
-    private double getTouch2ProgressRadius(MotionEvent event) {
-        float progressX = (int) (barWidth * progressPercent);
-        float progressY = height / 2f;
-
-        float x = event.getX();
-        float y = event.getY();
-        return Math.sqrt(Math.pow(x - progressX, 2) + Math.pow(y - progressY, 2));
     }
 
     /**
@@ -446,11 +472,6 @@ public class XSeekBar extends View {
         setCenterPointPercent(centerPointPercent);
     }
 
-    /**
-     * 设置数据变更监听
-     *
-     * @param onProgressChangeListener
-     */
     public void setOnProgressChangeListener(OnProgressChangeListener onProgressChangeListener) {
         this.onProgressChangeListener = onProgressChangeListener;
     }
@@ -465,7 +486,7 @@ public class XSeekBar extends View {
          *
          * @param progress
          */
-        void onStartTracking(int progress);
+        void onStartTracking(int progress, float leftDx);
 
         /**
          * 进度改变
@@ -473,13 +494,21 @@ public class XSeekBar extends View {
          * @param progress
          * @param fromUser
          */
-        void onProgressChange(int progress, boolean fromUser);
+        void onProgressChange(int progress, float leftDx, boolean fromUser);
+
+        /**
+         * 位置改变监听
+         *
+         * @param leftDx
+         */
+        void onPositionChange(int progress, float leftDx);
 
         /**
          * 停止拖动
          *
          * @param progress
          */
-        void onStopTracking(int progress, boolean fromUser);
+        void onStopTracking(int progress, float leftDx, boolean fromUser);
     }
+
 }

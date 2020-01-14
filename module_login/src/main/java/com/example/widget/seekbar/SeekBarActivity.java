@@ -1,5 +1,7 @@
 package com.example.widget.seekbar;
 
+import android.support.annotation.NonNull;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -24,17 +26,38 @@ public class SeekBarActivity extends BaseActivity<ActivitySeekBarBinding> {
     public void initView() {
         mViewBinding.xsb.setOnProgressChangeListener(new XSeekBar.OnProgressChangeListener() {
             @Override
-            public void onStartTracking(int progress) {
+            public void onStartTracking(int progress, float leftDx) {
+                mViewBinding.rlBubble.animate().cancel();
+                mViewBinding.rlBubble.animate().setDuration(200)
+                        .alpha(1)
+                        .setStartDelay(0)
+                        .start();
+                mViewBinding.rlBubble.setVisibility(View.VISIBLE);
+                mViewBinding.rlBubble.setTranslationX(leftDx - mViewBinding.rlBubble.getWidth() / 2f);
             }
 
             @Override
-            public void onProgressChange(int progress, boolean fromUser) {
+            public void onProgressChange(int progress, float leftDx, boolean fromUser) {
+
             }
 
             @Override
-            public void onStopTracking(int progress, boolean fromUser) {
+            public void onPositionChange(int progress, float leftDx) {
+                mViewBinding.tvProgress.setText(progress + "");
+                mViewBinding.rlBubble.setTranslationX(leftDx - mViewBinding.rlBubble.getWidth() / 2f);
+            }
+
+            @Override
+            public void onStopTracking(int progress, float leftDx, boolean fromUser) {
+                mViewBinding.rlBubble.animate().cancel();
+                mViewBinding.rlBubble.animate().setDuration(200)
+                        .alpha(0)
+                        .setStartDelay(500)
+                        .start();
+                mViewBinding.rlBubble.setTranslationX(leftDx - mViewBinding.rlBubble.getWidth() / 2f);
             }
         });
+
 
         mViewBinding.xsb.setEnableStroke(false);
         mViewBinding.xsb.setBackgroundColor(0xffE5E5E5);
@@ -43,11 +66,11 @@ public class SeekBarActivity extends BaseActivity<ActivitySeekBarBinding> {
         mViewBinding.xsb1.setEnableCenterPoint(false);
         mViewBinding.xsb1.setCenterPointPercent(0);
         mViewBinding.xsb1.setMinProgress(0);
-        mViewBinding.xsb1.setMaxProgress(100);
+        mViewBinding.xsb1.setMaxProgress(30);
 
         mViewBinding.xsb2.setCenterPointPercent(0.3f);
-        mViewBinding.xsb2.setMinProgress(-33);
-        mViewBinding.xsb2.setMaxProgress(67);
+        mViewBinding.xsb2.setMinProgress(-30);
+        mViewBinding.xsb2.setMaxProgress(70);
 
         mViewBinding.btn
                 .setOnClickListener(new View.OnClickListener() {
@@ -65,6 +88,14 @@ public class SeekBarActivity extends BaseActivity<ActivitySeekBarBinding> {
     }
 
     private int i = 0;
+
+    public static class Tran implements ViewPager.PageTransformer {
+
+        @Override
+        public void transformPage(@NonNull View view, float v) {
+
+        }
+    }
 
     @Override
     public void initData() {
