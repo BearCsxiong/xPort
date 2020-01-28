@@ -1,8 +1,5 @@
 package com.example.widget.seekbar;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -16,6 +13,7 @@ import android.view.View;
 
 import com.example.login.R;
 
+import me.csxiong.library.utils.XAnimation;
 import me.csxiong.library.utils.XDisplayUtil;
 
 /**
@@ -120,15 +118,38 @@ public class XSeekBar extends View {
      * 描边笔
      */
     private Paint mStrokePaint;
+
     /**
-     * 进度回调
+     * 动画
      */
-    private ValueAnimator animator = ValueAnimator.ofFloat(0, 1)
-            .setDuration(350);
-    /**
-     * 是否开始
-     */
-    private boolean isStart;
+    private XAnimation animator = XAnimation.ofFloat(0, 1)
+            .duration(300)
+            .setAnimationListener(new XAnimation.XAnimationListener() {
+                @Override
+                public void onAnimationUpdate(float fraction, float value) {
+                    setProgress((int) (startProgress + fraction * diffProgress), false);
+                }
+
+                @Override
+                public void onAnimationStart(XAnimation animation) {
+                    startProgress = progress;
+                    diffProgress = forwardProgress - progress;
+                }
+
+                @Override
+                public void onAnimationEnd(XAnimation animation) {
+                    if (onProgressChangeListener != null) {
+                        onProgressChangeListener.onProgressChange(intProgress, getLimitLeft() + barWidth * progressPercent, false);
+                    }
+                }
+
+                @Override
+                public void onAnimationCancel(XAnimation animation) {
+                    if (onProgressChangeListener != null) {
+                        onProgressChangeListener.onProgressChange(intProgress, getLimitLeft() + barWidth * progressPercent, false);
+                    }
+                }
+            });
     /**
      * 动画其实进度
      */
@@ -141,44 +162,6 @@ public class XSeekBar extends View {
      * 期望进度
      */
     private float forwardProgress;
-
-    private ValueAnimator.AnimatorUpdateListener updateListener = new ValueAnimator.AnimatorUpdateListener() {
-        @Override
-        public void onAnimationUpdate(ValueAnimator animation) {
-            if (isStart) {
-                float fraction = animation.getAnimatedFraction();
-                setProgress((int) (startProgress + fraction * diffProgress), false);
-            }
-        }
-    };
-
-    private ValueAnimator.AnimatorListener animatorListener = new AnimatorListenerAdapter() {
-        @Override
-        public void onAnimationCancel(Animator animation) {
-            super.onAnimationCancel(animation);
-            isStart = false;
-            if (onProgressChangeListener != null) {
-                onProgressChangeListener.onProgressChange(intProgress, getLimitLeft() + barWidth * progressPercent, false);
-            }
-        }
-
-        @Override
-        public void onAnimationEnd(Animator animation) {
-            super.onAnimationEnd(animation);
-            isStart = false;
-            if (onProgressChangeListener != null) {
-                onProgressChangeListener.onProgressChange(intProgress, getLimitLeft() + barWidth * progressPercent, false);
-            }
-        }
-
-        @Override
-        public void onAnimationStart(Animator animation) {
-            super.onAnimationStart(animation);
-            isStart = true;
-            startProgress = progress;
-            diffProgress = forwardProgress - progress;
-        }
-    };
 
     public XSeekBar(Context context) {
         this(context, null);
@@ -226,9 +209,6 @@ public class XSeekBar extends View {
         mProgressPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mProgressPaint.setColor(progressColor);
         mProgressPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-
-        animator.addListener(animatorListener);
-        animator.addUpdateListener(updateListener);
     }
 
     @Override

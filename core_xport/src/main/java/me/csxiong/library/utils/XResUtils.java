@@ -97,41 +97,4 @@ public class XResUtils {
         return typedValue.getFloat();
     }
 
-    public abstract static class AnimationStartListener implements Animation.AnimationListener {
-        @Override
-        public void onAnimationEnd(Animation animation) {
-
-        }
-
-        @Override
-        public void onAnimationRepeat(Animation animation) {
-
-        }
-    }
-
-    public abstract static class AnimationEndListener implements Animation.AnimationListener {
-
-        @Override
-        public void onAnimationStart(Animation animation) {
-
-        }
-
-        @Override
-        public void onAnimationRepeat(Animation animation) {
-
-        }
-    }
-
-    public abstract static class AnimationRepeatListener implements Animation.AnimationListener {
-        @Override
-        public void onAnimationEnd(Animation animation) {
-
-        }
-
-        @Override
-        public void onAnimationStart(Animation animation) {
-
-        }
-    }
-
 }

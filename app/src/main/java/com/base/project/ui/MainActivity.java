@@ -47,6 +47,7 @@ public class MainActivity extends XActivity<ActivityMainBinding, MainViewModel> 
         mDataList.add(new FeatureBean("ViewPager泄漏检测", "/login/leakViewPager"));
         mDataList.add(new FeatureBean("雷达图", "/login/radar"));
         mDataList.add(new FeatureBean("SeekBar测试界面", "/login/seekbar"));
+        mDataList.add(new FeatureBean("手势View测试界面", "/login/gesture"));
         mAdapter.updateItemEntities(AdapterDataBuilder.create()
                 .addEntities(mDataList, FeatureViewHolder.class).build());
 
