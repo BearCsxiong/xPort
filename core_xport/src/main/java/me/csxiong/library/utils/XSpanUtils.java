@@ -62,12 +62,8 @@ import me.csxiong.library.base.APP;
 import static android.graphics.BlurMaskFilter.Blur;
 
 /**
- * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 16/12/13
- *     desc  : utils about span
- * </pre>
+ * @Desc : 实用的SPAN工具类
+ * @Author : csxiong - 2020-01-29
  */
 public final class XSpanUtils {
 

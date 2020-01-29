@@ -1,7 +1,7 @@
 package me.csxiong.camera.ui.album;
 
 import android.content.Context;
-import android.support.design.internal.ViewUtils;
+import android.support.v4.view.ViewCompat;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -13,7 +13,6 @@ import me.csxiong.camera.databinding.ItemAlbumBinding;
 import me.csxiong.library.integration.adapter.XItem;
 import me.csxiong.library.integration.adapter.XViewHolder;
 import me.csxiong.library.integration.imageloader.ImageLoader;
-import me.csxiong.library.utils.DeviceUtils;
 import me.csxiong.library.utils.XDisplayUtil;
 
 /**
@@ -35,6 +34,9 @@ public class AlbumViewHolder extends XViewHolder<ItemAlbumBinding, ImageEntity> 
     @Override
     public void onBindViewHolder(int position, XItem<ImageEntity> item, List<Object> payloads) {
         super.onBindViewHolder(position, item, payloads);
+
+        ViewCompat.setTransitionName(mViewBinding.iv, item.getEntity().getDisplayPath());
+
         ImageLoader.url(item.getEntity().getDisplayPath())
                 .into(mViewBinding.iv);
     }

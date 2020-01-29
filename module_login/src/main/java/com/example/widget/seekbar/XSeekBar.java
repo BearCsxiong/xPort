@@ -13,7 +13,7 @@ import android.view.View;
 
 import com.example.login.R;
 
-import me.csxiong.library.utils.XAnimation;
+import me.csxiong.library.utils.XAnimator;
 import me.csxiong.library.utils.XDisplayUtil;
 
 /**
@@ -122,29 +122,29 @@ public class XSeekBar extends View {
     /**
      * 动画
      */
-    private XAnimation animator = XAnimation.ofFloat(0, 1)
+    private XAnimator animator = XAnimator.ofFloat(0, 1)
             .duration(300)
-            .setAnimationListener(new XAnimation.XAnimationListener() {
+            .setAnimationListener(new XAnimator.XAnimationListener() {
                 @Override
                 public void onAnimationUpdate(float fraction, float value) {
                     setProgress((int) (startProgress + fraction * diffProgress), false);
                 }
 
                 @Override
-                public void onAnimationStart(XAnimation animation) {
+                public void onAnimationStart(XAnimator animation) {
                     startProgress = progress;
                     diffProgress = forwardProgress - progress;
                 }
 
                 @Override
-                public void onAnimationEnd(XAnimation animation) {
+                public void onAnimationEnd(XAnimator animation) {
                     if (onProgressChangeListener != null) {
                         onProgressChangeListener.onProgressChange(intProgress, getLimitLeft() + barWidth * progressPercent, false);
                     }
                 }
 
                 @Override
-                public void onAnimationCancel(XAnimation animation) {
+                public void onAnimationCancel(XAnimator animation) {
                     if (onProgressChangeListener != null) {
                         onProgressChangeListener.onProgressChange(intProgress, getLimitLeft() + barWidth * progressPercent, false);
                     }

@@ -8,7 +8,7 @@ import android.animation.ValueAnimator;
  * 使调用更加线性和好用
  * @Author : csxiong - 2020-01-26
  */
-public class XAnimation implements Animator.AnimatorListener, Animator.AnimatorPauseListener, ValueAnimator.AnimatorUpdateListener {
+public class XAnimator implements Animator.AnimatorListener, Animator.AnimatorPauseListener, ValueAnimator.AnimatorUpdateListener {
 
     /**
      * 动画监听主体
@@ -25,34 +25,34 @@ public class XAnimation implements Animator.AnimatorListener, Animator.AnimatorP
      */
     private boolean isStart = false;
 
-    private XAnimation(float... floats) {
+    private XAnimator(float... floats) {
         valueAnimator = ValueAnimator.ofFloat(floats);
         valueAnimator.addUpdateListener(this);
         valueAnimator.addListener(this);
         valueAnimator.addPauseListener(this);
     }
 
-    public XAnimation duration(long duration) {
+    public XAnimator duration(long duration) {
         valueAnimator.setDuration(duration);
         return this;
     }
 
-    public XAnimation restartMode() {
+    public XAnimator restartMode() {
         valueAnimator.setRepeatMode(ValueAnimator.RESTART);
         return this;
     }
 
-    public XAnimation reverseMode() {
+    public XAnimator reverseMode() {
         valueAnimator.setRepeatMode(ValueAnimator.REVERSE);
         return this;
     }
 
-    public XAnimation repeatCount(int count) {
+    public XAnimator repeatCount(int count) {
         valueAnimator.setRepeatCount(count);
         return this;
     }
 
-    public XAnimation setAnimationListener(XAnimationListener animationListener) {
+    public XAnimator setAnimationListener(XAnimationListener animationListener) {
         this.animationListener = animationListener;
         return this;
     }
@@ -67,12 +67,16 @@ public class XAnimation implements Animator.AnimatorListener, Animator.AnimatorP
         valueAnimator.start();
     }
 
+    public boolean isRunning() {
+        return valueAnimator.isRunning();
+    }
+
     public void cancel() {
         valueAnimator.cancel();
     }
 
-    public static XAnimation ofFloat(float... floats) {
-        return new XAnimation(floats);
+    public static XAnimator ofFloat(float... floats) {
+        return new XAnimator(floats);
     }
 
     @Override
@@ -140,20 +144,20 @@ public class XAnimation implements Animator.AnimatorListener, Animator.AnimatorP
          *
          * @param animation
          */
-        void onAnimationStart(XAnimation animation);
+        void onAnimationStart(XAnimator animation);
 
         /**
          * 动画结束监听
          *
          * @param animation
          */
-        void onAnimationEnd(XAnimation animation);
+        void onAnimationEnd(XAnimator animation);
 
         /**
          * 动画取消监听
          *
          * @param animation
          */
-        void onAnimationCancel(XAnimation animation);
+        void onAnimationCancel(XAnimator animation);
     }
 }

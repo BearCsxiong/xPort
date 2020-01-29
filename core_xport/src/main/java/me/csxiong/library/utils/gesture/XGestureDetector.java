@@ -48,9 +48,6 @@ public class XGestureDetector {
 
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
-            if (onGestureListener != null) {
-                onGestureListener.onActionUp();
-            }
             return false;
         }
 
@@ -114,11 +111,17 @@ public class XGestureDetector {
 
         @Override
         public boolean onScaleBegin(ScaleGestureDetector detector) {
+            if (onGestureListener != null) {
+                onGestureListener.onScaleStart();
+            }
             return true;
         }
 
         @Override
         public void onScaleEnd(ScaleGestureDetector detector) {
+            if (onGestureListener != null) {
+                onGestureListener.onScaleEnd();
+            }
         }
     };
 
@@ -145,6 +148,11 @@ public class XGestureDetector {
         this.isMultiTouch = isMultiTouch;
         scaleGestureDetector.onTouchEvent(event);
         gestureDetector.onTouchEvent(event);
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            if (onGestureListener != null) {
+                onGestureListener.onActionUp();
+            }
+        }
         return true;
     }
 
@@ -173,6 +181,16 @@ public class XGestureDetector {
          * @param touchCount   手指数
          */
         void onMultiTouchChange(boolean isMultiTouch, int touchCount);
+
+        /**
+         * 缩放开始
+         */
+        void onScaleStart();
+
+        /**
+         * 缩放结束
+         */
+        void onScaleEnd();
 
         /**
          * 缩放事件 多指操作

@@ -7,7 +7,8 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * 集合相关工具类。
+ * @Desc : 集合相关工具
+ * @Author : csxiong - 2020-01-29
  */
 public class CollectionUtils {
     /**
@@ -28,6 +29,7 @@ public class CollectionUtils {
 
     /**
      * 判断列表是否为空。
+     *
      * @param list
      * @return
      */
@@ -37,6 +39,7 @@ public class CollectionUtils {
 
     /**
      * 判断Map是否为空。
+     *
      * @param map
      * @return
      */
@@ -46,6 +49,7 @@ public class CollectionUtils {
 
     /**
      * 比较两个列表是否相同。
+     *
      * @param list1
      * @param list2
      * @return
@@ -67,6 +71,7 @@ public class CollectionUtils {
 
     /**
      * 判断Position是否在列表的范围里。
+     *
      * @param list
      * @param position
      * @return
@@ -77,6 +82,7 @@ public class CollectionUtils {
 
     /**
      * 判断position是否在数组中。
+     *
      * @param arrays
      * @param position
      * @return
@@ -87,6 +93,7 @@ public class CollectionUtils {
 
     /**
      * 判断position是否在数组中。
+     *
      * @param arrays
      * @param position
      * @return
@@ -97,6 +104,7 @@ public class CollectionUtils {
 
     /**
      * 是否包含。
+     *
      * @param modes
      * @param mode
      * @return
