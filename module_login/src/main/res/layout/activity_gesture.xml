@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <me.csxiong.library.widget.GestureView
+        <me.csxiong.library.widget.GestureImageView
             android:id="@+id/gv"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

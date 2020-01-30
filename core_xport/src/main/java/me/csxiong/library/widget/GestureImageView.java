@@ -13,23 +13,50 @@ import me.csxiong.library.utils.XAnimator;
 import me.csxiong.library.utils.gesture.XGestureDetector;
 
 /**
- * @Desc : 测试手势View
+ * @Desc : 图片手势View
  * @Author : csxiong - 2020-01-28
+ * 1.一个强大的PhotoView 预览图片
+ * 2.双击放大
+ * 3.阻尼缩放
+ * 4.放大预览检测
+ * 5.边界检测
+ * 6.TODO FLING 快滚
+ * <p>
+ * BUGFIX:
+ * 1.FIXME 修复ViewPager手势冲突问题
  */
-public class GestureView extends AppCompatImageView {
+public class GestureImageView extends AppCompatImageView {
 
-    private static final long RESET_DURATION = 300l;
+    /**
+     * 改变时长
+     */
+    private static final long CHANGE_DURATION = 150;
 
-    private static final float SCALE_DAMP = 1.5f;
+    /**
+     * 缩放阻尼系数
+     */
+    private static final float SCALE_DAMP = 1.8f;
 
-    private static final float TRANSLATE_DAMP = 3f;
+    /**
+     * 位移阻尼系数
+     */
+    private static final float TRANSLATE_DAMP = 4f;
 
+    /**
+     * 最小缩放比例 -> 这里有个对应的隐藏逻辑 这里1的scale 是指图片相对居中适配后的相对值的最小值
+     */
     private static final float MIN_SCALE = 1.0f;
 
+    /**
+     * 最大缩放比例
+     */
     private static final float MAX_SCALE = 4.0f;
 
     private final static String TAG = "GestureView";
 
+    /**
+     * 手势检测
+     */
     private XGestureDetector gestureDetector;
 
     /**
@@ -57,23 +84,56 @@ public class GestureView extends AppCompatImageView {
      */
     private int height;
 
+    /**
+     * 临时标志:双击是否触发标志位
+     */
+    private boolean isDoubleConsume;
+
+    /**
+     * 缩放手势最新FocusX
+     */
     private float gestureFocusX;
 
+    /**
+     * 缩放手势最新FocusY
+     */
     private float gestureFocusY;
 
     //-----------------动效内部值-------
+
+    /**
+     * 缩放差值
+     */
     private float differScale;
 
-    private float focusX;
-
-    private float focusY;
-
+    /**
+     * 位移X差值
+     */
     private float differTranslateX;
 
+    /**
+     * 位移Y差值
+     */
     private float differTranslateY;
+
+    /**
+     * 缩放中心X
+     */
+    private float focusX;
+
+    /**
+     * 缩放中心Y
+     */
+    private float focusY;
 
     //-----------------动效内部值-------
 
+    /**
+     * 位移至目标
+     *
+     * @param tx 位移X
+     * @param ty 位移Y
+     */
     private void translateTo(float tx, float ty) {
         changeAnimator.cancel();
         //缩放无变化
@@ -84,21 +144,32 @@ public class GestureView extends AppCompatImageView {
         changeAnimator.start();
     }
 
+    /**
+     * 缩放至目标
+     *
+     * @param scale 目标缩放值
+     * @param px    目标中心点X
+     * @param py    目标中心点Y
+     */
     private void scaleTo(float scale, float px, float py) {
+        changeAnimator.cancel();
+        //预缩放
         float currentScale = getCurrentScale();
         float scaleRatio = scale / currentScale;
         tempMatrix.set(changeMatrix);
         tempMatrix.postScale(scaleRatio, scaleRatio, px, py);
         tempRectf.set(baseRectf);
         tempMatrix.mapRect(tempRectf);
+        //确定将要缩放到的矩形
+        //计算中心偏移值 以及边界条件
         differScale = scaleRatio - 1;
-
+        differTranslateX = 0;
         if (tempRectf.width() > width) {
             //边界判断
             if (tempRectf.left > 0) {
-                differTranslateX = tempRectf.left;
+                differTranslateX = -tempRectf.left;
             } else if (tempRectf.right < width) {
-                differTranslateX = tempRectf.right - width;
+                differTranslateX = width - tempRectf.right;
             }
         } else {
             //中心点判断
@@ -108,9 +179,9 @@ public class GestureView extends AppCompatImageView {
         differTranslateY = 0;
         if (tempRectf.height() > height) {
             if (tempRectf.top > 0) {
-                differTranslateY = tempRectf.top;
+                differTranslateY = -tempRectf.top;
             } else if (tempRectf.bottom < height) {
-                differTranslateY = tempRectf.bottom - height;
+                differTranslateY = height - tempRectf.bottom;
             }
         } else {
             differTranslateY = baseRectf.centerY() - tempRectf.centerY();
@@ -126,14 +197,16 @@ public class GestureView extends AppCompatImageView {
      * 改变图形位置Animator
      */
     private XAnimator changeAnimator = XAnimator.ofFloat(0, 1)
-            .duration(RESET_DURATION)
+            .duration(CHANGE_DURATION)
             .setAnimationListener(new XAnimator.XAnimationListener() {
                 @Override
                 public void onAnimationUpdate(float fraction, float value) {
                     changeMatrix.set(tempMatrix);
+                    //仅有缩放变化 动态改变
                     if (differScale != 1) {
                         changeMatrix.postScale(1 + differScale * fraction, 1 + differScale * fraction, focusX, focusY);
                     }
+                    //仅有位移变化 动态变化
                     if (differTranslateX != 0 || differTranslateY != 0) {
                         changeMatrix.postTranslate(differTranslateX * fraction, differTranslateY * fraction);
                     }
@@ -144,6 +217,8 @@ public class GestureView extends AppCompatImageView {
                 public void onAnimationStart(XAnimator animation) {
                     //保存当前改变的Matrix
                     tempMatrix.set(changeMatrix);
+                    Log.e("Temp", "differTranslate:" + differTranslateX + "---" + differTranslateY);
+                    Log.e("Temp", "differScale:" + differScale);
                 }
 
                 @Override
@@ -156,8 +231,6 @@ public class GestureView extends AppCompatImageView {
 
                 }
             });
-
-    private boolean isDoubleConsume;
 
     /**
      * 手势检测回调
@@ -222,7 +295,6 @@ public class GestureView extends AppCompatImageView {
         @Override
         public void onActionDown() {
             Log.e(TAG, "onActionDown");
-            changeAnimator.cancel();
         }
 
         @Override
@@ -234,13 +306,20 @@ public class GestureView extends AppCompatImageView {
         public void onDoubleTap(MotionEvent event) {
             Log.e(TAG, "onDoubleTap");
             float currentScale = getCurrentScale();
-            if (currentScale >= MAX_SCALE) {
-                isDoubleConsume = true;
-                scaleTo(MIN_SCALE, baseRectf.centerX(), baseRectf.centerY());
-            } else if (currentScale >= MIN_SCALE) {
-                isDoubleConsume = true;
-                scaleTo(MAX_SCALE, event.getX(), event.getY());
+            RectF currentRectf = getCurrentRectf();
+            float x = event.getX();
+            float y = event.getY();
+            boolean contains = currentRectf.contains(x, y);
+            if (contains) {
+                if (currentScale >= MAX_SCALE) {
+                    isDoubleConsume = true;
+                    scaleTo(MIN_SCALE, baseRectf.centerX(), baseRectf.centerY());
+                } else if (currentScale >= MIN_SCALE) {
+                    isDoubleConsume = true;
+                    scaleTo(MAX_SCALE, event.getX(), event.getY());
+                }
             }
+
         }
 
         @Override
@@ -296,18 +375,21 @@ public class GestureView extends AppCompatImageView {
         }
     };
 
+    /**
+     * 初始化 添加手势
+     */
     private void init() {
         gestureDetector = new XGestureDetector(getContext());
         gestureDetector.setOnGestureListener(onGestureListener);
         setScaleType(ScaleType.MATRIX);
     }
 
-    public GestureView(Context context, AttributeSet attrs) {
+    public GestureImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public GestureView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public GestureImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
@@ -333,6 +415,11 @@ public class GestureView extends AppCompatImageView {
      */
     private Matrix tempMatrix = new Matrix();
 
+    /**
+     * 默认使用矩阵作为ScaleType
+     *
+     * @param scaleType
+     */
     @Override
     public void setScaleType(ScaleType scaleType) {
 //        super.setScaleType(scaleType);
@@ -352,6 +439,12 @@ public class GestureView extends AppCompatImageView {
         initSize(w, h);
     }
 
+    /**
+     * 初始化Size 默认逻辑 图片居中显示
+     *
+     * @param width
+     * @param height
+     */
     private void initSize(int width, int height) {
         this.width = width;
         this.height = height;
@@ -383,6 +476,9 @@ public class GestureView extends AppCompatImageView {
         Log.e(TAG, baseRectf.toShortString());
     }
 
+    /**
+     * 动态更新图片矩阵 更新矩阵变换
+     */
     private void updateChange() {
         displayMatrix.reset();
         displayMatrix.set(baseMatrix);
@@ -390,37 +486,33 @@ public class GestureView extends AppCompatImageView {
         setImageMatrix(displayMatrix);
     }
 
-    private float getTranslateX() {
-        changeMatrix.getValues(values);
-        return values[Matrix.MTRANS_X];
-    }
-
-    private float getTranslateY() {
-        changeMatrix.getValues(values);
-        return values[Matrix.MTRANS_Y];
-    }
-
-    private float getCenterX() {
-        changeMatrix.mapRect(tempRectf);
-        return tempRectf.centerX();
-    }
-
-    private float getCenterY() {
-        changeMatrix.mapRect(tempRectf);
-        return tempRectf.centerY();
-    }
-
+    /**
+     * 获取当前缩放值
+     *
+     * @return
+     */
     private float getCurrentScale() {
         changeMatrix.getValues(values);
         return values[Matrix.MSCALE_X];
     }
 
+    /**
+     * 获取当前可视矩形
+     *
+     * @return
+     */
     private RectF getCurrentRectf() {
         tempRectf.set(baseRectf);
         changeMatrix.mapRect(tempRectf);
         return tempRectf;
     }
 
+    /**
+     * Touch事件拦截
+     *
+     * @param event
+     * @return
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         return gestureDetector.onTouchEvent(event);
