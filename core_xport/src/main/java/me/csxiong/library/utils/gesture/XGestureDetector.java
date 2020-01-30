@@ -35,9 +35,6 @@ public class XGestureDetector {
 
         @Override
         public boolean onDown(MotionEvent e) {
-            if (onGestureListener != null) {
-                onGestureListener.onActionDown();
-            }
             return false;
         }
 
@@ -146,6 +143,11 @@ public class XGestureDetector {
             }
         }
         this.isMultiTouch = isMultiTouch;
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            if (onGestureListener != null) {
+                onGestureListener.onActionDown();
+            }
+        }
         scaleGestureDetector.onTouchEvent(event);
         gestureDetector.onTouchEvent(event);
         if (event.getAction() == MotionEvent.ACTION_UP) {

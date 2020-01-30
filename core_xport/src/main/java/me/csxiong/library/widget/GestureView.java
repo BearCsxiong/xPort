@@ -57,61 +57,93 @@ public class GestureView extends AppCompatImageView {
      */
     private int height;
 
-    //-----------------动效内部值-------
-    private float startScale;
+    private float gestureFocusX;
 
+    private float gestureFocusY;
+
+    //-----------------动效内部值-------
     private float differScale;
 
-    private float differCenterX;
+    private float focusX;
 
-    private float differCenterY;
+    private float focusY;
 
     private float differTranslateX;
 
     private float differTranslateY;
+
     //-----------------动效内部值-------
 
+    private void translateTo(float tx, float ty) {
+        changeAnimator.cancel();
+        //缩放无变化
+        differScale = 1;
+        //位移改变
+        differTranslateX = tx;
+        differTranslateY = ty;
+        changeAnimator.start();
+    }
+
+    private void scaleTo(float scale, float px, float py) {
+        float currentScale = getCurrentScale();
+        float scaleRatio = scale / currentScale;
+        tempMatrix.set(changeMatrix);
+        tempMatrix.postScale(scaleRatio, scaleRatio, px, py);
+        tempRectf.set(baseRectf);
+        tempMatrix.mapRect(tempRectf);
+        differScale = scaleRatio - 1;
+
+        if (tempRectf.width() > width) {
+            //边界判断
+            if (tempRectf.left > 0) {
+                differTranslateX = tempRectf.left;
+            } else if (tempRectf.right < width) {
+                differTranslateX = tempRectf.right - width;
+            }
+        } else {
+            //中心点判断
+            differTranslateX = baseRectf.centerX() - tempRectf.centerX();
+        }
+
+        differTranslateY = 0;
+        if (tempRectf.height() > height) {
+            if (tempRectf.top > 0) {
+                differTranslateY = tempRectf.top;
+            } else if (tempRectf.bottom < height) {
+                differTranslateY = tempRectf.bottom - height;
+            }
+        } else {
+            differTranslateY = baseRectf.centerY() - tempRectf.centerY();
+        }
+
+        differScale = scaleRatio - 1;
+        focusX = px;
+        focusY = py;
+        changeAnimator.start();
+    }
+
     /**
-     * 重置位移动效
+     * 改变图形位置Animator
      */
-    private XAnimator resetTranslateAnimator = XAnimator.ofFloat(0, 1)
+    private XAnimator changeAnimator = XAnimator.ofFloat(0, 1)
             .duration(RESET_DURATION)
             .setAnimationListener(new XAnimator.XAnimationListener() {
                 @Override
                 public void onAnimationUpdate(float fraction, float value) {
                     changeMatrix.set(tempMatrix);
-                    changeMatrix.postTranslate(-fraction * differTranslateX, -fraction * differTranslateY);
+                    if (differScale != 1) {
+                        changeMatrix.postScale(1 + differScale * fraction, 1 + differScale * fraction, focusX, focusY);
+                    }
+                    if (differTranslateX != 0 || differTranslateY != 0) {
+                        changeMatrix.postTranslate(differTranslateX * fraction, differTranslateY * fraction);
+                    }
                     updateChange();
                 }
 
                 @Override
                 public void onAnimationStart(XAnimator animation) {
-                    RectF currentRectf = getCurrentRectf();
-                    //记录当前matrix
+                    //保存当前改变的Matrix
                     tempMatrix.set(changeMatrix);
-                    differTranslateX = 0;
-                    differTranslateY = 0;
-
-                    //这边属于逻辑问题 需要中心点和边界分开处理
-                    if (currentRectf.width() > width) {
-                        if (currentRectf.left > 0) {
-                            differTranslateX = currentRectf.left - 0;
-                        } else if (currentRectf.right < width) {
-                            differTranslateX = currentRectf.right - width;
-                        }
-                    } else {
-                        differTranslateX = currentRectf.centerX() - baseRectf.centerX();
-                    }
-
-                    if (currentRectf.height() > height) {
-                        if (currentRectf.top > 0) {
-                            differTranslateY = currentRectf.top - 0;
-                        } else if (currentRectf.bottom < height) {
-                            differTranslateY = currentRectf.bottom - height;
-                        }
-                    } else {
-                        differTranslateY = currentRectf.centerY() - baseRectf.centerY();
-                    }
                 }
 
                 @Override
@@ -125,45 +157,7 @@ public class GestureView extends AppCompatImageView {
                 }
             });
 
-    /**
-     * 重置缩放动效
-     */
-    private XAnimator resetScaleAnimator = XAnimator.ofFloat(0, 1)
-            .duration(RESET_DURATION)
-            .setAnimationListener(new XAnimator.XAnimationListener() {
-                @Override
-                public void onAnimationUpdate(float fraction, float value) {
-                    float scale = startScale + fraction * differScale;
-                    changeMatrix.reset();
-                    changeMatrix.postScale(scale, scale, baseRectf.centerX(), baseRectf.centerY());
-                    changeMatrix.postTranslate(-(1 - fraction) * differCenterX, -(1 - fraction) * differCenterY);
-                    updateChange();
-                }
-
-                @Override
-                public void onAnimationStart(XAnimator animation) {
-                    startScale = getCurrentScale();
-                    RectF rectf = getCurrentRectf();
-                    differCenterX = width / 2f - rectf.centerX();
-                    differCenterY = height / 2f - rectf.centerY();
-                    if (startScale < MIN_SCALE) {
-                        differScale = MIN_SCALE - startScale;
-                    } else if (startScale > MAX_SCALE) {
-                        differScale = MAX_SCALE - startScale;
-                    }
-
-                }
-
-                @Override
-                public void onAnimationEnd(XAnimator animation) {
-
-                }
-
-                @Override
-                public void onAnimationCancel(XAnimator animation) {
-
-                }
-            });
+    private boolean isDoubleConsume;
 
     /**
      * 手势检测回调
@@ -171,20 +165,25 @@ public class GestureView extends AppCompatImageView {
     private XGestureDetector.OnGestureListener onGestureListener = new XGestureDetector.OnGestureListener() {
         @Override
         public void onMultiTouchChange(boolean isMultiTouch, int touchCount) {
+            Log.e(TAG, "onMultiTouchChange");
         }
 
         @Override
         public void onScaleStart() {
-            resetScaleAnimator.cancel();
-            resetScaleAnimator.cancel();
+            Log.e(TAG, "onScaleStart");
+            changeAnimator.cancel();
         }
 
         @Override
         public void onScaleEnd() {
+            Log.e(TAG, "onScaleEnd");
         }
 
         @Override
         public void onScale(float scaleFraction, float focusX, float focusY) {
+            Log.e(TAG, "onScale");
+            gestureFocusX = focusX;
+            gestureFocusY = focusY;
             float currentScale = getCurrentScale();
             //阻尼保护
             if (currentScale < MIN_SCALE && scaleFraction < 1) {
@@ -198,6 +197,7 @@ public class GestureView extends AppCompatImageView {
 
         @Override
         public void onScroll(float distanceX, float distanceY) {
+            Log.e(TAG, "onScroll");
             RectF currentRectf = getCurrentRectf();
             boolean isDampX = currentRectf.left >= 0 || currentRectf.right <= width;
             boolean isDampY = currentRectf.top >= 0 || currentRectf.bottom <= height;
@@ -208,7 +208,7 @@ public class GestureView extends AppCompatImageView {
                 distanceY /= TRANSLATE_DAMP;
             }
             //防止在重置时触发滚动
-            if (!resetScaleAnimator.isRunning()) {
+            if (!changeAnimator.isRunning()) {
                 changeMatrix.postTranslate(-distanceX, -distanceY);
                 updateChange();
             }
@@ -216,47 +216,82 @@ public class GestureView extends AppCompatImageView {
 
         @Override
         public void onFling(float velocityX, float velocityY) {
+            Log.e(TAG, "onFling");
         }
 
         @Override
         public void onActionDown() {
-            resetTranslateAnimator.cancel();
-            resetScaleAnimator.cancel();
+            Log.e(TAG, "onActionDown");
+            changeAnimator.cancel();
         }
 
         @Override
         public void onSingleTap(MotionEvent event) {
+            Log.e(TAG, "onSingleTap");
         }
 
         @Override
         public void onDoubleTap(MotionEvent event) {
+            Log.e(TAG, "onDoubleTap");
+            float currentScale = getCurrentScale();
+            if (currentScale >= MAX_SCALE) {
+                isDoubleConsume = true;
+                scaleTo(MIN_SCALE, baseRectf.centerX(), baseRectf.centerY());
+            } else if (currentScale >= MIN_SCALE) {
+                isDoubleConsume = true;
+                scaleTo(MAX_SCALE, event.getX(), event.getY());
+            }
         }
 
         @Override
         public void onLongPress() {
+            Log.e(TAG, "onLongPress");
         }
 
         @Override
         public void onActionUp() {
-            //缩放检测
-            float currentScale = getCurrentScale();
-            boolean isResetScale = currentScale < MIN_SCALE
-                    || currentScale > MAX_SCALE;
-            if (isResetScale) {
-                //Tips:内部含中心位移 不需要位移检测
-                resetScaleAnimator.cancel();
-                resetScaleAnimator.start();
+            if (isDoubleConsume) {
+                isDoubleConsume = false;
                 return;
             }
-            //位移检测
-            RectF rectf = getCurrentRectf();
-            boolean isResetTranslate = rectf.left > 0
-                    || rectf.top > 0
-                    || rectf.right < width
-                    || rectf.bottom < height;
-            if (isResetTranslate) {
-                resetTranslateAnimator.cancel();
-                resetTranslateAnimator.start();
+            Log.e(TAG, "onActionUp");
+            //缩放检测
+            float currentScale = getCurrentScale();
+            RectF currentRectf = getCurrentRectf();
+            if (currentScale < MIN_SCALE) {
+                scaleTo(MIN_SCALE, baseRectf.centerX(), baseRectf.centerY());
+                return;
+            } else if (currentScale > MAX_SCALE) {
+                //手势最后的FocusX和FocusY 作为缩小的中心
+                scaleTo(MAX_SCALE, gestureFocusX, gestureFocusY);
+                return;
+            }
+
+            float tx = 0;
+            float ty = 0;
+
+            if (currentRectf.width() > width) {
+                if (currentRectf.left > 0) {
+                    tx = -currentRectf.left;
+                } else if (currentRectf.right < width) {
+                    tx = width - currentRectf.right;
+                }
+            } else {
+                tx = baseRectf.centerX() - currentRectf.centerX();
+            }
+
+            if (currentRectf.height() > height) {
+                if (currentRectf.top > 0) {
+                    ty = -currentRectf.top;
+                } else if (currentRectf.bottom < height) {
+                    ty = height - currentRectf.bottom;
+                }
+            } else {
+                ty = baseRectf.centerY() - currentRectf.centerY();
+            }
+
+            if (tx != 0 || ty != 0) {
+                translateTo(tx, ty);
             }
         }
     };
