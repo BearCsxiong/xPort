@@ -16,7 +16,7 @@ import android.view.ViewGroup;
  */
 public abstract class BaseFragment<T extends ViewDataBinding> extends Fragment implements IPage, IView {
 
-    public T mBinding;
+    public T mViewBinding;
 
     private ViewDelegate mViewDelegate;
 
@@ -24,7 +24,7 @@ public abstract class BaseFragment<T extends ViewDataBinding> extends Fragment i
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(getLayoutId(), null, false);
-        mBinding = DataBindingUtil.bind(view);
+        mViewBinding = DataBindingUtil.bind(view);
         if (mViewDelegate != null) {
             mViewDelegate.release();
         } else {

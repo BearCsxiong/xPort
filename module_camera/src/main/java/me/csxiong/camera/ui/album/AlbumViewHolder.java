@@ -34,10 +34,9 @@ public class AlbumViewHolder extends XViewHolder<ItemAlbumBinding, ImageEntity> 
     @Override
     public void onBindViewHolder(int position, XItem<ImageEntity> item, List<Object> payloads) {
         super.onBindViewHolder(position, item, payloads);
-
         ViewCompat.setTransitionName(mViewBinding.iv, item.getEntity().getDisplayPath());
-
         ImageLoader.url(item.getEntity().getDisplayPath())
                 .into(mViewBinding.iv);
+        addOnChildClickListener(mViewBinding.iv);
     }
 }

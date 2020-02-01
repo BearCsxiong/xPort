@@ -24,6 +24,7 @@ import me.csxiong.library.utils.gesture.XGestureDetector;
  * <p>
  * BUGFIX:
  * 1.FIXME 修复ViewPager手势冲突问题
+ * 2.FIXME 添加主Major手指检测
  */
 public class GestureImageView extends AppCompatImageView {
 
@@ -51,8 +52,6 @@ public class GestureImageView extends AppCompatImageView {
      * 最大缩放比例
      */
     private static final float MAX_SCALE = 4.0f;
-
-    private final static String TAG = "GestureView";
 
     /**
      * 手势检测
@@ -88,6 +87,16 @@ public class GestureImageView extends AppCompatImageView {
      * 临时标志:双击是否触发标志位
      */
     private boolean isDoubleConsume;
+
+    /**
+     * 临时标志:是否是ActionDown检查边界
+     */
+    private boolean isActionDownCheckTouchBound;
+
+    /**
+     * 是否跳过onScroll
+     */
+    private boolean isSkipScroll;
 
     /**
      * 缩放手势最新FocusX
@@ -238,30 +247,26 @@ public class GestureImageView extends AppCompatImageView {
     private XGestureDetector.OnGestureListener onGestureListener = new XGestureDetector.OnGestureListener() {
         @Override
         public void onMultiTouchChange(boolean isMultiTouch, int touchCount) {
-            Log.e(TAG, "onMultiTouchChange");
         }
 
         @Override
         public void onScaleStart() {
-            Log.e(TAG, "onScaleStart");
             changeAnimator.cancel();
         }
 
         @Override
         public void onScaleEnd() {
-            Log.e(TAG, "onScaleEnd");
         }
 
         @Override
         public void onScale(float scaleFraction, float focusX, float focusY) {
-            Log.e(TAG, "onScale");
             gestureFocusX = focusX;
             gestureFocusY = focusY;
             float currentScale = getCurrentScale();
             //阻尼保护
-            if (currentScale < MIN_SCALE && scaleFraction < 1) {
+            if (currentScale <= MIN_SCALE && scaleFraction < 1) {
                 scaleFraction = (float) (1 - Math.pow(1 - scaleFraction, SCALE_DAMP));
-            } else if (currentScale > MAX_SCALE && scaleFraction > 1) {
+            } else if (currentScale >= MAX_SCALE && scaleFraction > 1) {
                 scaleFraction = (float) (1 + Math.pow(scaleFraction - 1, SCALE_DAMP));
             }
             changeMatrix.postScale(scaleFraction, scaleFraction, focusX, focusY);
@@ -270,8 +275,47 @@ public class GestureImageView extends AppCompatImageView {
 
         @Override
         public void onScroll(float distanceX, float distanceY) {
-            Log.e(TAG, "onScroll");
             RectF currentRectf = getCurrentRectf();
+            //BugFix:首次触控检测,解决Horizontal手势冲突
+            if (isActionDownCheckTouchBound && getParent() != null) {
+                //BugFix:校准上下手势,修复部分细微Y轴位移导致触发检测
+                boolean isHorizontalScroll = Math.abs(distanceX) > Math.abs(distanceY);
+                if (isHorizontalScroll) {
+                    if (baseRectf.width() < width) {
+                        //BugFix:修复在原始宽度和控件宽度不一致情况下的边界问题
+                        if (currentRectf.width() >= baseRectf.width() && currentRectf.width() < width) {
+                            //中心点判断是否可以滑动
+                            if (Math.abs(currentRectf.centerX() - baseRectf.centerX()) < .1f) {
+                                isSkipScroll = true;
+                                getParent().requestDisallowInterceptTouchEvent(false);
+                            }
+                        } else if (currentRectf.width() >= width) {
+                            //左右边界 释放手势
+                            if ((Math.abs(currentRectf.left) < .1f && distanceX < 0)
+                                    || (Math.abs(currentRectf.right - width) < .1f && distanceX > 0)) {
+                                isSkipScroll = true;
+                                getParent().requestDisallowInterceptTouchEvent(false);
+                            }
+                        }
+                    } else {
+                        //左右边界 释放手势
+                        if ((Math.abs(currentRectf.left) < .1f && distanceX < 0)
+                                || (Math.abs(currentRectf.right - width) < .1f && distanceX > 0)) {
+                            isSkipScroll = true;
+                            getParent().requestDisallowInterceptTouchEvent(false);
+                            return;
+                        }
+                        Log.e("onScroll", (currentRectf.left >= 0) + "--" + distanceX + ":::" + currentRectf.right + "--" + distanceX);
+                    }
+                }
+                isActionDownCheckTouchBound = false;
+                return;
+            }
+            //BugFix:修复在onScroll在不断回调情况下 部分requestDisallowInterceptTouchEvent释放不及时 导致部分滚动
+            if (isSkipScroll) {
+                return;
+            }
+            //阻尼保护 边界保护
             boolean isDampX = currentRectf.left >= 0 || currentRectf.right <= width;
             boolean isDampY = currentRectf.top >= 0 || currentRectf.bottom <= height;
             if (isDampX) {
@@ -289,22 +333,25 @@ public class GestureImageView extends AppCompatImageView {
 
         @Override
         public void onFling(float velocityX, float velocityY) {
-            Log.e(TAG, "onFling");
         }
 
         @Override
         public void onActionDown() {
-            Log.e(TAG, "onActionDown");
+            if (getParent() != null) {
+                //手指初次下压 请求不拦截Touch事件
+                isSkipScroll = false;
+                getParent().requestDisallowInterceptTouchEvent(true);
+                //记录手指下压首次
+                isActionDownCheckTouchBound = true;
+            }
         }
 
         @Override
         public void onSingleTap(MotionEvent event) {
-            Log.e(TAG, "onSingleTap");
         }
 
         @Override
         public void onDoubleTap(MotionEvent event) {
-            Log.e(TAG, "onDoubleTap");
             float currentScale = getCurrentScale();
             RectF currentRectf = getCurrentRectf();
             float x = event.getX();
@@ -324,7 +371,6 @@ public class GestureImageView extends AppCompatImageView {
 
         @Override
         public void onLongPress() {
-            Log.e(TAG, "onLongPress");
         }
 
         @Override
@@ -333,7 +379,6 @@ public class GestureImageView extends AppCompatImageView {
                 isDoubleConsume = false;
                 return;
             }
-            Log.e(TAG, "onActionUp");
             //缩放检测
             float currentScale = getCurrentScale();
             RectF currentRectf = getCurrentRectf();
@@ -382,6 +427,11 @@ public class GestureImageView extends AppCompatImageView {
         gestureDetector = new XGestureDetector(getContext());
         gestureDetector.setOnGestureListener(onGestureListener);
         setScaleType(ScaleType.MATRIX);
+    }
+
+    public GestureImageView(Context context) {
+        super(context);
+        init();
     }
 
     public GestureImageView(Context context, AttributeSet attrs) {
@@ -473,7 +523,6 @@ public class GestureImageView extends AppCompatImageView {
         updateChange();
         baseRectf.set(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
         baseMatrix.mapRect(baseRectf);
-        Log.e(TAG, baseRectf.toShortString());
     }
 
     /**

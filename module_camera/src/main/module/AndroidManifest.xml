@@ -3,5 +3,7 @@
 
     <application>
         <activity android:name=".ui.album.AlbumActivity" />
+
+        <activity android:name=".ui.photo.PhotoActivity" />
     </application>
 </manifest>
