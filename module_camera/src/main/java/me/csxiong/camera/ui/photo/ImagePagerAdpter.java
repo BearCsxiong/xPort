@@ -1,44 +1,32 @@
 package me.csxiong.camera.ui.photo;
 
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewCompat;
+import android.view.View;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import me.csxiong.camera.R;
 import me.csxiong.camera.album.ImageEntity;
+import me.csxiong.library.integration.adapter.XPagerAdapter;
+import me.csxiong.library.integration.imageloader.ImageLoader;
+import me.csxiong.library.widget.GestureImageView;
 
 /**
  * @Desc : 图片Pager
  * @Author : csxiong - 2020-01-31
  */
-public class ImagePagerAdpter extends FragmentPagerAdapter {
+public class ImagePagerAdpter extends XPagerAdapter<ImageEntity> {
 
-    private List<ImageEntity> data = new ArrayList<>();
-
-    public ImagePagerAdpter(FragmentManager fm) {
-        super(fm);
-    }
-
-    public void updateData(List<ImageEntity> data) {
-        this.data.clear();
-        this.data.addAll(data);
-        notifyDataSetChanged();
+    @Override
+    public int getLayoutId() {
+        return R.layout.item_pager_image;
     }
 
     @Override
-    public Fragment getItem(int i) {
-        PhotoFragment fg = new PhotoFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("position", i);
-        fg.setArguments(bundle);
-        return fg;
-    }
+    public void onBindView(View view, int position) {
+        GestureImageView iv = view.findViewById(R.id.iv);
+        ImageEntity entity = dataList.get(position);
+        ViewCompat.setTransitionName(iv, entity.getDisplayPath());
 
-    @Override
-    public int getCount() {
-        return data.size();
+        ImageLoader.url(entity.getDisplayPath())
+                .into(iv);
     }
 }

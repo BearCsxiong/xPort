@@ -16,7 +16,7 @@ ext {
             multidexVersion   : '1.0.3',
             loggerVersion     : '2.2.0',
             okhttpVersion     : '3.12.1',
-            glideVersion      : '3.7.0',
+            glideVersion      : '4.8.0',
             frescoVersion     : '1.9.0',
             dagger2SdkVersion : "2.15",
             retrofitSdkVersion: "2.4.0",

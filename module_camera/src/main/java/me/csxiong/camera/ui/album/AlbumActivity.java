@@ -99,8 +99,7 @@ public class AlbumActivity extends XActivity<ActivityAlbumBinding, AlbumViewMode
                         RecyclerView.ViewHolder viewHolder = mViewBinding.rv.findViewHolderForAdapterPosition(position);
                         if (viewHolder instanceof AlbumViewHolder) {
                             AlbumViewHolder avh = (AlbumViewHolder) viewHolder;
-                            sharedElements.clear();
-                            sharedElements.put(currentVisiableImage.getDisplayPath(), avh.mViewBinding.iv);
+                            sharedElements.put(names.get(0), avh.mViewBinding.iv);
                         }
                     }
                 }

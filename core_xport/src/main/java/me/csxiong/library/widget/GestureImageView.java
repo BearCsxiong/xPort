@@ -245,6 +245,7 @@ public class GestureImageView extends AppCompatImageView {
      * 手势检测回调
      */
     private XGestureDetector.OnGestureListener onGestureListener = new XGestureDetector.OnGestureListener() {
+
         @Override
         public void onMultiTouchChange(boolean isMultiTouch, int touchCount) {
         }

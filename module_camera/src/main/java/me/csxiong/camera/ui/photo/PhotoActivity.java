@@ -1,13 +1,12 @@
 package me.csxiong.camera.ui.photo;
 
+import android.app.SharedElementCallback;
 import android.os.Build;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.SharedElementCallback;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.view.ViewPager;
 import android.transition.Transition;
-import android.transition.TransitionListenerAdapter;
 import android.view.View;
-import android.view.ViewTreeObserver;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 
@@ -19,7 +18,9 @@ import me.csxiong.camera.album.ImageEntity;
 import me.csxiong.camera.databinding.ActivityPhotoBinding;
 import me.csxiong.camera.ui.album.AlbumRepository;
 import me.csxiong.library.base.BaseActivity;
+import me.csxiong.library.integration.imageloader.IImageLoader;
 import me.csxiong.library.integration.imageloader.ImageLoader;
+import me.csxiong.library.utils.gesture.SimpleTransitionAdapter;
 
 @Route(path = "/camera/photo", name = "相片界面")
 public class PhotoActivity extends BaseActivity<ActivityPhotoBinding> {
@@ -33,61 +34,96 @@ public class PhotoActivity extends BaseActivity<ActivityPhotoBinding> {
 
     @Override
     public void initView() {
-        mAdapter = new ImagePagerAdpter(getSupportFragmentManager());
+        mAdapter = new ImagePagerAdpter();
         mViewBinding.vp.setAdapter(mAdapter);
 
-        supportPostponeEnterTransition();
-        mViewBinding.getRoot().getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+        mViewBinding.vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public boolean onPreDraw() {
-                mViewBinding.getRoot().getViewTreeObserver().removeOnPreDrawListener(this);
-                supportStartPostponedEnterTransition();
-                return false;
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                ImageEntity entity = mAdapter.dataList.get(i);
+                AlbumRepository.getInstance().setCurrentVisiableImage(entity);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
             }
         });
 
-        ActivityCompat.setEnterSharedElementCallback(this, new SharedElementCallback() {
-            @Override
-            public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
-                ImageEntity image = AlbumRepository.getInstance().getCurrentVisiableImage();
-                if (image != null) {
-                    sharedElements.clear();
-                    sharedElements.put(image.getDisplayPath(), mViewBinding.ivTransition);
-                }
-            }
-        });
-
+        //在过渡完成之后 需要有部分需要处理的逻辑 包括隐藏过渡imageView 注册额外的监听
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                getWindow().getEnterTransition().addListener(new TransitionListenerAdapter() {
-                    @Override
-                    public void onTransitionEnd(Transition transition) {
-                        super.onTransitionEnd(transition);
-                        mViewBinding.getRoot().post(() -> {
-                            mViewBinding.vp.setVisibility(View.VISIBLE);
-                            mViewBinding.ivTransition.setVisibility(View.GONE);
+            getWindow().getEnterTransition().addListener(new SimpleTransitionAdapter() {
+                @Override
+                public void onTransitionEnd(@NonNull Transition transition) {
+                    mViewBinding.ivTransition.post(() -> {
+                        //显示目标
+                        mViewBinding.vp.setVisibility(View.VISIBLE);
+                        mViewBinding.ivTransition.setVisibility(View.GONE);
+                        mViewBinding.ivTransition.setTransitionName(null);
+                        //设置Back的过渡动画的目标获取
+                        setEnterSharedElementCallback(new SharedElementCallback() {
+                            @Override
+                            public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
+                                if (mAdapter.dataList == null || mAdapter.dataList.isEmpty()) {
+                                    names.clear();
+                                    sharedElements.clear();
+                                } else {
+                                    ImageEntity entity = AlbumRepository.getInstance().getCurrentVisiableImage();
+                                    View view = mViewBinding.vp.findViewWithTag(entity);
+                                    if (view != null) {
+                                        sharedElements.put(entity.getDisplayPath(), view.findViewById(R.id.iv));
+                                    }
+                                }
+                            }
                         });
-                    }
-                });
-            }
+                    });
+                }
+            });
         }
     }
 
     @Override
+    public void onBackPressed() {
+        setResult(RESULT_OK);
+        super.onBackPressed();
+    }
+
+    @Override
     public void initData() {
+        //监听图片数据
         AlbumRepository.getInstance()
                 .getAlbumDataEvent().observe(this, list -> {
-            mAdapter.updateData(list);
+            mAdapter.updateDataList(list);
 
             ImageEntity image = AlbumRepository.getInstance().getCurrentVisiableImage();
             int position = AlbumRepository.getInstance().getAlbumDataEvent().getValue().indexOf(image);
-            mViewBinding.vp.setCurrentItem(position);
+            mViewBinding.vp.setCurrentItem(position, false);
 
-            mViewBinding.vp.setVisibility(View.GONE);
+            mViewBinding.vp.setVisibility(View.INVISIBLE);
             mViewBinding.ivTransition.setVisibility(View.VISIBLE);
-            ImageLoader.url(image.getDisplayPath())
-                    .into(mViewBinding.ivTransition);
             ViewCompat.setTransitionName(mViewBinding.ivTransition, image.getDisplayPath());
+
+            //暂停动画
+            supportPostponeEnterTransition();
+
+            ImageLoader.url(image.getDisplayPath())
+                    .withLoadListener(new IImageLoader.OnLoadListener() {
+                        @Override
+                        public void onSuccess(int width, int height) {
+                            supportStartPostponedEnterTransition();
+                        }
+
+                        @Override
+                        public void onError() {
+                            supportStartPostponedEnterTransition();
+                        }
+                    })
+                    .into(mViewBinding.ivTransition);
         });
     }
 }
