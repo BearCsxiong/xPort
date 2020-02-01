@@ -38,6 +38,7 @@ public class AlbumViewHolder extends XViewHolder<ItemAlbumBinding, ImageEntity> 
 
         ImageLoader.url(item.getEntity().getDisplayPath())
                 .into(mViewBinding.iv);
+
         addOnChildClickListener(mViewBinding.iv);
     }
 }

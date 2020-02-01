@@ -466,18 +466,6 @@ public class GestureImageView extends AppCompatImageView {
      */
     private Matrix tempMatrix = new Matrix();
 
-    /**
-     * 默认使用矩阵作为ScaleType
-     *
-     * @param scaleType
-     */
-    @Override
-    public void setScaleType(ScaleType scaleType) {
-//        super.setScaleType(scaleType);
-        //仅实用Matrix矩阵变换
-        super.setScaleType(ScaleType.MATRIX);
-    }
-
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);

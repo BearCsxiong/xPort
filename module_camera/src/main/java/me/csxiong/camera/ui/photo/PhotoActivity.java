@@ -7,6 +7,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.transition.Transition;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 
@@ -21,6 +22,7 @@ import me.csxiong.library.base.BaseActivity;
 import me.csxiong.library.integration.imageloader.IImageLoader;
 import me.csxiong.library.integration.imageloader.ImageLoader;
 import me.csxiong.library.utils.gesture.SimpleTransitionAdapter;
+import me.csxiong.library.widget.GestureImageView;
 
 @Route(path = "/camera/photo", name = "相片界面")
 public class PhotoActivity extends BaseActivity<ActivityPhotoBinding> {
@@ -73,10 +75,14 @@ public class PhotoActivity extends BaseActivity<ActivityPhotoBinding> {
                                     names.clear();
                                     sharedElements.clear();
                                 } else {
+                                    names.clear();
                                     ImageEntity entity = AlbumRepository.getInstance().getCurrentVisiableImage();
+                                    names.add(entity.getDisplayPath());
                                     View view = mViewBinding.vp.findViewWithTag(entity);
                                     if (view != null) {
-                                        sharedElements.put(entity.getDisplayPath(), view.findViewById(R.id.iv));
+                                        GestureImageView transitionView = view.findViewById(R.id.iv);
+                                        transitionView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                                        sharedElements.put(entity.getDisplayPath(), transitionView);
                                     }
                                 }
                             }
