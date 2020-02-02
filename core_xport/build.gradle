@@ -1,5 +1,5 @@
 apply from: config
-apply plugin: 'com.novoda.bintray-release'
+apply plugin: 'com.github.dcendents.android-maven'
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
@@ -40,16 +40,4 @@ dependencies {
     annotationProcessor aroutercompiler
 
     api "android.arch.lifecycle:extensions:1.1.1"
-}
-
-//与android、dependencies在同一级
-publish {
-    userOrg = 'csxiong'// 组织名
-    groupId = 'me.csxiong'// 包名、
-    artifactId = 'XPort'// library的名字
-    version = '1.0.0'// 版本
-    description = 'help build apps quickly!'
-    website = "https://github.com/csxiong/xPort"
-    repoName = 'XPort'//repository name
-//upload your bintray ./gradlew clean build bintrayUpload -PbintrayUser=名字 -PbintrayKey=KEY -PdryRun=false
 }
