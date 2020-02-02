@@ -26,6 +26,7 @@ public class GlobalConfigModule {
     private ClientModule.OkhttpConfiguration mOkhttpConfiguration;
     private ClientModule.LoggerConfiguration mLoggerConfiguration;
     private ClientModule.GsonConfiguration mGsonConfiguration;
+    private ClientModule.ImageLoaderConfiguration mImageLoaderConfiguration;
 
     private GlobalConfigModule(Builder builder) {
         this.mApiUrl = builder.apiUrl;
@@ -34,6 +35,7 @@ public class GlobalConfigModule {
         this.mOkhttpConfiguration = builder.okhttpConfiguration;
         this.mLoggerConfiguration = builder.loggerConfiguration;
         this.mGsonConfiguration = builder.gsonConfiguration;
+        this.mImageLoaderConfiguration = builder.imageLoaderConfiguration;
     }
 
     public static Builder builder() {
@@ -90,6 +92,13 @@ public class GlobalConfigModule {
         return mGsonConfiguration;
     }
 
+    @Singleton
+    @Provides
+    @Nullable
+    ClientModule.ImageLoaderConfiguration provideImageLoaderConfiguration() {
+        return mImageLoaderConfiguration;
+    }
+
 
     public static final class Builder {
         private HttpUrl apiUrl;
@@ -98,6 +107,7 @@ public class GlobalConfigModule {
         private ClientModule.OkhttpConfiguration okhttpConfiguration;
         private ClientModule.LoggerConfiguration loggerConfiguration;
         private ClientModule.GsonConfiguration gsonConfiguration;
+        private ClientModule.ImageLoaderConfiguration imageLoaderConfiguration;
 
         private Builder() {
         }
@@ -127,6 +137,11 @@ public class GlobalConfigModule {
 
         public Builder loggerConfiguration(ClientModule.LoggerConfiguration loggerConfiguration) {
             this.loggerConfiguration = loggerConfiguration;
+            return this;
+        }
+
+        public Builder imageloaderConfiguration(ClientModule.ImageLoaderConfiguration imageLoaderConfiguration) {
+            this.imageLoaderConfiguration = imageLoaderConfiguration;
             return this;
         }
 

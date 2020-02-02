@@ -2,6 +2,7 @@ package me.csxiong.library.di.component;
 
 import dagger.Component;
 import me.csxiong.library.di.scope.AppScope;
+import me.csxiong.library.integration.imageloader.ImageLoader;
 import me.csxiong.library.utils.ThreadExecutor;
 
 /**
@@ -18,4 +19,10 @@ public interface SystemComponent {
      * @param threadExecutors
      */
     void inject(ThreadExecutor threadExecutors);
+
+    /**
+     * 注入ImageLoader
+     * @param imageLoader
+     */
+    void inject(ImageLoader imageLoader);
 }

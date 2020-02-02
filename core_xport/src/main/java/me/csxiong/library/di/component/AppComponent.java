@@ -13,6 +13,7 @@ import me.csxiong.library.base.AppDelegateManager;
 import me.csxiong.library.di.module.AppModule;
 import me.csxiong.library.di.module.ClientModule;
 import me.csxiong.library.di.module.GlobalConfigModule;
+import me.csxiong.library.integration.imageloader.IImageLoader;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 
@@ -68,6 +69,13 @@ public interface AppComponent {
      * @return
      */
     ExecutorService provideExcutorService();
+
+    /**
+     * 提供图片加载工具
+     *
+     * @return
+     */
+    IImageLoader provideIImageLoader();
 
     /**
      * 注入到APP代理

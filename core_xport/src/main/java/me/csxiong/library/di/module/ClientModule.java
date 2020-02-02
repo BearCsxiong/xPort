@@ -36,6 +36,8 @@ import io.reactivex.schedulers.Schedulers;
 import me.csxiong.library.BuildConfig;
 import me.csxiong.library.integration.http.HttpLogger;
 import me.csxiong.library.integration.http.JsonConverterFactory;
+import me.csxiong.library.integration.imageloader.GlideImageLoader;
+import me.csxiong.library.integration.imageloader.IImageLoader;
 import me.csxiong.library.integration.scheduler.XThreadFactory;
 import me.csxiong.library.utils.DeviceUtils;
 import okhttp3.ConnectionPool;
@@ -203,6 +205,16 @@ public class ClientModule {
 
     @Singleton
     @Provides
+    IImageLoader provideImageLoader(Application application,
+                                    @Nullable ImageLoaderConfiguration configuration) {
+        if (configuration != null) {
+            return configuration.configImageLoader(application);
+        }
+        return new GlideImageLoader();
+    }
+
+    @Singleton
+    @Provides
     GsonBuilder provideGsonBuilder(Application application,
                                    @Nullable GsonConfiguration gsonConfiguration) {
         GsonBuilder gsonBuilder = new GsonBuilder();
@@ -266,6 +278,10 @@ public class ClientModule {
             return string;
         });
         return gsonBuilder;
+    }
+
+    public interface ImageLoaderConfiguration {
+        IImageLoader configImageLoader(Context context);
     }
 
     public interface RetrofitConfiguration {

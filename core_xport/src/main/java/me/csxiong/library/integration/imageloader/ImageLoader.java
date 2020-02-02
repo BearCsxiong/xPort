@@ -9,9 +9,13 @@ import android.view.View;
 import java.io.File;
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
+import me.csxiong.library.base.APP;
+import me.csxiong.library.di.component.DaggerSystemComponent;
+
 import static me.csxiong.library.integration.imageloader.IImageLoader.WEBP_200;
 import static me.csxiong.library.integration.imageloader.IImageLoader.WEBP_DEFAULT;
-
 
 /**
  * @Desc : ImageLoader
@@ -19,25 +23,32 @@ import static me.csxiong.library.integration.imageloader.IImageLoader.WEBP_DEFAU
  */
 public class ImageLoader {
 
-    static {
-        imageLoader = new ImageLoader();
-    }
-
-    private IImageLoader _imageLoader;
+    @Inject
+    public IImageLoader _imageLoader;
 
     private ImageLoader() {
-        _imageLoader = new GlideImageLoader();
+        DaggerSystemComponent.builder()
+                .appComponent(APP.get().getAppComponent())
+                .build()
+                .inject(this);
     }
 
-    private static ImageLoader imageLoader;
+    private static ImageLoader instance;
 
     public static IImageLoader get() {
-        return imageLoader._imageLoader;
+        if (instance == null) {
+            synchronized (ImageLoader.class) {
+                if (instance == null) {
+                    instance = new ImageLoader();
+                }
+            }
+        }
+        return instance._imageLoader;
     }
 
     //network image
     public static ImageRequest url(String url) {
-        return imageLoader.createRequest(url);
+        return instance.createRequest(url);
     }
 
     public static ImageRequest url(Uri uri) {
@@ -80,9 +91,9 @@ public class ImageLoader {
 
         int borderColor = Color.WHITE;
 
-        int placeHolderRes = -1;
+        int loadingHolderRes = -1;
 
-        int placeHolderDrawable = -1;
+        int errorHolderRes = -1;
 
         int width = -1;
 
@@ -93,9 +104,6 @@ public class ImageLoader {
 
         //是否scaleType
         boolean isCenterCrop = false;
-
-        //默认为fresco
-        boolean isGlide = false;
 
         //gif是否自动播放
         boolean isAnime = true;
@@ -130,18 +138,19 @@ public class ImageLoader {
             return this;
         }
 
-        public ImageRequest withHolder(int placeHolderRes) {
-            this.placeHolderRes = placeHolderRes;
+        public ImageRequest withLoadingHolder(int placeHolderRes) {
+            this.loadingHolderRes = placeHolderRes;
             return this;
         }
 
-        public ImageRequest withHolderDrawable(int placeHolderDrawable) {
-            this.placeHolderDrawable = placeHolderDrawable;
+        public ImageRequest withErrorHolder(int errorHolder)
+        {
+            this.errorHolderRes = errorHolder;
             return this;
         }
 
         public ImageRequest withNonHolder() {
-            this.placeHolderRes = -2;
+            this.loadingHolderRes = -2;
             return this;
         }
 
@@ -213,11 +222,11 @@ public class ImageLoader {
         }
 
         public void preLoad() {
-            imageLoader._imageLoader.preLoad(this);
+            instance._imageLoader.preLoad(this);
         }
 
         public void into(View view) {
-            imageLoader._imageLoader.load(view, this);
+            instance._imageLoader.load(view, this);
         }
     }
 
