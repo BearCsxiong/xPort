@@ -1,9 +1,0 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="me.csxiong.camera">
-
-    <application>
-        <activity android:name=".ui.album.AlbumActivity" />
-
-        <activity android:name=".ui.photo.PhotoActivity" />
-    </application>
-</manifest>
