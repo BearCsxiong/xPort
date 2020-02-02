@@ -555,4 +555,11 @@ public class GestureImageView extends AppCompatImageView {
     public boolean onTouchEvent(MotionEvent event) {
         return gestureDetector.onTouchEvent(event);
     }
+
+    /**
+     * 复原
+     */
+    public void restore() {
+        scaleTo(MIN_SCALE, baseRectf.centerX(), baseRectf.centerY());
+    }
 }
