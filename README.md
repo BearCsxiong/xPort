@@ -1,4 +1,4 @@
-# XPort [![](https://jitpack.io/v/csxiong/xPort.svg)](https://jitpack.io/#csxiong/xPort)
+# XPort [![JitPack](https://jitpack.io/v/csxiong/xPort.svg)](https://jitpack.io/#csxiong/xPort)
 
 ## 🔥快速构建App的基础代码,提供优质脚手架。快速构建
 > **努力成为一个高级Android开发**
