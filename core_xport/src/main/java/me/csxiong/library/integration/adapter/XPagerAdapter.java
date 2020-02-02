@@ -1,5 +1,7 @@
 package me.csxiong.library.integration.adapter;
 
+import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
@@ -13,12 +15,12 @@ import java.util.List;
  * @Desc : 简便的ViewPager包装适配器
  * @Author : csxiong - 2020-02-02
  */
-public abstract class XPagerAdapter<T> extends PagerAdapter {
+public abstract class XPagerAdapter<K extends ViewDataBinding, T> extends PagerAdapter {
 
     /**
      * 缓存View队列
      */
-    private LinkedList<View> cacheViews = new LinkedList<>();
+    private LinkedList<K> cacheViews = new LinkedList<>();
 
     /**
      * 数据队列
@@ -42,29 +44,30 @@ public abstract class XPagerAdapter<T> extends PagerAdapter {
 
     @Override
     public boolean isViewFromObject(@NonNull View view, @NonNull Object o) {
-        return view == o;
+        K k = (K) o;
+        return view == k.getRoot();
     }
 
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
-        View view;
+        K k;
         if (cacheViews.isEmpty()) {
-            view = LayoutInflater.from(container.getContext()).inflate(getLayoutId(), container, false);
+            k = DataBindingUtil.inflate(LayoutInflater.from(container.getContext()), getLayoutId(), container, false);
         } else {
-            view = cacheViews.remove();
+            k = cacheViews.remove();
         }
-        view.setTag(dataList.get(position));
-        container.addView(view);
-        onBindView(view, position);
-        return view;
+        k.getRoot().setTag(dataList.get(position));
+        container.addView(k.getRoot());
+        onBindView(k, position);
+        return k;
     }
 
     @Override
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-        if (object instanceof View) {
-            container.removeView((View) object);
-            cacheViews.add((View) object);
+        if (object instanceof ViewDataBinding) {
+            container.removeView(((ViewDataBinding) object).getRoot());
+            cacheViews.add((K) object);
         }
     }
 
@@ -90,8 +93,8 @@ public abstract class XPagerAdapter<T> extends PagerAdapter {
     /**
      * 绑定目标View
      *
-     * @param view
+     * @param mViewBinding
      * @param position
      */
-    public abstract void onBindView(View view, int position);
+    public abstract void onBindView(K mViewBinding, int position);
 }
