@@ -9,7 +9,6 @@ import javax.inject.Inject;
 
 import me.csxiong.library.base.APP;
 import me.csxiong.library.di.component.DaggerSystemComponent;
-import me.csxiong.library.di.module.ClientModule;
 
 /**
  * @Desc : 简单的线程切换工具
@@ -26,7 +25,6 @@ public class ThreadExecutor {
 
     /**
      * 获取XPort提供的线程池
-     * {@link ClientModule#provideExecutor()}
      */
     @Inject
     public ExecutorService executorService;
@@ -49,7 +47,6 @@ public class ThreadExecutor {
 
     /**
      * 默认构造 提供简单的注入获取XPort的线程池
-     * {@link ClientModule#provideExecutor()}
      */
     private ThreadExecutor() {
         DaggerSystemComponent.builder()
@@ -64,8 +61,8 @@ public class ThreadExecutor {
      *
      * @param runnable
      */
-    public void runOnUiThread(Runnable runnable) {
-        handler.post(runnable);
+    public static void runOnUiThread(Runnable runnable) {
+        get().handler.post(runnable);
     }
 
     /**
@@ -74,8 +71,8 @@ public class ThreadExecutor {
      * @param runnable
      * @param delay    延迟
      */
-    public void runOnUiThread(Runnable runnable, long delay) {
-        handler.postDelayed(runnable, delay);
+    public static void runOnUiThread(Runnable runnable, long delay) {
+        get().handler.postDelayed(runnable, delay);
     }
 
     /**
@@ -83,8 +80,20 @@ public class ThreadExecutor {
      *
      * @param runnable
      */
-    public void runOnBackgroundThread(Runnable runnable) {
-        executorService.execute(runnable);
+    public static void runOnBackgroundThread(Runnable runnable) {
+        get().executorService.execute(runnable);
+    }
+
+    /**
+     * 是否是主线程
+     *
+     * @return
+     */
+    public static boolean isUIThread() {
+        if (Looper.myLooper() != null && Looper.myLooper() == Looper.getMainLooper()) {
+            return true;
+        }
+        return false;
     }
 
 }

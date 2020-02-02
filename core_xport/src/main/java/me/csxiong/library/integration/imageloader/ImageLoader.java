@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.facebook.common.util.UriUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -15,9 +14,9 @@ import static me.csxiong.library.integration.imageloader.IImageLoader.WEBP_DEFAU
 
 
 /**
- * Created by csxiong on 2018/11/14.
+ * @Desc : ImageLoader
+ * @Author : csxiong - 2020-02-02
  */
-
 public class ImageLoader {
 
     static {
@@ -43,23 +42,6 @@ public class ImageLoader {
 
     public static ImageRequest url(Uri uri) {
         return url(uri.toString());
-    }
-
-    //local image
-    public static ImageRequest local(int resId) {
-        return imageLoader.createRequest(new Uri.Builder()
-                .scheme(UriUtil.LOCAL_RESOURCE_SCHEME)
-                .path(String.valueOf(resId))
-                .build()
-                .toString());
-    }
-
-    public static ImageRequest local(String url) {
-        return local(Uri.parse("file://" + url));
-    }
-
-    public static ImageRequest local(Uri uri) {
-        return imageLoader.createRequest(uri.toString());
     }
 
     public static void downloadFile(String url) {

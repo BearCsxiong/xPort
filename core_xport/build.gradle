@@ -23,11 +23,6 @@ dependencies {
     api gson
     api okio
     api glide
-    api fresco
-    api frescoOkhttp
-    api fresco_animated_gif
-    api fresco_animated_webp
-    api fresco_webpsupport
 
     api ipermission
 

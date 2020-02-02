@@ -1,4 +1,4 @@
-package me.csxiong.library.widget;
+package com.example.widget;
 
 import android.content.Context;
 import android.graphics.Canvas;

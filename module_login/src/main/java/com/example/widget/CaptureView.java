@@ -1,8 +1,7 @@
-package me.csxiong.library.widget;
+package com.example.widget;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -16,12 +15,14 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.IntRange;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 
 import me.csxiong.library.R;
 import me.csxiong.library.base.APP;
+import me.csxiong.library.utils.ThreadExecutor;
 import me.csxiong.library.utils.XDisplayUtil;
 
 
@@ -29,7 +30,7 @@ import me.csxiong.library.utils.XDisplayUtil;
  * @Desc : 一个采集的手势View
  * @Author : csxiong - 2019-11-13
  */
-public class NewCaptureView extends View {
+public class CaptureView extends View {
 
     /**
      * 刻度文字透明度
@@ -50,15 +51,15 @@ public class NewCaptureView extends View {
     /**
      * 过滑阻尼
      */
-    private final static int OVERSCROLL_DAMPING_ALPHA = 20;
+    private final static int OVERSCROLL_DAMPING_ALPHA = 5;
     /**
      * 手势阻尼
      */
-    private final static float GESTURE_DAMPING_ALPHA = 1.5f;
+    private final static float GESTURE_DAMPING_ALPHA = 2.5f;
     /**
-     * 手势停留80毫秒
+     * 手势触发时间
      */
-    private final static int HANDLE_TOUCH_TIME = 80;
+    private final static long HAND_TOUCH_TIME = 120;
 
     //渐变色
     private LinearGradient backGradient;
@@ -76,13 +77,10 @@ public class NewCaptureView extends View {
     private Paint mGesturePaint;
 
     //面部画笔
-    private Paint mCaptureIconPaint;
+    private Paint mFacePaint;
 
     //选中弧度画笔
     private Paint mArcPaint;
-
-    //指示器画笔
-    private Paint mIndicatorPaint;
 
     //常规scale的长度
     private int scaleLength;
@@ -120,17 +118,17 @@ public class NewCaptureView extends View {
     //内部手势的半径
     private float inRadius;
 
+    //面部指示器的半径
+    private float faceRadius;
+
     //内部手势的透明读
     private int alpha;
 
     //面部透明度
-    private int captureIconAlpha = 255;
+    private int faceAlpha;
 
     //程度值
     private float degree;
-
-    //拍照图标宽度，高度
-    private int captureWidth, captureHeight;
 
     /**
      * View可见宽度
@@ -168,7 +166,7 @@ public class NewCaptureView extends View {
     private RectF roundRectf = new RectF();
 
     /**
-     * 手势是否被按压状态
+     * FIXME 是否是按压状态
      */
     private boolean isPress;
 
@@ -199,8 +197,8 @@ public class NewCaptureView extends View {
     /**
      * 指示器透明度动画改造
      */
-    private int captureIconStartAlpha;
-    private int captureIconDifferAlpha;
+    private int startFaceAlpha;
+    private int differFaceAlpha;
 
     /**
      * 拍摄时 单击的动画变量
@@ -211,13 +209,8 @@ public class NewCaptureView extends View {
     /**
      * 拍摄时 单击的透明度变化
      */
-//    private int captureStartAlpha;
-//    private int captureDifferAlpha;
-
-    /**
-     * 指示器颜色变化
-     */
-    private int indicatorStartColor;
+    private int captureStartAlpha;
+    private int captureDifferAlpha;
 
     /**
      * 上一次的进度 用于比较进度
@@ -225,19 +218,9 @@ public class NewCaptureView extends View {
     private int progress;
 
     /**
-     * 当前指示器的颜色值 透明的内部
+     * 面部bitmap
      */
-    private int indicatorColor = 0x00FE537F;
-
-    /**
-     * 颜色渐变计算
-     */
-    private ArgbEvaluator argbEvaluator;
-
-    /**
-     * 拍照内部按钮
-     */
-    private Drawable captureDrawable;
+    private Drawable faceDrawable;
 
     /**
      * 相机单击动画
@@ -258,7 +241,7 @@ public class NewCaptureView extends View {
     private ValueAnimator.AnimatorUpdateListener captureUpdateListener = animation -> {
         float value = (float) animation.getAnimatedValue();
         inRadius = captureStartInRadius + value * captureDifferInRadius;
-//        alpha = (int) (captureStartAlpha + value * captureDifferAlpha);
+        alpha = (int) (captureStartAlpha + value * captureDifferAlpha);
         invalidate();
     };
 
@@ -285,10 +268,10 @@ public class NewCaptureView extends View {
         public void onAnimationStart(Animator animation) {
             super.onAnimationStart(animation);
             captureStartInRadius = inRadius;
-//            captureStartAlpha = alpha;
+            captureStartAlpha = alpha;
 
             captureDifferInRadius = shrinkInRadius - inRadius;
-//            captureDifferAlpha = 255 - alpha;
+            captureDifferAlpha = 255 - alpha;
         }
     };
 
@@ -304,8 +287,7 @@ public class NewCaptureView extends View {
         if (!isPress) {
             degree = fract * differDegree + startDegree;
         }
-        captureIconAlpha = (int) (fract * captureIconDifferAlpha + captureIconStartAlpha);
-        indicatorColor = getIndicatorColor(fract, indicatorStartColor, isPress);
+        faceAlpha = (int) (fract * differFaceAlpha + startFaceAlpha);
         invalidate();
     };
 
@@ -320,7 +302,7 @@ public class NewCaptureView extends View {
             differInRadius = 0;
             differAlpha = 0;
             differDegree = 0;
-            captureIconDifferAlpha = 0;
+            differFaceAlpha = 0;
         }
 
         @Override
@@ -330,7 +312,7 @@ public class NewCaptureView extends View {
             differInRadius = 0;
             differAlpha = 0;
             differDegree = 0;
-            captureIconDifferAlpha = 0;
+            differFaceAlpha = 0;
         }
 
         @Override
@@ -340,18 +322,17 @@ public class NewCaptureView extends View {
             startInRadius = inRadius;
             startAlpha = alpha;
             startDegree = degree;
-            captureIconStartAlpha = captureIconAlpha;
-            indicatorStartColor = indicatorColor;
+            startFaceAlpha = faceAlpha;
             if (isPress) {
                 differAlpha = expandAlpha - startAlpha;
                 differOutRadius = expandOutRadius - outRadius;
                 differInRadius = expandInRadius - inRadius;
-                captureIconDifferAlpha = 0 - captureIconAlpha;
+                differFaceAlpha = 255 - faceAlpha;
             } else {
                 differAlpha = shrinkAlpha - startAlpha;
                 differOutRadius = shrinkOutRadius - outRadius;
                 differInRadius = normalInRadius - inRadius;
-                captureIconDifferAlpha = 255 - captureIconAlpha;
+                differFaceAlpha = 0 - faceAlpha;
 
                 if (degree > MAX_DEGREE) {
                     differDegree = MAX_DEGREE - degree;
@@ -365,15 +346,15 @@ public class NewCaptureView extends View {
         }
     };
 
-    public NewCaptureView(Context context) {
+    public CaptureView(Context context) {
         this(context, null);
     }
 
-    public NewCaptureView(Context context, AttributeSet attrs) {
+    public CaptureView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public NewCaptureView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CaptureView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
@@ -399,19 +380,15 @@ public class NewCaptureView extends View {
         mGesturePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mGesturePaint.setColor(0xffffffff);
 
-        mCaptureIconPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mCaptureIconPaint.setColor(0xffffffff);
-        mCaptureIconPaint.setAlpha(0);
+        mFacePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mFacePaint.setColor(0xffffffff);
+        mFacePaint.setAlpha(0);
 
         mArcPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mArcPaint.setStyle(Paint.Style.STROKE);
         mArcPaint.setStrokeWidth(45);
         mArcPaint.setColor(0xffffffff);
         mArcPaint.setAlpha(80);
-
-        mIndicatorPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mIndicatorPaint.setStyle(Paint.Style.FILL);
-        mIndicatorPaint.setColor(0xFFFD5A5C);
 
         changeAnimator.addUpdateListener(updateListener);
         changeAnimator.addListener(listenerAdapter);
@@ -420,20 +397,7 @@ public class NewCaptureView extends View {
         captureAnimator.addUpdateListener(captureUpdateListener);
         captureAnimator.addListener(captureListener);
 
-        argbEvaluator = new ArgbEvaluator();
-
-        captureDrawable = ContextCompat.getDrawable(APP.get(), R.mipmap.icon_group_capture);
-    }
-
-    /**
-     * 获取渐变颜色
-     *
-     * @param fract
-     * @param isPress
-     * @return
-     */
-    private int getIndicatorColor(float fract, int startColor, boolean isPress) {
-        return (int) argbEvaluator.evaluate(fract, startColor, isPress ? 0xFFFE537F : 0x00FE537F);
+        faceDrawable = ContextCompat.getDrawable(APP.get(), R.mipmap.icon_face);
     }
 
     @Override
@@ -441,9 +405,16 @@ public class NewCaptureView extends View {
         super.onDraw(canvas);
         //1.位移至中心
         canvas.translate(width / 2f, height / 2f);
+
         //2.绘制底部圆盘 这里需要旋转的原因的渐变色需要随角度变化
+        canvas.save();
+        canvas.rotate(degree);
         canvas.drawCircle(0, 0, outRadius, mBackgroundPaint);
+        canvas.restore();
+
         //2.绘制当前进度圆弧 透明弧度
+        canvas.save();
+        canvas.rotate(degree);
         float arcDegree = degree;
         if (arcDegree > 180) {
             arcDegree = 180;
@@ -451,17 +422,20 @@ public class NewCaptureView extends View {
             arcDegree = 0;
         }
         arcRectf.set(-outRadius + sweepWidth / 2f, -outRadius + sweepWidth / 2f, outRadius - sweepWidth / 2f, outRadius - sweepWidth / 2f);
-        canvas.drawArc(arcRectf, 180, arcDegree, false, mArcPaint);
+        canvas.drawArc(arcRectf, -90, -arcDegree, false, mArcPaint);
+        canvas.restore();
+
         //3.绘制中间透明图标
         mGesturePaint.setAlpha(alpha);
         canvas.drawCircle(0, 0, inRadius, mGesturePaint);
+
         //4.绘制刻度
         for (int i = 0; i <= 100; i++) {
             canvas.save();
             float scale = i * 1.8f;
             //动态计算横扫过的面积 填充刻度
             boolean isNeedFill = degree > scale;
-            canvas.rotate(-90 + scale);
+            canvas.rotate(degree - scale);
             int point = i % 25;
             //25分割
             if (point == 0) {
@@ -477,72 +451,31 @@ public class NewCaptureView extends View {
             }
 
             if (i == 0 || i == 50 || i == 100) {
-                int alpha = getAlpha(progress, i);
-                mScalePaint.setAlpha(alpha);
+                mScalePaint.setAlpha(SCALE_ALPHA);
                 canvas.drawText(i + "", 0, -outRadius + expandScaleLength + 50, mScalePaint);
             }
             canvas.restore();
         }
 
-
-        canvas.save();
-        canvas.rotate(-90 + degree);
         //5.绘制标尺刻度 存在切换动画
+        mCenterPaint.setAlpha(255 - faceAlpha);
         roundRectf.set(-4, -outRadius + expandScaleLength, 4, -outRadius - 10);
         canvas.drawRoundRect(roundRectf, 20, 20, mCenterPaint);
-        //6.绘制指示刻度
-        canvas.drawText((isPress ? "+" : "") + progress, 0, -outRadius + 130, mCenterPaint);
-        //7.绘制内部指示点 存在颜色渐变
-        mIndicatorPaint.setColor(indicatorColor);
-        canvas.drawCircle(0, -inRadius + 30, 8, mIndicatorPaint);
-        canvas.restore();
 
+        //6.绘制指示刻度
+        mCenterPaint.setAlpha(255);
+        canvas.drawText(String.valueOf(progress), 0, -outRadius + 130, mCenterPaint);
 
         //7.绘制面部指示器 存在切换动画
-        mCaptureIconPaint.setAlpha(captureIconAlpha);
-        if (captureDrawable != null) {
-            captureDrawable.setAlpha(captureIconAlpha);
-            captureDrawable.draw(canvas);
+        mFacePaint.setAlpha(faceAlpha);
+        canvas.drawCircle(0, -outRadius + 30, 50, mFacePaint);
+        //中心点（0,-outRadius + 40）
+        if (faceDrawable != null) {
+            faceRadius = 30 - progress / 100f * 10;
+            faceDrawable.setAlpha(faceAlpha);
+            faceDrawable.setBounds((int) -faceRadius, (int) (-outRadius + 30 - faceRadius), (int) faceRadius, (int) (-outRadius + 30 + faceRadius));
+            faceDrawable.draw(canvas);
         }
-    }
-
-    /**
-     * 获取透明度
-     *
-     * @param progress
-     * @return
-     */
-    public int getAlpha(int progress, int index) {
-        if (index == 0) {
-            if (progress < 5) {
-                return 0;
-            } else if (progress <= 10) {
-                return (int) ((progress - 5) / 5f * SCALE_ALPHA);
-            } else {
-                return SCALE_ALPHA;
-            }
-        }
-        if (index == 50) {
-            if (progress > 40 && progress < 45) {
-                return (int) ((45 - progress) / 5f * SCALE_ALPHA);
-            } else if (progress >= 45 && progress <= 55) {
-                return 0;
-            } else if (progress > 55 && progress < 60) {
-                return (int) ((progress - 55) / 5f * SCALE_ALPHA);
-            } else {
-                return SCALE_ALPHA;
-            }
-        }
-        if (index == 100) {
-            if (progress >= 90 && progress < 95) {
-                return (int) ((95 - progress) / 5f * SCALE_ALPHA);
-            } else if (progress >= 95) {
-                return 0;
-            } else {
-                return SCALE_ALPHA;
-            }
-        }
-        return SCALE_ALPHA;
     }
 
     /**
@@ -556,13 +489,9 @@ public class NewCaptureView extends View {
     }
 
     /**
-     * 获取当前进度
-     *
-     * @return
+     * 记录手势press startTime
      */
-    public int getProgress() {
-        return progress;
-    }
+    private long time;
 
     /**
      * 起始手势角度
@@ -575,67 +504,25 @@ public class NewCaptureView extends View {
      */
     private boolean isInCircle;
 
-    private boolean isOutCircle;
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            dispatchDownEvent(event);
+            lastX = (int) event.getX();
+            lastY = (int) event.getY();
+            isInCircle = Math.sqrt(Math.pow(lastX - center.x, 2) + Math.pow(lastY - center.y, 2)) < normalInRadius;
+            Log.e("isInCircle", isInCircle + "");
+            time = System.currentTimeMillis();
             return true;
         } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
-            dispatchMoveEvent(event);
-        } else if (event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_UP) {
-            dispatchEndEvent(event);
-        }
-        return super.onTouchEvent(event);
-    }
-
-    /**
-     * 获取手指触控半径
-     *
-     * @param x
-     * @param y
-     * @return
-     */
-    public double getTouchRadius(int x, int y) {
-        return Math.sqrt(Math.pow(x - center.x, 2) + Math.pow(y - center.y, 2));
-    }
-
-    private long time;
-
-    /**
-     * 拦截手势触发事件
-     *
-     * @param event
-     */
-    private void dispatchDownEvent(MotionEvent event) {
-        lastX = (int) event.getX();
-        lastY = (int) event.getY();
-        time = System.currentTimeMillis();
-        isInCircle = getTouchRadius(lastX, lastY) < inRadius;
-    }
-
-    /**
-     * 移动手势触发
-     *
-     * @param event
-     */
-    private void dispatchMoveEvent(MotionEvent event) {
-        //计算是否触及到外圈
-        long moveTime = System.currentTimeMillis();
-        int moveX = (int) event.getX();
-        int moveY = (int) event.getY();
-        double touchRadius = getTouchRadius(moveX, moveY);
-        boolean isTouch = touchRadius <= outRadius;
-        if (isOutCircle && !isTouch && isPress) {
-            isOutCircle = false;
-            endProgressTouch();
-        } else if (!isOutCircle && isTouch && moveTime - time > HANDLE_TOUCH_TIME) {
-            isOutCircle = true;
-            startProgressTouch();
-        }
-
-        if (isPress && isOutCircle) {
+            //FIXME 这边目前是200毫秒开始需求点改动
+            long _time = System.currentTimeMillis();
+            if (!isPress && _time - time > HAND_TOUCH_TIME) {
+                isPress = true;
+                captureAnimator.cancel();
+                changeAnimator.cancel();
+                changeAnimator.start();
+                time = 0;
+            }
             start.set(lastX, lastY);
             lastX = (int) event.getX();
             lastY = (int) event.getY();
@@ -651,75 +538,40 @@ public class NewCaptureView extends View {
                 angle /= OVERSCROLL_DAMPING_ALPHA;
             }
             degree += angle;
-            //临时角度 计算当前进度
-            float tempDegree = degree;
-            if (tempDegree > MAX_DEGREE) {
-                tempDegree = MAX_DEGREE;
-            } else if (tempDegree < MIN_DEGREE) {
-                tempDegree = MIN_DEGREE;
-            }
-            int newProgress = (int) ((tempDegree / 180) * 100);
-            if (progress != newProgress && onProgressChangeListener != null) {
-                onProgressChangeListener.onProgressChange(progress, newProgress, isPress, OnProgressChangeListener.PROGRESS_CHANGING);
-            }
-            progress = newProgress;
+            ThreadExecutor.runOnUiThread(() -> {
+                //临时角度 计算当前进度
+                float tempDegree = degree;
+                if (tempDegree > MAX_DEGREE) {
+                    tempDegree = MAX_DEGREE;
+                } else if (tempDegree < MIN_DEGREE) {
+                    tempDegree = MIN_DEGREE;
+                }
+                int newProgress = (int) ((tempDegree / 180) * 100);
+                if (progress != newProgress && onProgressChangeListener != null) {
+                    onProgressChangeListener.onProgressChange(progress, newProgress, isPress);
+                }
+                progress = newProgress;
+            });
             invalidate();
-        } else {
-            lastX = moveX;
-            lastY = moveY;
-        }
-    }
-
-    /**
-     * 结束手势触发
-     *
-     * @param event
-     */
-    private void dispatchEndEvent(MotionEvent event) {
-        if (isInCircle && !isPress) {
-            //触发动画收缩
-            if (onCaptureTouchListener != null) {
-                onCaptureTouchListener.onCaptureTouch();
-            }
-            isOutCircle = false;
-            isInCircle = false;
-            isPress = false;
+        } else if (event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_UP) {
             time = 0;
-            captureAnimator.cancel();
-            changeAnimator.cancel();
-            captureAnimator.start();
-        } else {
-            endProgressTouch();
+            if (isInCircle && !isPress) {
+                //触发动画收缩
+                captureAnimator.cancel();
+                changeAnimator.cancel();
+                captureAnimator.start();
+                if (onCaptureTouchListener != null) {
+                    onCaptureTouchListener.onCaptureTouch();
+                }
+            } else {
+                isInCircle = false;
+                isPress = false;
+                captureAnimator.cancel();
+                changeAnimator.cancel();
+                changeAnimator.start();
+            }
         }
-    }
-
-    /**
-     * 开始进度改变
-     */
-    private void startProgressTouch() {
-        if (onProgressChangeListener != null) {
-            onProgressChangeListener.onProgressChange(progress, progress, true, OnProgressChangeListener.PROGRESS_START);
-        }
-        isPress = true;
-        captureAnimator.cancel();
-        changeAnimator.cancel();
-        changeAnimator.start();
-    }
-
-    /**
-     * 结束进度touch
-     */
-    private void endProgressTouch() {
-        if (onProgressChangeListener != null) {
-            onProgressChangeListener.onProgressChange(progress, progress, true, OnProgressChangeListener.PROGRESS_END);
-        }
-        isOutCircle = false;
-        isInCircle = false;
-        isPress = false;
-        time = 0;
-        captureAnimator.cancel();
-        changeAnimator.cancel();
-        changeAnimator.start();
+        return super.onTouchEvent(event);
     }
 
     @Override
@@ -747,9 +599,6 @@ public class NewCaptureView extends View {
         normalInRadius = width / 2.08f / 2;
         shrinkInRadius = width / 2.3f / 2;
 
-        captureWidth = (int) (width * 0.096f);
-        captureHeight = (int) (width * 0.0827f);
-
         //计算刻度的比例长度
         scaleLength = (int) (width * 0.04f);
         expandScaleLength = (int) (width * 0.05f);
@@ -769,11 +618,6 @@ public class NewCaptureView extends View {
                 Shader.TileMode.CLAMP);
         mBackgroundPaint.setShader(backGradient);
         mBackgroundPaint.setShadowLayer(20, 0, 0, 0xFFFD5A5C);
-
-        //设置默认的高宽度
-        if (captureDrawable != null) {
-            captureDrawable.setBounds(-captureWidth / 2, -captureHeight / 2, captureWidth / 2, captureHeight / 2);
-        }
     }
 
     /**
@@ -851,17 +695,13 @@ public class NewCaptureView extends View {
      */
     public interface OnProgressChangeListener {
 
-        int PROGRESS_START = 0;
-        int PROGRESS_CHANGING = 1;
-        int PROGRESS_END = 2;
-
         /**
          * 手势滑动进度改变
          *
          * @param lastProgress
          * @param progress
          */
-        void onProgressChange(int lastProgress, int progress, boolean isFromUser, int state);
+        void onProgressChange(int lastProgress, int progress, boolean isFromUser);
 
     }
 

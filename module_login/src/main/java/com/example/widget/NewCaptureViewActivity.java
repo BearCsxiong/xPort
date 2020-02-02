@@ -9,7 +9,6 @@ import com.example.login.databinding.ActivityNewCaptureBinding;
 import me.csxiong.library.base.BaseActivity;
 import me.csxiong.library.utils.VibratorUtils;
 import me.csxiong.library.utils.XToast;
-import me.csxiong.library.widget.NewCaptureView;
 
 @Route(path = "/login/new/capture", name = "新多人拍照手势控件")
 public class NewCaptureViewActivity extends BaseActivity<ActivityNewCaptureBinding> {

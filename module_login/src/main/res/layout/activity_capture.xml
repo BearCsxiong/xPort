@@ -10,7 +10,7 @@
         android:background="#000000"
         android:layout_height="match_parent">
 
-        <me.csxiong.library.widget.CaptureView
+        <com.example.widget.CaptureView
             android:id="@+id/cv"
             android:layout_width="@dimen/x375"
             android:layout_height="@dimen/x375"
