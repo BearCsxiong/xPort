@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.view.View;
 
-
 import java.io.File;
 import java.util.ArrayList;
 
@@ -26,6 +25,8 @@ public class ImageLoader {
     @Inject
     public IImageLoader _imageLoader;
 
+    private static ImageLoader instance;
+
     private ImageLoader() {
         DaggerSystemComponent.builder()
                 .appComponent(APP.get().getAppComponent())
@@ -33,9 +34,7 @@ public class ImageLoader {
                 .inject(this);
     }
 
-    private static ImageLoader instance;
-
-    public static IImageLoader get() {
+    public static ImageLoader getInstance() {
         if (instance == null) {
             synchronized (ImageLoader.class) {
                 if (instance == null) {
@@ -43,12 +42,11 @@ public class ImageLoader {
                 }
             }
         }
-        return instance._imageLoader;
+        return instance;
     }
 
-    //network image
     public static ImageRequest url(String url) {
-        return instance.createRequest(url);
+        return getInstance().createRequest(url);
     }
 
     public static ImageRequest url(Uri uri) {
@@ -56,7 +54,7 @@ public class ImageLoader {
     }
 
     public static void downloadFile(String url) {
-        get().downloadFile(url, null);
+        getInstance()._imageLoader.downloadFile(url, null);
     }
 
     public static void downloadFiles(ArrayList<String> urls, IImageLoader.onDownloadFilesListener onDownloadListener) {
@@ -68,11 +66,11 @@ public class ImageLoader {
     }
 
     public static void downloadFile(String url, IImageLoader.onDownloadListener onDownloadListener) {
-        get().downloadFile(url, onDownloadListener);
+        getInstance()._imageLoader.downloadFile(url, onDownloadListener);
     }
 
     public static File getCacheFile(String url) {
-        return get().getCacheFile(url);
+        return getInstance()._imageLoader.getCacheFile(url);
     }
 
     private ImageRequest createRequest(String url) {
@@ -81,22 +79,31 @@ public class ImageLoader {
 
     public static class ImageRequest {
 
+        //目标文件地址
         String url;
 
+        //圆角角度
         int cornerTL, cornerTR, cornerBL, cornerBR;
 
+        //是否圆形
         boolean isCircle;
 
+        //边界宽度
         int borderWidth = -1;
 
+        //边界颜色
         int borderColor = Color.WHITE;
 
+        //等待图片
         int loadingHolderRes = -1;
 
+        //错误图片
         int errorHolderRes = -1;
 
+        //目标宽
         int width = -1;
 
+        //目标高
         int height = -1;
 
         //是否高斯模糊
@@ -143,8 +150,7 @@ public class ImageLoader {
             return this;
         }
 
-        public ImageRequest withErrorHolder(int errorHolder)
-        {
+        public ImageRequest withErrorHolder(int errorHolder) {
             this.errorHolderRes = errorHolder;
             return this;
         }
