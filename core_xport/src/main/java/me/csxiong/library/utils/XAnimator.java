@@ -1,6 +1,7 @@
 package me.csxiong.library.utils;
 
 import android.animation.Animator;
+import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 
 /**
@@ -34,6 +35,13 @@ public class XAnimator implements Animator.AnimatorListener, Animator.AnimatorPa
 
     public XAnimator duration(long duration) {
         valueAnimator.setDuration(duration);
+        return this;
+    }
+
+    public XAnimator interpolator(TimeInterpolator interpolator) {
+        if (interpolator != null) {
+            valueAnimator.setInterpolator(interpolator);
+        }
         return this;
     }
 
