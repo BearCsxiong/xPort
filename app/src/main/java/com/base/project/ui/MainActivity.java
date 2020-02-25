@@ -21,12 +21,12 @@ public class MainActivity extends XActivity<ActivityMainBinding, MainViewModel> 
 
     @Override
     public void initView() {
-
+        mViewBinding.iv.setImageResource(R.mipmap.ic_launcher);
     }
 
     @Override
     public void initData() {
-        
+
     }
 
 }

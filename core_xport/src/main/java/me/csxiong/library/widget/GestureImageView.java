@@ -8,8 +8,11 @@ import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.animation.DecelerateInterpolator;
 
+import me.csxiong.library.utils.MathUtil;
 import me.csxiong.library.utils.XAnimator;
+import me.csxiong.library.utils.XDisplayUtil;
 import me.csxiong.library.utils.gesture.XGestureDetector;
 
 /**
@@ -99,6 +102,11 @@ public class GestureImageView extends AppCompatImageView {
     private boolean isSkipScroll;
 
     /**
+     * 是否是Fling滚动
+     */
+    private boolean isFlingScroll;
+
+    /**
      * 缩放手势最新FocusX
      */
     private float gestureFocusX;
@@ -145,6 +153,7 @@ public class GestureImageView extends AppCompatImageView {
      */
     private void translateTo(float tx, float ty) {
         changeAnimator.cancel();
+        Log.e("cancel", "translateTo#");
         //缩放无变化
         differScale = 1;
         //位移改变
@@ -162,6 +171,7 @@ public class GestureImageView extends AppCompatImageView {
      */
     private void scaleTo(float scale, float px, float py) {
         changeAnimator.cancel();
+        Log.e("cancel", "scaleTo#");
         //预缩放
         float currentScale = getCurrentScale();
         float scaleRatio = scale / currentScale;
@@ -199,6 +209,7 @@ public class GestureImageView extends AppCompatImageView {
         differScale = scaleRatio - 1;
         focusX = px;
         focusY = py;
+        changeAnimator.duration(CHANGE_DURATION);
         changeAnimator.start();
     }
 
@@ -207,6 +218,7 @@ public class GestureImageView extends AppCompatImageView {
      */
     private XAnimator changeAnimator = XAnimator.ofFloat(0, 1)
             .duration(CHANGE_DURATION)
+            .interpolator(new DecelerateInterpolator())
             .setAnimationListener(new XAnimator.XAnimationListener() {
                 @Override
                 public void onAnimationUpdate(float fraction, float value) {
@@ -232,12 +244,12 @@ public class GestureImageView extends AppCompatImageView {
 
                 @Override
                 public void onAnimationEnd(XAnimator animation) {
-
+                    isFlingScroll = false;
                 }
 
                 @Override
                 public void onAnimationCancel(XAnimator animation) {
-
+                    isFlingScroll = false;
                 }
             });
 
@@ -253,6 +265,7 @@ public class GestureImageView extends AppCompatImageView {
         @Override
         public void onScaleStart() {
             changeAnimator.cancel();
+            Log.e("cancel", "onScaleStart");
         }
 
         @Override
@@ -270,12 +283,18 @@ public class GestureImageView extends AppCompatImageView {
             } else if (currentScale >= MAX_SCALE && scaleFraction > 1) {
                 scaleFraction = (float) (1 + Math.pow(scaleFraction - 1, SCALE_DAMP));
             }
+            Log.e("scale", "currentScale:" + currentScale + "---" + scaleFraction);
             changeMatrix.postScale(scaleFraction, scaleFraction, focusX, focusY);
             updateChange();
         }
 
         @Override
         public void onScroll(float distanceX, float distanceY) {
+            Log.e("scale", "onScroll");
+            if (isFlingScroll) {
+                //如果正在触发Fling 跳过Scroll回调
+                return;
+            }
             RectF currentRectf = getCurrentRectf();
             //BugFix:首次触控检测,解决Horizontal手势冲突
             if (isActionDownCheckTouchBound && getParent() != null) {
@@ -306,7 +325,6 @@ public class GestureImageView extends AppCompatImageView {
                             getParent().requestDisallowInterceptTouchEvent(false);
                             return;
                         }
-                        Log.e("onScroll", (currentRectf.left >= 0) + "--" + distanceX + ":::" + currentRectf.right + "--" + distanceX);
                     }
                 }
                 isActionDownCheckTouchBound = false;
@@ -333,7 +351,43 @@ public class GestureImageView extends AppCompatImageView {
         }
 
         @Override
-        public void onFling(float velocityX, float velocityY) {
+        public void onFling(float startX, float startY, float velocityX, float velocityY) {
+            Log.e("onScale", "onFling");
+            float currentScale = getCurrentScale();
+            if (currentScale <= MIN_SCALE || currentScale > MAX_SCALE) {
+                return;
+            }
+            changeAnimator.cancel();
+            float deltaX = velocityX / 8;
+            float deltaY = velocityY / 8;
+            RectF currentRectf = getCurrentRectf();
+            if (currentRectf.width() >= width) {
+                if (currentRectf.left + deltaX > 0) {
+                    deltaX = -currentRectf.left;
+                }
+                if (currentRectf.right + deltaX < width) {
+                    deltaX = width - currentRectf.right;
+                }
+            } else {
+                deltaX = width / 2f - currentRectf.centerX();
+            }
+
+            if (currentRectf.height() >= height) {
+                if (currentRectf.top + deltaY > 0) {
+                    deltaY = -currentRectf.top;
+                }
+                if (currentRectf.bottom + deltaY < height) {
+                    deltaY = height - currentRectf.bottom;
+                }
+            } else {
+                deltaY = height / 2f - currentRectf.centerY();
+            }
+            //计算时间
+            int time = 250 + MathUtil.getRatioValue(0, 150,
+                    Math.max(Math.abs(deltaX), Math.abs(deltaY)) / XDisplayUtil.dpToPx(200));
+            isFlingScroll = true;
+            changeAnimator.duration(time);
+            translateTo(deltaX, deltaY);
         }
 
         @Override
@@ -344,6 +398,11 @@ public class GestureImageView extends AppCompatImageView {
                 getParent().requestDisallowInterceptTouchEvent(true);
                 //记录手指下压首次
                 isActionDownCheckTouchBound = true;
+            }
+            //如果处于Fling 立刻停止
+            if (isFlingScroll) {
+                isFlingScroll = false;
+                changeAnimator.cancel();
             }
         }
 
@@ -378,6 +437,9 @@ public class GestureImageView extends AppCompatImageView {
         public void onActionUp() {
             if (isDoubleConsume) {
                 isDoubleConsume = false;
+                return;
+            }
+            if (isFlingScroll) {
                 return;
             }
             //缩放检测
@@ -416,6 +478,7 @@ public class GestureImageView extends AppCompatImageView {
             }
 
             if (tx != 0 || ty != 0) {
+                changeAnimator.duration(CHANGE_DURATION);
                 translateTo(tx, ty);
             }
         }
