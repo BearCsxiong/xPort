@@ -1,8 +1,11 @@
 package com.base.project.ui;
 
+import android.view.View;
+
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.base.project.R;
 import com.base.project.databinding.ActivityMainBinding;
+import com.base.project.ui.main.FragmentGroup;
 import com.base.project.ui.main.MainViewModel;
 
 import me.csxiong.library.base.XActivity;
@@ -21,11 +24,21 @@ public class MainActivity extends XActivity<ActivityMainBinding, MainViewModel> 
 
     @Override
     public void initView() {
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fl, new FragmentGroup(), "group")
+                .commitNowAllowingStateLoss();
     }
 
     @Override
     public void initData() {
 
+    }
+
+    public void change(View v) {
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fl, new FragmentGroup(), "group1")
+                .remove(getSupportFragmentManager().findFragmentByTag("group"))
+                .commitNowAllowingStateLoss();
     }
 
 }

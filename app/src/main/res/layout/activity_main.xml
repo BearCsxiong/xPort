@@ -6,5 +6,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <FrameLayout
+            android:id="@+id/fl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></FrameLayout>
+
+        <Button
+            android:id="@+id/btn"
+            android:layout_width="200dp"
+            android:onClick="change"
+            android:layout_alignParentBottom="true"
+            android:layout_height="50dp" />
+
     </RelativeLayout>
 </layout>

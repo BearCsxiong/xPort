@@ -16,4 +16,5 @@ public abstract class MainFragmentModule {
     @FragmentScope
     @ContributesAndroidInjector
     abstract Fragment inject();
+
 }
