@@ -24,7 +24,7 @@ public abstract class BaseFragment<T extends ViewDataBinding> extends Fragment i
 
     private ViewDelegate mViewDelegate;
 
-    private FragmentSupportVisibleDetector helper = new FragmentSupportVisibleDetector(this);
+    private FragmentSupportVisibleDetector visibleDetector = new FragmentSupportVisibleDetector(this);
 
     @Nullable
     @Override
@@ -44,25 +44,25 @@ public abstract class BaseFragment<T extends ViewDataBinding> extends Fragment i
     @Override
     public void onResume() {
         super.onResume();
-        helper.onResume();
+        visibleDetector.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        helper.onPause();
+        visibleDetector.onPause();
     }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        helper.setUserVisibleHint();
+        visibleDetector.setUserVisibleHint();
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        helper.onHiddenChange();
+        visibleDetector.onHiddenChange();
     }
 
     @Override
@@ -105,11 +105,11 @@ public abstract class BaseFragment<T extends ViewDataBinding> extends Fragment i
 
     @Override
     public FragmentSupportVisibleDetector getFragmentSupportVisibleHelper() {
-        return helper;
+        return visibleDetector;
     }
 
     @Override
     public boolean isSupportVisible() {
-        return helper.isSupportVisible();
+        return visibleDetector.isSupportVisible();
     }
 }

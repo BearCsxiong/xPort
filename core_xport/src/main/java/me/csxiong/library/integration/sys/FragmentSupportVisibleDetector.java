@@ -22,6 +22,11 @@ public class FragmentSupportVisibleDetector {
     private boolean isSupportVisible;
 
     /**
+     * 是否进入过onPause
+     */
+    private boolean isFromPause;
+
+    /**
      * 目标Fragment
      */
     private Fragment fragment;
@@ -39,31 +44,38 @@ public class FragmentSupportVisibleDetector {
     }
 
     public void onResume() {
-        if (fragment == null) {
+        if (fragment == null || !fragment.isAdded()) {
             return;
         }
         if (isFirstResume) {
             isFirstResume = false;
         }
         checkVisible();
+        isFromPause = false;
     }
 
     public void onPause() {
         if (fragment == null) {
             return;
         }
-        isSupportVisible = false;
+        isFromPause = true;
+        if (isSupportVisible) {
+            isSupportVisible = false;
+            if (onSupportVisibleIntegration != null) {
+                onSupportVisibleIntegration.onSupportInvisible();
+            }
+        }
     }
 
     public void onHiddenChange() {
-        if (fragment == null || isFirstResume) {
+        if (fragment == null || !fragment.isAdded() || isFirstResume) {
             return;
         }
         checkVisible();
     }
 
     public void setUserVisibleHint() {
-        if (fragment == null || isFirstResume) {
+        if (fragment == null || !fragment.isAdded() || isFirstResume) {
             return;
         }
         checkVisible();
@@ -100,7 +112,7 @@ public class FragmentSupportVisibleDetector {
      * @return
      */
     public boolean isSupportVisible() {
-        if (fragment == null || !fragment.isAdded() || fragment.isRemoving() || fragment.isDetached()) {
+        if (fragment == null) {
             return false;
         }
         // parent不可见
@@ -116,6 +128,14 @@ public class FragmentSupportVisibleDetector {
             }
         }
         return true;
+    }
+
+    /**
+     * 是否来自onPause
+     * @return
+     */
+    public boolean isFromPause() {
+        return isFromPause;
     }
 
 }

@@ -2,9 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/GitHub-xPort.iml" filepath="$PROJECT_DIR$/GitHub-xPort.iml" group="xPort" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/core_xport/core_xport.iml" filepath="$PROJECT_DIR$/core_xport/core_xport.iml" />
       <module fileurl="file://$PROJECT_DIR$/xPort.iml" filepath="$PROJECT_DIR$/xPort.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/xPort-app.iml" filepath="$PROJECT_DIR$/app/xPort-app.iml" group="xPort/app" />
+      <module fileurl="file://$PROJECT_DIR$/core_xport/xPort-core_xport.iml" filepath="$PROJECT_DIR$/core_xport/xPort-core_xport.iml" group="xPort/core_xport" />
     </modules>
   </component>
 </project>
