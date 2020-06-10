@@ -10,15 +10,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import me.csxiong.library.integration.sys.FragmentSupportVisibleDetector;
+import me.csxiong.library.integration.sys.OnSupportVisibleIntegration;
+
 /**
  * @Desc : 基类Fragment
  * @Author : csxiong create on 2019/7/22
  */
-public abstract class BaseFragment<T extends ViewDataBinding> extends Fragment implements IPage, IView {
+public abstract class BaseFragment<T extends ViewDataBinding> extends Fragment implements IPage, IView,
+        OnSupportVisibleIntegration {
 
     public T mViewBinding;
 
     private ViewDelegate mViewDelegate;
+
+    private FragmentSupportVisibleDetector visibleDetector = new FragmentSupportVisibleDetector(this);
 
     @Nullable
     @Override
@@ -36,9 +42,27 @@ public abstract class BaseFragment<T extends ViewDataBinding> extends Fragment i
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onResume() {
+        super.onResume();
+        visibleDetector.onResume();
+    }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        visibleDetector.onPause();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        visibleDetector.setUserVisibleHint();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        visibleDetector.onHiddenChange();
     }
 
     @Override
@@ -67,5 +91,25 @@ public abstract class BaseFragment<T extends ViewDataBinding> extends Fragment i
         if (mViewDelegate != null) {
             mViewDelegate.stopProcessing();
         }
+    }
+
+    @Override
+    public void onSupportVisible() {
+
+    }
+
+    @Override
+    public void onSupportInvisible() {
+
+    }
+
+    @Override
+    public FragmentSupportVisibleDetector getFragmentSupportVisibleHelper() {
+        return visibleDetector;
+    }
+
+    @Override
+    public boolean isSupportVisible() {
+        return visibleDetector.isSupportVisible();
     }
 }

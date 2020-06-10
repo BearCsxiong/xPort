@@ -3,7 +3,6 @@ package com.base.project.ui;
 import android.graphics.Color;
 import android.view.Window;
 import android.view.WindowManager;
-
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.base.project.R;
 import com.base.project.databinding.ActivityMainBinding;
@@ -33,7 +32,6 @@ public class MainActivity extends XActivity<ActivityMainBinding, MainViewModel> 
         // enable navigation bar tint
         tintManager.setNavigationBarTintEnabled(true);
         tintManager.setStatusBarTintColor(Color.TRANSPARENT);
-//        tintManager.setStatusBarAlpha(0.1f);
     }
 
     @Override

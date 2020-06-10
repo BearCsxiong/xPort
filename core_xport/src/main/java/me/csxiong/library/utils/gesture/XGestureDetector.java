@@ -66,7 +66,7 @@ public class XGestureDetector {
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             if (onGestureListener != null) {
-                onGestureListener.onFling(velocityX, velocityY);
+                onGestureListener.onFling(e2.getX(), e2.getY(), velocityX, velocityY);
             }
             return false;
         }
@@ -214,10 +214,12 @@ public class XGestureDetector {
         /**
          * OverScroll触发 单指操作
          *
+         * @param startX    X起始位置
+         * @param startY    Y起始位置
          * @param velocityX X轴速度
          * @param velocityY Y轴速度
          */
-        void onFling(float velocityX, float velocityY);
+        void onFling(float startX, float startY, float velocityX, float velocityY);
 
         /**
          * 每次单击down事件 区别于onSingleTap
