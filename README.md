@@ -66,3 +66,8 @@ Dagger2|DataBinding|RxJava2|AndroidAutoSize|Room|OkHttp3<br>Retrofit|LiveData|Mv
  > 保持对外结构开放 包装细节</br>
  > 确定要写的【目标代码】,具体思考流程是怎么走的</br>
  > 保持对层的理解 确定某一层的【封装程度】,保持拓展性的关键
+ 
+# 新世界
+- 计划替代Dagger2集成Google开发者大会 新推出的基于Dagger的DI组件 Hilt
+- Kotlin DSL封装
+- ...
