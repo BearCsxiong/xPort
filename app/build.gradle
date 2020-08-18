@@ -8,17 +8,15 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
     annotationProcessor aroutercompiler
-    annotationProcessor dagger2compiler
-    annotationProcessor dagger2androidprocessor
     api project(':core_xport')
 }
 
 android.applicationVariants.all { variant ->
     variant.outputs.all {
         if (variant.buildType.debuggable) {
-            outputFileName = "app_debug.apk"
+            outputFileName = "app_csx_debug.apk"
         } else {
-            outputFileName = "app_release.apk"
+            outputFileName = "app_csx_release.apk"
         }
     }
 }
