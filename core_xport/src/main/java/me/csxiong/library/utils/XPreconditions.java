@@ -1,8 +1,9 @@
 package me.csxiong.library.utils;
 
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.Nullable;
 
 /**
  * @Desc : 控制工具

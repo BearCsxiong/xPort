@@ -2,7 +2,8 @@ package me.csxiong.library.base;
 
 import android.app.Application;
 import android.content.Context;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 /**
  * @Desc : Application生命周期代理

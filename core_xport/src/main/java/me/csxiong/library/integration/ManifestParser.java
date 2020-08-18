@@ -3,12 +3,12 @@ package me.csxiong.library.integration;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.support.multidex.BuildConfig;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import me.csxiong.library.BuildConfig;
 import me.csxiong.library.base.GlobalConfig;
 
 /**

@@ -1,7 +1,8 @@
 package me.csxiong.library.utils.gesture;
 
-import android.support.annotation.NonNull;
 import android.transition.Transition;
+
+import androidx.annotation.NonNull;
 
 /**
  * @Desc : 简易的Transition适配器

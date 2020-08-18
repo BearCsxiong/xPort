@@ -1,6 +1,6 @@
 package me.csxiong.library.integration.http;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.orhanobut.logger.Logger;
 

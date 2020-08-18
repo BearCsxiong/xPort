@@ -3,7 +3,7 @@ package me.csxiong.library.utils;
 import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.util.TypedValue;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;

@@ -4,13 +4,23 @@ apply plugin: 'com.github.dcendents.android-maven'
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
 
-    api appcompatv7
-    api design
-    api supportv4
-    api cardviewv7
+    api support.multidexVersion
+    api support.cardviewVersion
+    api support.appcompatVersion
+    api support.recyclerviewVersion
+    api support.exifinterfaceVersion
+    api support.annotationVersion
+    api support.viewpager2Version
+    api support.constraintVersion
+
+    api lifecycle.extensionsVersion
+    api lifecycle.viewModelVersion
+    api lifecycle.lifedataVersion
+    api lifecycle.commonJaveVersion
+
     api logger2
     api okhttp3
     api okhttp3_logging
@@ -22,6 +32,4 @@ dependencies {
 
     api arouter
     annotationProcessor aroutercompiler
-
-    api lifecycle
 }

@@ -1,10 +1,8 @@
 package me.csxiong.library.base;
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 
 import java.io.BufferedReader;
