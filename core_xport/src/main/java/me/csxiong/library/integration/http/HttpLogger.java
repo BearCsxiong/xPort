@@ -4,13 +4,12 @@ import android.text.TextUtils;
 
 import com.orhanobut.logger.Logger;
 
-import me.csxiong.library.utils.GsonUtils;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 /**
- * @Desc : 结合OkHttpLogger打印的Logger
- * @Author : csxiong create on 2019/7/16
+ * Created by csxiong on 2019/2/11.
  */
+
 public class HttpLogger implements HttpLoggingInterceptor.Logger {
 
     private StringBuilder mMessage = new StringBuilder();
@@ -33,12 +32,24 @@ public class HttpLogger implements HttpLoggingInterceptor.Logger {
         // 以{}或者[]形式的说明是响应结果的json数据，需要进行格式化
         if ((message.startsWith("{") && message.endsWith("}"))
                 || (message.startsWith("[") && message.endsWith("]"))) {
-            message = GsonUtils.formatJson(message);
+
+            message = GsonUtils.toJson(message);
         }
         mMessage.append(message.concat("\n"));
         // 请求或者响应结束，打印整条日志
         if (message.startsWith("<-- END HTTP")) {
             Logger.t(tag).d(mMessage.toString());
         }
+    }
+
+    /**
+     * 获取一个打印拦截器
+     *
+     * @return
+     */
+    public static HttpLoggingInterceptor getLogInterceptor() {
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLogger(Preconditions.TAG));
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        return loggingInterceptor;
     }
 }
