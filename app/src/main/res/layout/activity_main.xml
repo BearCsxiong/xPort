@@ -13,12 +13,47 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"></FrameLayout>
 
-        <Button
-            android:id="@+id/btn"
-            android:layout_width="200dp"
-            android:onClick="change"
-            android:layout_alignParentBottom="true"
-            android:layout_height="50dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="50dp">
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:onClick="change1"
+                android:layout_alignParentBottom="true"
+                android:layout_height="50dp" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:onClick="change2"
+                android:layout_alignParentBottom="true"
+                android:layout_height="50dp" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:onClick="change3"
+                android:layout_alignParentBottom="true"
+                android:layout_height="50dp" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:onClick="change4"
+                android:layout_alignParentBottom="true"
+                android:layout_height="50dp" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:onClick="change5"
+                android:layout_alignParentBottom="true"
+                android:layout_height="50dp" />
+
+        </LinearLayout>
 
     </RelativeLayout>
 </layout>

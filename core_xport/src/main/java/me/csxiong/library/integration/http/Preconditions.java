@@ -11,7 +11,7 @@ import android.util.Log;
  */
 public class Preconditions {
 
-    public static final String TAG = "XHttp-NET";
+    public static final String TAG = "XHttp";
 
     /**
      * 日志输出

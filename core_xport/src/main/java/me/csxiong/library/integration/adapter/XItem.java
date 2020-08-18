@@ -2,6 +2,10 @@ package me.csxiong.library.integration.adapter;
 
 import java.util.Objects;
 
+/**
+ * @Desc : 被包装的数据
+ * @Author : Bear - 2020/8/18
+ */
 public class XItem<E> {
     /**
      * 是否正在被选中。

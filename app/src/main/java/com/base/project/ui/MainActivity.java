@@ -1,14 +1,17 @@
 package com.base.project.ui;
 
 import android.graphics.Color;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.base.project.R;
 import com.base.project.databinding.ActivityMainBinding;
 import com.base.project.ui.main.MainViewModel;
 
 import me.csxiong.library.base.BaseActivity;
+import me.csxiong.library.utils.XToast;
 
 /**
  * @Desc : 主页
@@ -49,6 +52,26 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
             winParams.flags &= ~bits;
         }
         win.setAttributes(winParams);
+    }
+
+    public void change1(View v) {
+        XToast.error("失败");
+    }
+
+    public void change2(View v) {
+        XToast.success("成功");
+    }
+
+    public void change3(View v) {
+        XToast.info("信息");
+    }
+
+    public void change4(View v) {
+        XToast.warning("提示");
+    }
+
+    public void change5(View v) {
+        XToast.show("Toast");
     }
 
 }

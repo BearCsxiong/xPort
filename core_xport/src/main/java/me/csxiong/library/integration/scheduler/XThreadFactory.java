@@ -7,6 +7,8 @@ import com.orhanobut.logger.Logger;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import me.csxiong.library.BuildConfig;
+
 /**
  * @Desc : 默认ThreadFactory实现线程创建的工程方法
  * @Author : csxiong create on 2019/7/16
@@ -44,7 +46,9 @@ public class XThreadFactory implements ThreadFactory {
         thread.setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread thread, Throwable ex) {
-                Logger.t(TAG).e("Runtime Exception in Thread[" + thread.getName() + "]\n" + "with\t->\t" + ex.getMessage());
+                if (BuildConfig.DEBUG) {
+                    Logger.t(TAG).e("Runtime Exception in Thread[" + thread.getName() + "]\n" + "with\t->\t" + ex.getMessage());
+                }
             }
         });
         return thread;

@@ -8,9 +8,11 @@ import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.RelativeLayout;
 
+import me.csxiong.library.utils.XAnimator;
+
 /**
- * @Desc : 动感的relativeLayout
- * @Author : csxiong create on 2019/7/17
+ * @Desc : 一个缩放的包装控件
+ * @Author : Bear - 2020/8/18
  */
 public class ZoomRelativeLayout extends RelativeLayout {
     private boolean isPressed;
@@ -23,6 +25,8 @@ public class ZoomRelativeLayout extends RelativeLayout {
     private ScaleAnimation zoomOutAnimation;
     private float SCROLL_THRESHOLD = 0;
 
+    public static float SCALE_FRACTOR = 0.8f;
+
     public ZoomRelativeLayout(Context context) {
         this(context, null);
     }
@@ -34,10 +38,10 @@ public class ZoomRelativeLayout extends RelativeLayout {
     }
 
     private void init() {
-        zoomInAnimation = new ScaleAnimation(1f, 0.8f, 1f, 0.8f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        zoomInAnimation = new ScaleAnimation(1f, SCALE_FRACTOR, 1f, SCALE_FRACTOR, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         zoomInAnimation.setFillAfter(true);
         zoomInAnimation.setDuration(150);
-        zoomOutAnimation = new ScaleAnimation(0.8f, 1f, 0.8f, 1f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        zoomOutAnimation = new ScaleAnimation(SCALE_FRACTOR, 1f, SCALE_FRACTOR, 1f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         zoomOutAnimation.setFillAfter(true);
         zoomOutAnimation.setDuration(150);
         zoomInAnimation.setAnimationListener(new Animation.AnimationListener() {

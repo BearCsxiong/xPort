@@ -14,6 +14,10 @@ import java.util.List;
 
 import me.csxiong.library.utils.CollectionUtils;
 
+/**
+ * @Desc : 基础适配器
+ * @Author : Bear - 2020/8/18
+ */
 public class XRecyclerViewAdapter extends RecyclerView.Adapter<XViewHolder> {
     /**
      * Payload产生，通知变换。

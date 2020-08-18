@@ -6,6 +6,10 @@ import java.util.List;
 
 import me.csxiong.library.utils.CollectionUtils;
 
+/**
+ * @Desc : 基础数据包装
+ * @Author : Bear - 2020/8/18
+ */
 public class AdapterDataBuilder {
     /**
      * 数据源。
@@ -16,13 +20,18 @@ public class AdapterDataBuilder {
      */
     private List<Class<? extends XViewHolder>> mHolderClassList = new LinkedList<>();
 
+    /**
+     * 首次创建
+     *
+     * @return
+     */
     public static AdapterDataBuilder create() {
-        // 这样写格式比较好看。
         return new AdapterDataBuilder();
     }
 
     /**
      * 添加普通数据。
+     *
      * @param itemEntities
      * @param holderClass
      * @param <T>
@@ -36,6 +45,7 @@ public class AdapterDataBuilder {
 
     /**
      * 添加普通数据。
+     *
      * @param itemEntities
      * @param holderClass
      * @param <T>
@@ -49,6 +59,7 @@ public class AdapterDataBuilder {
 
     /**
      * 添加可选中数据。
+     *
      * @param itemEntities
      * @param holderClass
      * @param <T>
@@ -62,6 +73,7 @@ public class AdapterDataBuilder {
 
     /**
      * 添加数据源。
+     *
      * @param itemEntities
      * @param holderClass
      * @param isSelectable
@@ -95,6 +107,7 @@ public class AdapterDataBuilder {
 
     /**
      * 数据转化
+     *
      * @param <T>
      */
     public interface DataConvertor<T> {

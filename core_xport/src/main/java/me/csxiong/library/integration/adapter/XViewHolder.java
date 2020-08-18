@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 /**
- * @Desc :
+ * @Desc : 基础的ViewHolder包装
  * @Author : csxiong - 2019-11-13
  */
 public abstract class XViewHolder<K extends ViewDataBinding, T> extends RecyclerView.ViewHolder {

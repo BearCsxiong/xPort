@@ -13,6 +13,8 @@ import okhttp3.OkHttpClient;
  * Desc : 简单封装OKHttp
  * 1.目的在于简化逻辑
  * 2.满足需求简化 主要服务ContentType是Json的数据返回
+ * <p>
+ * 超级轻便 维护简单
  * Author : csxiong - 2019/6/21
  */
 public class XHttp {

@@ -16,8 +16,8 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 /**
- * Desc : 抽象请求,并扩展构造
- * Author : csxiong - 2019/6/24
+ * @Desc : 抽象请求,并扩展构造
+ * @Author : Bear - 2020/8/18
  */
 public abstract class AbsRequest {
 
