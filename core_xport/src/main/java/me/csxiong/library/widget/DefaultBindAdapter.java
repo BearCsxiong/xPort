@@ -12,6 +12,10 @@ import android.widget.TextView;
 
 import me.csxiong.library.base.APP;
 
+/**
+ * @Desc : 模拟基础属性使用
+ * @Author : Bear - 2020/8/18
+ */
 public class DefaultBindAdapter {
 
     @BindingAdapter(value = {"imageUrl", "placeDrawableId", "errorDrawableId"})

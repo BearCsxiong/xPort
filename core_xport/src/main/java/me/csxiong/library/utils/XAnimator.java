@@ -26,6 +26,11 @@ public class XAnimator implements Animator.AnimatorListener, Animator.AnimatorPa
      */
     private boolean isStart = false;
 
+    /**
+     * BugFix 修复部分机型对于Cancel也同时回调到onAnimationEnd
+     */
+    private boolean isCancel = false;
+
     private XAnimator(float... floats) {
         valueAnimator = ValueAnimator.ofFloat(floats);
         valueAnimator.addUpdateListener(this);
@@ -66,11 +71,13 @@ public class XAnimator implements Animator.AnimatorListener, Animator.AnimatorPa
     }
 
     public void startDelay(long duration) {
+        isCancel = false;
         valueAnimator.setStartDelay(duration);
         valueAnimator.start();
     }
 
     public void start() {
+        isCancel = false;
         valueAnimator.setStartDelay(0);
         valueAnimator.start();
     }
@@ -80,6 +87,7 @@ public class XAnimator implements Animator.AnimatorListener, Animator.AnimatorPa
     }
 
     public void cancel() {
+        isCancel = true;
         valueAnimator.cancel();
     }
 
@@ -97,6 +105,9 @@ public class XAnimator implements Animator.AnimatorListener, Animator.AnimatorPa
 
     @Override
     public void onAnimationEnd(Animator animation) {
+        if (isCancel) {
+            return;
+        }
         isStart = false;
         if (animationListener != null) {
             animationListener.onAnimationEnd(this);

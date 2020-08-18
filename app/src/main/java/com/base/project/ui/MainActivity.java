@@ -8,14 +8,14 @@ import com.base.project.R;
 import com.base.project.databinding.ActivityMainBinding;
 import com.base.project.ui.main.MainViewModel;
 
-import me.csxiong.library.base.XActivity;
+import me.csxiong.library.base.BaseActivity;
 
 /**
  * @Desc : 主页
  * @Author : csxiong - 2019-11-13
  */
 @Route(path = "/app/main", name = "主页")
-public class MainActivity extends XActivity<ActivityMainBinding, MainViewModel> {
+public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
     @Override
     public int getLayoutId() {

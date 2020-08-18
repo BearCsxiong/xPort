@@ -4,11 +4,11 @@ import android.os.Handler;
 import android.os.Looper;
 
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
-import javax.inject.Inject;
-
-import me.csxiong.library.base.APP;
-import me.csxiong.library.di.component.DaggerSystemComponent;
+import me.csxiong.library.integration.scheduler.XThreadFactory;
 
 /**
  * @Desc : 简单的线程切换工具
@@ -21,14 +21,13 @@ public class ThreadExecutor {
     /**
      * 静态handler,UIThread的Looper,提供简单的线程切换服务
      */
-    public Handler handler;
+    private static Handler handler;
+
+    private static ExecutorService executorService;
 
     /**
      * 获取XPort提供的线程池
      */
-    @Inject
-    public ExecutorService executorService;
-
     /**
      * 单例实现
      *
@@ -49,10 +48,10 @@ public class ThreadExecutor {
      * 默认构造 提供简单的注入获取XPort的线程池
      */
     private ThreadExecutor() {
-        DaggerSystemComponent.builder()
-                .appComponent(APP.get().getAppComponent())
-                .build()
-                .inject(this);
+        //TODO 核心线程数 大概是当前手机的手机CPU个数 最大线程数 大概可以是CPU个数两倍多一些
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(Math.max(5, DeviceUtils.getCPUCount()), Math.max(10, DeviceUtils.getCPUCount()), 30, TimeUnit.SECONDS, new PriorityBlockingQueue<>(), new XThreadFactory(), new ThreadPoolExecutor.DiscardOldestPolicy());
+        executor.allowCoreThreadTimeOut(true);
+        executorService = executor;
         handler = new Handler(Looper.getMainLooper());
     }
 
@@ -72,7 +71,7 @@ public class ThreadExecutor {
      * @param delay    延迟
      */
     public static void runOnUiThread(Runnable runnable, long delay) {
-        get().handler.postDelayed(runnable, delay);
+        handler.postDelayed(runnable, delay);
     }
 
     /**
@@ -81,7 +80,7 @@ public class ThreadExecutor {
      * @param runnable
      */
     public static void runOnBackgroundThread(Runnable runnable) {
-        get().executorService.execute(runnable);
+        executorService.execute(runnable);
     }
 
     /**

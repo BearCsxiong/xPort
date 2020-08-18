@@ -4,7 +4,7 @@ import android.content.Context;
 
 import java.lang.ref.WeakReference;
 
-import me.csxiong.library.utils.RxUtils;
+import me.csxiong.library.utils.ThreadExecutor;
 import me.csxiong.library.widget.XTipDialog;
 
 /**
@@ -23,7 +23,7 @@ public class ViewDelegate implements IView {
 
     @Override
     public void startLoading(String msg) {
-        if (!RxUtils.isUIThread()) {
+        if (!ThreadExecutor.isUIThread()) {
             return;
         }
         if (mLoadingDialog != null && mLoadingDialog.isShowing()) {
@@ -39,7 +39,7 @@ public class ViewDelegate implements IView {
 
     @Override
     public void stopLoading() {
-        if (!RxUtils.isUIThread()) {
+        if (!ThreadExecutor.isUIThread()) {
             return;
         }
         if (mLoadingDialog != null && mLoadingDialog.isShowing()) {

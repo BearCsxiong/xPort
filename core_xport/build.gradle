@@ -6,33 +6,22 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
     api appcompatv7
     api design
     api supportv4
     api cardviewv7
     api logger2
-    api rxjava2
-    api rxandroid2
-    api retrofit2_adapter_rxjava2
     api okhttp3
     api okhttp3_logging
     api multidex
-    api retrofit2
-    api retrofit2_converter_gson
-    api retrofit2_adapter_rxjava2
     api gson
     api okio
     api glide
-
     api ipermission
 
-    api dagger2
-    annotationProcessor dagger2compiler
-    api dagger2android
-    api dagger2androidsupport
-    annotationProcessor dagger2androidprocessor
     api arouter
     annotationProcessor aroutercompiler
 
-    api "android.arch.lifecycle:extensions:1.1.1"
+    api lifecycle
 }

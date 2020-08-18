@@ -7,13 +7,8 @@ import android.os.Vibrator;
 import me.csxiong.library.base.APP;
 
 /**
- * -------------------------------------------------------------------------------
- * |
- * | desc : 震动工具
- * |
- * |--------------------------------------------------------------------------------
- * | on 2019/2/18 created by csxiong
- * |--------------------------------------------------------------------------------
+ * @Desc : 震动工具
+ * @Author : Bear - 2020/8/18
  */
 public class VibratorUtils {
 
@@ -35,6 +30,11 @@ public class VibratorUtils {
         vibrator(new long[]{100, 200, 100, 400});
     }
 
+    /**
+     * 震动时间
+     *
+     * @param times
+     */
     public static void onShot(long times) {
         Vibrator mVibrator = (Vibrator) APP.get().getSystemService(Service.VIBRATOR_SERVICE);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {

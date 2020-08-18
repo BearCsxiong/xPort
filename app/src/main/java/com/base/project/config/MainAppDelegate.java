@@ -7,9 +7,6 @@ import android.support.multidex.MultiDex;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.base.project.BuildConfig;
-import com.base.project.di.DaggerUIComponent;
-
-import me.csxiong.library.base.APP;
 import me.csxiong.library.base.IAppDelegate;
 
 /**
@@ -29,14 +26,6 @@ public class MainAppDelegate implements IAppDelegate {
             ARouter.openDebug();
         }
         ARouter.init(application);
-
-        /**
-         * 所有UI组件反注入到APP中的Injector中
-         */
-        DaggerUIComponent.builder()
-                .appComponent(APP.get().getAppComponent())
-                .build()
-                .inject((APP) application);
     }
 
     @Override

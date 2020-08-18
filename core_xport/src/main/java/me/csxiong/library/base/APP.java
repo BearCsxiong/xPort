@@ -12,33 +12,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 
-import javax.inject.Inject;
-
-import dagger.android.AndroidInjector;
-import dagger.android.DispatchingAndroidInjector;
-import dagger.android.HasActivityInjector;
-import dagger.android.support.HasSupportFragmentInjector;
-import me.csxiong.library.di.component.AppComponent;
-
 /**
  * @Desc : 全局使用的Application
  * @Author : csxiong create on 2019/7/16
  */
-public class APP extends Application implements
-        HasActivityInjector,
-        HasSupportFragmentInjector {
-
-    /**
-     * 提供Activity的dagger注入服务
-     */
-    @Inject
-    DispatchingAndroidInjector<Activity> activityInjector;
-
-    /**
-     * 提供Fragment的dagger注入服务
-     */
-    @Inject
-    DispatchingAndroidInjector<Fragment> fragmentInjector;
+public class APP extends Application {
 
     /**
      * 单例Application
@@ -147,32 +125,4 @@ public class APP extends Application implements
         return false;
     }
 
-    /**
-     * XPort提供的默认注入器,提供基础功能
-     *
-     * @return 默认注入器
-     */
-    public AppComponent getAppComponent() {
-        return _INSTANCE.mAppDelegate.getAppComponent();
-    }
-
-    /**
-     * dagger获取注入器方法,{@link HasActivityInjector}
-     *
-     * @return
-     */
-    @Override
-    public AndroidInjector<Activity> activityInjector() {
-        return activityInjector;
-    }
-
-    /**
-     * dagger获取注入器方法,{@link HasSupportFragmentInjector}
-     *
-     * @return
-     */
-    @Override
-    public AndroidInjector<Fragment> supportFragmentInjector() {
-        return fragmentInjector;
-    }
 }

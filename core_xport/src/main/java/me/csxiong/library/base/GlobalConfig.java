@@ -21,21 +21,11 @@ import android.support.v4.app.FragmentManager;
 
 import java.util.List;
 
-import me.csxiong.library.di.module.GlobalConfigModule;
-
 /**
  * @Desc : 全局配置接口
  * @Author : csxiong create on 2019/7/17
  */
 public interface GlobalConfig {
-
-    /**
-     * 注入部分本框架提供的建造方式,完成dagger2的注入
-     *
-     * @param context
-     * @param builder
-     */
-    void applyOptions(Context context, GlobalConfigModule.Builder builder);
 
     /**
      * 注入Application生命周期
