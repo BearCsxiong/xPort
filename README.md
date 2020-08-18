@@ -18,14 +18,14 @@
 ## 主要结构性框架
 - 主要选择**Jetpack**下的基础框架,但是因为很多框架的实用性和现在部分开发冲突很大,暂时选择性的使用.
  
-DI|UI DI|响应式编程|屏幕适配方案|数据库|网络请求|消息机制|基础结构
+~DI|UI DI|响应式编程|屏幕适配方案|数据库|网络请求|消息机制|基础结构
 :-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:
-Dagger2|DataBinding|RxJava2|AndroidAutoSize|Room|OkHttp3<br>Retrofit|LiveData|Mvvm
+~Dagger2|DataBinding|RxJava2|AndroidAutoSize|Room|OkHttp3<br>Retrofit|LiveData|Mvvm
 
 ## 结构性的框架主打拓展性和在未来一段时间内的稳定性,尽量在选择上更加追求稳定高效
 
 ### **DI**
-  > 是一个控制反转的一个思想 解耦类间依赖的一个**控制器**,把某个类的依赖转移剥离出来。达到即插即用的一中思想
+  > ~是一个控制反转的一个思想 解耦类间依赖的一个**控制器**,把某个类的依赖转移剥离出来。达到即插即用的一中思想
   
 ### **UI DI**
   > UI注入其实是一个帮助Android做findViewById的工具,DataBinding只是谷歌在知道性框架Architecture的一个UI DI的框架,<br>
