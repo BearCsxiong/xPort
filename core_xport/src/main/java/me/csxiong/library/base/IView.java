@@ -1,6 +1,6 @@
 package me.csxiong.library.base;
 
-import android.support.annotation.IntRange;
+import androidx.annotation.IntRange;
 
 /**
  * @Desc : 部分抽象View操作

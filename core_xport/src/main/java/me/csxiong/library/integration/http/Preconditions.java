@@ -1,8 +1,9 @@
 package me.csxiong.library.integration.http;
 
-import android.support.multidex.BuildConfig;
 import android.text.TextUtils;
 import android.util.Log;
+
+import me.csxiong.library.BuildConfig;
 
 
 /**
