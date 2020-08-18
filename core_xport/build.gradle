@@ -34,4 +34,5 @@ dependencies {
 
     api arouter
     annotationProcessor aroutercompiler
+    kapt aroutercompiler
 }

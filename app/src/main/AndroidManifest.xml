@@ -52,6 +52,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.SecondActivity"/>
+
         <meta-data
             android:name="com.base.project.config.MainGlobalConfig"
             android:value="@string/GlobalConfig" />

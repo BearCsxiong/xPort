@@ -6,6 +6,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.base.project.R;
 import com.base.project.databinding.ActivityMainBinding;
 import com.base.project.ui.main.MainViewModel;
@@ -55,7 +56,9 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     }
 
     public void change1(View v) {
-        XToast.error("失败");
+//        XToast.error("失败");
+        ARouter.getInstance().build("/main/second")
+                .navigation(this);
     }
 
     public void change2(View v) {

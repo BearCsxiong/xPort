@@ -1,11 +1,11 @@
 ext {
-
     _versionCode = 1
     _versionName = "1.0.1"
     _minSdkVersion = 19
     _targetSdkVersion = 23
     _compileSdkVersion = 28
     _buildToolsVersion = "28.0.2"
+    _kotlin_version = '1.3.72'
 
     support = [
             appcompatVersion    : "androidx.appcompat:appcompat:1.0.0",
@@ -38,7 +38,7 @@ ext {
             okio           : "com.squareup.okio:okio:1.5.0"
     ]
 
-    def lifecycleVersion = "2.2.0"
+    lifecycleVersion = "2.2.0"
     lifecycle = [
             extensionsVersion: "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion",
             viewModelVersion : "androidx.lifecycle:lifecycle-viewmodel:$lifecycleVersion",
@@ -53,6 +53,9 @@ ext {
             //network core
             okhttp3Version       : "com.squareup.okhttp3:okhttp:3.12.1",
             okhttp3LoggingVersion: "com.squareup.okhttp3:logging-interceptor:3.12.1"
+    ]
+    kotlin = [
+            kotlinVersion: "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$_kotlin_version"
     ]
     //fix 8.8.1version compiler fail
     arouter = "com.alibaba:arouter-api:${version.arouterVersion}"
