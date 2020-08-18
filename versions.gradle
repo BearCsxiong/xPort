@@ -19,25 +19,25 @@ ext {
     ]
     version = [
             arouterVersion    : '1.4.0',
-            okioVersion       : '1.5.0',
-            gsonVersion       : '2.6.2',
-            multidexVersion   : '1.0.3',
             loggerVersion     : '2.2.0',
             okhttpVersion     : '3.12.1',
             glideVersion      : '4.8.0',
-            frescoVersion     : '1.9.0',
             dagger2SdkVersion : "2.15",
             retrofitSdkVersion: "2.4.0",
             butterknifeVersion: "9.0.0",
-            espressoSdkVersion: "3.0.1",
-            canarySdkVersion  : "1.5.4",
             rxjava2           : "2.2.2",
             rxandroid2        : "2.1.0",
             rxlifecycle       : "2.2.1",
-            exoplayerVersion  : "2.9.0",
-            objectboxVersion  : "2.3.4",
             ipermission       : "1.6.0",
     ]
+    google = [
+            glideVersion   : "com.github.bumptech.glide:glide:4.8.0",
+            materialVersion: "com.google.android.material:material:1.0.0",
+            playCoreVersion: "com.google.android.play:core:1.6.4",
+            gsonVersion    : "com.google.code.gson:gson:2.8.1",
+            okio           : "com.squareup.okio:okio:1.5.0"
+    ]
+
     def lifecycleVersion = "2.2.0"
     lifecycle = [
             extensionsVersion: "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion",
@@ -49,8 +49,11 @@ ext {
             runtimeVersion : "androidx.room:room-runtime:2.2.4",
             compilerVersion: "androidx.room:room-compiler:2.2.4"
     ]
-    //google imageloader
-    glide = "com.github.bumptech.glide:glide:${version.glideVersion}"
+    okHttp = [
+            //network core
+            okhttp3Version       : "com.squareup.okhttp3:okhttp:3.12.1",
+            okhttp3LoggingVersion: "com.squareup.okhttp3:logging-interceptor:3.12.1"
+    ]
     //fix 8.8.1version compiler fail
     arouter = "com.alibaba:arouter-api:${version.arouterVersion}"
     aroutercompiler = "com.alibaba:arouter-compiler:1.2.1"
@@ -67,26 +70,9 @@ ext {
     retrofit2 = "com.squareup.retrofit2:retrofit:${version["retrofitSdkVersion"]}"
     retrofit2_converter_gson = "com.squareup.retrofit2:converter-gson:${version["retrofitSdkVersion"]}"
     retrofit2_adapter_rxjava2 = "com.squareup.retrofit2:adapter-rxjava2:${version["retrofitSdkVersion"]}"
-    //network core
-    okhttp3 = "com.squareup.okhttp3:okhttp:${version["okhttpVersion"]}"
-    okhttp3_logging = "com.squareup.okhttp3:logging-interceptor:${version["okhttpVersion"]}"
-    //great db
-    objectbox = "io.objectbox:objectbox-gradle-plugin:${version.objectboxVersion}"
-    objectboxDebug = "io.objectbox:objectbox-android-objectbrowser:${version.objectboxVersion}"
-    objectboxRxjava = "io.objectbox:objectbox-rxjava:${version.objectboxVersion}"
-    //lifecycle
-    rxlifecycle = "com.trello.rxlifecycle2:rxlifecycle:${version.rxlifecycle}"
-    rxlifecycle_android = "com.trello.rxlifecycle2:rxlifecycle-android:${version.rxlifecycle}"
-    rxlifecycle_components = "com.trello.rxlifecycle2:rxlifecycle-components:${version.rxlifecycle}"
     //logger
     logger2 = "com.orhanobut:logger:${version.loggerVersion}"
-    //multidex
-    multidex = "com.android.support:multidex:${version.multidexVersion}"
-    //json parse
-    gson = "com.google.code.gson:gson:${version.gsonVersion}"
-    okio = "com.squareup.okio:okio:${version.okioVersion}"
     //permission
     ipermission = "com.github.csxiong:IPermission:${version.ipermission}"
-    design = "com.android.support:design:28.0.0"
 }
 

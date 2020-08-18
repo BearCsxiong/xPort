@@ -21,13 +21,15 @@ dependencies {
     api lifecycle.lifedataVersion
     api lifecycle.commonJaveVersion
 
+    api okHttp.okhttp3Version
+    api okHttp.okhttp3LoggingVersion
+
+    api google.materialVersion
+    api google.gsonVersion
+    api google.glideVersion
+    api google.okio
+
     api logger2
-    api okhttp3
-    api okhttp3_logging
-    api multidex
-    api gson
-    api okio
-    api glide
     api ipermission
 
     api arouter
