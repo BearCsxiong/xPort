@@ -57,8 +57,9 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
     public void change1(View v) {
 //        XToast.error("失败");
-        ARouter.getInstance().build("/main/second")
-                .navigation(this);
+//        ARouter.getInstance().build("/main/second")
+//                .navigation(this);
+        startLoading("开始下载...");
     }
 
     public void change2(View v) {

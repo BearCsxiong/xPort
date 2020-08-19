@@ -7,10 +7,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 
 import me.csxiong.library.R;
+import me.csxiong.library.utils.XAnimator;
 import me.csxiong.library.utils.XDisplayUtil;
 
 
@@ -20,10 +24,45 @@ import me.csxiong.library.utils.XDisplayUtil;
  */
 public class XLoadingView extends View {
 
-    private int mSize;
-    private int mPaintColor;
-    private int mAnimateValue = 0;
-    private ValueAnimator mAnimator;
+    private int mSize = XDisplayUtil.dpToPxInt(32);
+    /**
+     * 画笔颜色
+     */
+    private int mPaintColor = Color.WHITE;
+    /**
+     * 当前线条数
+     */
+    private int curLineCount = 0;
+
+    private XAnimator xAnimator = XAnimator.ofFloat(0, LINE_COUNT - 1)
+            .restartMode()
+            .repeatCount(ValueAnimator.INFINITE)
+            .duration(500)
+            .interpolator(new LinearInterpolator())
+            .setAnimationListener(new XAnimator.XAnimationListener() {
+                @Override
+                public void onAnimationUpdate(float fraction, float value) {
+                    Log.e("csx", "onAnimationUpdate");
+                    curLineCount = (int) value;
+                    invalidate();
+                }
+
+                @Override
+                public void onAnimationStart(XAnimator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(XAnimator animation) {
+
+                }
+
+                @Override
+                public void onAnimationCancel(XAnimator animation) {
+
+                }
+            });
+
     private Paint mPaint;
     private static final int LINE_COUNT = 12;
     private static final int DEGREE_PER_LINE = 360 / LINE_COUNT;
@@ -33,15 +72,11 @@ public class XLoadingView extends View {
     }
 
     public XLoadingView(Context context, AttributeSet attrs) {
-        this(context, attrs, R.attr.XLoadingStyle);
+        this(context, attrs, 0);
     }
 
     public XLoadingView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        TypedArray array = getContext().obtainStyledAttributes(attrs, R.styleable.XLoadingView, defStyleAttr, 0);
-        mSize = array.getDimensionPixelSize(R.styleable.XLoadingView_x_loading_view_size, XDisplayUtil.dpToPxInt(32));
-        mPaintColor = array.getInt(R.styleable.XLoadingView_android_color, Color.WHITE);
-        array.recycle();
         initPaint();
     }
 
@@ -70,35 +105,14 @@ public class XLoadingView extends View {
         requestLayout();
     }
 
-    private ValueAnimator.AnimatorUpdateListener mUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
-        @Override
-        public void onAnimationUpdate(ValueAnimator animation) {
-            mAnimateValue = (int) animation.getAnimatedValue();
-            invalidate();
-        }
-    };
-
     public void start() {
-        if (mAnimator == null) {
-            mAnimator = ValueAnimator.ofInt(0, LINE_COUNT - 1);
-            mAnimator.addUpdateListener(mUpdateListener);
-            mAnimator.setDuration(600);
-            mAnimator.setRepeatMode(ValueAnimator.RESTART);
-            mAnimator.setRepeatCount(ValueAnimator.INFINITE);
-            mAnimator.setInterpolator(new LinearInterpolator());
-            mAnimator.start();
-        } else if (!mAnimator.isStarted()) {
-            mAnimator.start();
+        if (!xAnimator.isRunning()) {
+            xAnimator.start();
         }
     }
 
     public void stop() {
-        if (mAnimator != null) {
-            mAnimator.removeUpdateListener(mUpdateListener);
-            mAnimator.removeAllUpdateListeners();
-            mAnimator.cancel();
-            mAnimator = null;
-        }
+        xAnimator.cancel();
     }
 
     private void drawLoading(Canvas canvas, int rotateDegrees) {
@@ -126,7 +140,7 @@ public class XLoadingView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         int saveCount = canvas.saveLayer(0, 0, getWidth(), getHeight(), null, Canvas.ALL_SAVE_FLAG);
-        drawLoading(canvas, mAnimateValue * DEGREE_PER_LINE);
+        drawLoading(canvas, curLineCount * DEGREE_PER_LINE);
         canvas.restoreToCount(saveCount);
     }
 

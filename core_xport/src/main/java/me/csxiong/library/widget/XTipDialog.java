@@ -7,17 +7,15 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.IntDef;
-import androidx.annotation.LayoutRes;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -32,13 +30,13 @@ import me.csxiong.library.utils.XDisplayUtil;
 public class XTipDialog extends Dialog {
 
     public XTipDialog(Context context) {
-        this(context, R.style.XTipDialog);
+        this(context, R.style.BaseDialog);
     }
 
     public XTipDialog(Context context, int themeResId) {
         super(context, themeResId);
-        setCanceledOnTouchOutside(false);
-        setCancelable(false);
+        setCanceledOnTouchOutside(true);
+        setCancelable(true);
     }
 
     @Override
@@ -61,8 +59,6 @@ public class XTipDialog extends Dialog {
      * <p>
      * 提供了一个图标和一行文字的样式, 其中图标有几种类型可选。见 {@link IconType}
      * </p>
-     *
-     * @see CustomBuilder
      */
     public static class Builder {
         /**
@@ -127,9 +123,18 @@ public class XTipDialog extends Dialog {
          */
         public XTipDialog create() {
             XTipDialog dialog = new XTipDialog(mContext);
-            dialog.setContentView(R.layout.x_tip_dialog_layout);
-            ViewGroup contentWrap = (ViewGroup) dialog.findViewById(R.id.contentWrap);
-
+            //创建基础View
+            FrameLayout flContent = new FrameLayout(mContext);
+            LinearLayout linearLayout = new LinearLayout(mContext, null);
+            linearLayout.setOrientation(LinearLayout.VERTICAL);
+            linearLayout.setGravity(Gravity.CENTER);
+            linearLayout.setPadding(0, XDisplayUtil.dpToPxInt(18), 0, XDisplayUtil.dpToPxInt(16));
+            linearLayout.setBackground(GradientDrawableFactory.createDrawable(0xc0222222, XDisplayUtil.dpToPx(10f)));
+            FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(XDisplayUtil.dpToPxInt(150), -2);
+            lp.gravity = Gravity.CENTER;
+            flContent.addView(linearLayout, lp);
+            //设置内容
+            dialog.setContentView(flContent);
             switch (mCurrentIconType) {
                 case ICON_TYPE_LOADING:
                     XLoadingView loadingView = new XLoadingView(mContext);
@@ -137,7 +142,7 @@ public class XTipDialog extends Dialog {
                     loadingView.setSize(XDisplayUtil.dpToPxInt(32));
                     LinearLayout.LayoutParams loadingViewLP = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                     loadingView.setLayoutParams(loadingViewLP);
-                    contentWrap.addView(loadingView);
+                    linearLayout.addView(loadingView);
                     break;
                 case ICON_TYPE_SUCCESS:
                 case ICON_TYPE_FAIL:
@@ -154,7 +159,7 @@ public class XTipDialog extends Dialog {
                         imageView.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.qmui_icon_notify_info));
                     }
 
-                    contentWrap.addView(imageView);
+                    linearLayout.addView(imageView);
                     break;
             }
 
@@ -174,40 +179,10 @@ public class XTipDialog extends Dialog {
                 tipView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
                 tipView.setText(mTipWord);
 
-                contentWrap.addView(tipView);
+                linearLayout.addView(tipView);
             }
             return dialog;
         }
 
-    }
-
-    /**
-     * 传入自定义的布局并使用这个布局生成 TipDialog
-     */
-    public static class CustomBuilder {
-        private Context mContext;
-        private int mContentLayoutId;
-
-        public CustomBuilder(Context context) {
-            mContext = context;
-        }
-
-        public CustomBuilder setContent(@LayoutRes int layoutId) {
-            mContentLayoutId = layoutId;
-            return this;
-        }
-
-        /**
-         * 创建 Dialog, 但没有弹出来, 如果要弹出来, 请调用返回值的 {@link Dialog#show()} 方法
-         *
-         * @return 创建的 Dialog
-         */
-        public XTipDialog create() {
-            XTipDialog dialog = new XTipDialog(mContext);
-            dialog.setContentView(R.layout.x_tip_dialog_layout);
-            ViewGroup contentWrap = (ViewGroup) dialog.findViewById(R.id.contentWrap);
-            View customView = LayoutInflater.from(mContext).inflate(mContentLayoutId, contentWrap, true);
-            return dialog;
-        }
     }
 }
