@@ -1,5 +1,6 @@
 package com.base.project.ui;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.View;
 import android.view.Window;
@@ -11,7 +12,14 @@ import com.base.project.R;
 import com.base.project.databinding.ActivityMainBinding;
 import com.base.project.ui.main.MainViewModel;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import me.csxiong.library.base.BaseActivity;
+import me.csxiong.library.integration.process.DelegateFragment;
+import me.csxiong.library.integration.process.DelegateProcess;
+import me.csxiong.library.integration.process.XProcesser;
+import me.csxiong.library.utils.ImmersiveModeUtil;
 import me.csxiong.library.utils.XToast;
 
 /**
@@ -28,31 +36,12 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
     @Override
     public void initView() {
-        setTranslucentStatus(true);
-        // create our manager instance after the content view is set
-        SystemBarTintManager tintManager = new SystemBarTintManager(this);
-        // enable status bar tint
-        tintManager.setStatusBarTintEnabled(true);
-        // enable navigation bar tint
-        tintManager.setNavigationBarTintEnabled(true);
-        tintManager.setStatusBarTintColor(Color.TRANSPARENT);
+
     }
 
     @Override
     public void initData() {
 
-    }
-
-    private void setTranslucentStatus(boolean on) {
-        Window win = getWindow();
-        WindowManager.LayoutParams winParams = win.getAttributes();
-        final int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
-        if (on) {
-            winParams.flags |= bits;
-        } else {
-            winParams.flags &= ~bits;
-        }
-        win.setAttributes(winParams);
     }
 
     public void change1(View v) {

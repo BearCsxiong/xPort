@@ -6,6 +6,7 @@
         android:layout_width="match_parent"
         android:fitsSystemWindows="true"
         android:clipToPadding="false"
+        android:background="#ff0000"
         android:layout_height="match_parent">
 
         <FrameLayout

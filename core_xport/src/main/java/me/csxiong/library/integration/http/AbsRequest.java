@@ -1,5 +1,7 @@
 package me.csxiong.library.integration.http;
 
+import android.util.Log;
+
 import androidx.annotation.Nullable;
 
 import com.orhanobut.logger.Logger;
@@ -39,11 +41,6 @@ public abstract class AbsRequest {
     private String requestMapping;
 
     /**
-     * 打印完整路径
-     */
-    private String logFullRequestPath;
-
-    /**
      * type for T
      */
     private Type typeT;
@@ -61,17 +58,12 @@ public abstract class AbsRequest {
     /**
      * 是否同步请求
      */
-    private boolean isSynRequest = false;
+    private boolean isSyncRequest = false;
 
     /**
      * 是否应用默认参数适配器
      */
     private boolean isApplyDefaultParametersAdapter = true;
-
-    /**
-     * 是否打印网络日志
-     */
-    private boolean isLog = false;
 
     /**
      * 响应监听
@@ -185,13 +177,8 @@ public abstract class AbsRequest {
         return this;
     }
 
-    public AbsRequest setSynRequest(boolean isSyn) {
-        isSynRequest = isSyn;
-        return this;
-    }
-
-    public AbsRequest log() {
-        isLog = true;
+    public AbsRequest syncRequest(boolean isSync) {
+        isSyncRequest = isSync;
         return this;
     }
 
@@ -230,8 +217,8 @@ public abstract class AbsRequest {
             onParseResponse(response);
         };
         // 5.execute
-        if (!isSynRequest) {
-            ThreadExecutor.runOnBackgroundThread(executable);
+        if (!isSyncRequest) {
+            ThreadExecutor.runOnSlowBackgroundThread(executable);
         } else {
             executable.run();
         }
@@ -246,7 +233,9 @@ public abstract class AbsRequest {
     private Response onExecuteRequest(Request request) {
         Response response;
         try {
-            logFullRequestPath = request.toString();
+            if (XHttp.getInstance().getConfig().isLogFullPath()) {
+                Log.e(Preconditions.TAG, "XHttp request -> " + request.toString());
+            }
             response = XHttp.getInstance().getHttpClient().newCall(request).execute();
             return response;
         } catch (Exception e) {

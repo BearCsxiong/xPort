@@ -3,17 +3,25 @@ package me.csxiong.library.base;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
+
 import android.os.Bundle;
 
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.ViewModelProviders;
 
+import me.csxiong.library.utils.ImmersiveModeUtil;
+
 /**
  * @Desc : 基类活动
  * @Author : csxiong create on 2019/7/22
  */
 public abstract class BaseActivity<T extends ViewDataBinding> extends FragmentActivity implements IPage, IView {
+
+    /**
+     * 默认的界面UI配置
+     */
+    public static ActivityImmersiveConfig config;
 
     /**
      * 基础的Binding
@@ -39,7 +47,13 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends FragmentAc
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (config != null) {
+            config.beforeContentView(this);
+        }
         mViewBinding = DataBindingUtil.setContentView(this, getLayoutId());
+        if (config != null) {
+            config.afterContentView(this);
+        }
         if (mViewDelegate != null) {
             mViewDelegate.release();
         } else {

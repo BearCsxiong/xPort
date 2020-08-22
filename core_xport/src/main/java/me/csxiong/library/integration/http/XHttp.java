@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Cache;
 import okhttp3.Call;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -145,6 +146,10 @@ public class XHttp {
 
         private String mainHost;
 
+        private boolean isLogFullPath;
+
+        private Cache cache;
+
         public Config() {
             mOkBuilder = new OkHttpClient.Builder();
         }
@@ -164,6 +169,16 @@ public class XHttp {
             return this;
         }
 
+        public Config isLogFullPath(boolean isLogFullPath) {
+            this.isLogFullPath = isLogFullPath;
+            return this;
+        }
+
+        public Config cache(Cache cache) {
+            this.cache = cache;
+            return this;
+        }
+
         public Config connectTimeout(long seconds) {
             mOkBuilder.connectTimeout(seconds, TimeUnit.SECONDS);
             return this;
@@ -173,12 +188,21 @@ public class XHttp {
             return mRequestBuildAdapter;
         }
 
+        public boolean isLogFullPath() {
+            return isLogFullPath;
+        }
+
+        public void setLogFullPath(boolean logFullPath) {
+            isLogFullPath = logFullPath;
+        }
+
         public String getMainHost() {
             return mainHost;
         }
 
         public Config apply() {
             mOkBuilder.cache(null);
+            mOkBuilder.cache(cache);
             mOkHttpClient = mOkBuilder.build();
             return this;
         }

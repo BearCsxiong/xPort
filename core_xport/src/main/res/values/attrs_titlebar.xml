@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- TitleBar -->
+    <declare-styleable name="XTitleBar">
+        <attr name="xtb_title" format="string|reference" />
+        <attr name="xtb_theme_color" format="color|reference" />
+        <attr name="xtb_divide_enable" format="boolean" />
+    </declare-styleable>
+
+</resources>

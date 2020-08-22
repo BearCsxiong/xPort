@@ -5,6 +5,7 @@ import android.os.Looper;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -13,9 +14,14 @@ import me.csxiong.library.integration.scheduler.XThreadFactory;
 /**
  * @Desc : 简单的线程切换工具
  * @Author : csxiong create on 2019/7/16
+ * <p>
+ * 因为常规线程需要切换场景需要
  */
 public class ThreadExecutor {
 
+    /**
+     * 线程池
+     */
     private static ThreadExecutor executor;
 
     /**
@@ -23,7 +29,18 @@ public class ThreadExecutor {
      */
     private static Handler handler;
 
-    private static ExecutorService executorService;
+    private volatile static XIdleTimingHandler idleHandler;
+
+    /**
+     * 快销任务 快速处理 快速释放
+     */
+    private static ExecutorService fastExecutorService;
+
+    /**
+     * 慢销任务 需要足够长的等待和处理
+     */
+    private static ExecutorService slowExecutorService;
+
 
     /**
      * 获取XPort提供的线程池
@@ -48,10 +65,17 @@ public class ThreadExecutor {
      * 默认构造 提供简单的注入获取XPort的线程池
      */
     private ThreadExecutor() {
-        //TODO 核心线程数 大概是当前手机的手机CPU个数 最大线程数 大概可以是CPU个数两倍多一些
-        ThreadPoolExecutor executor = new ThreadPoolExecutor(Math.max(5, DeviceUtils.getCPUCount()), Math.max(10, DeviceUtils.getCPUCount()), 30, TimeUnit.SECONDS, new PriorityBlockingQueue<>(), new XThreadFactory(), new ThreadPoolExecutor.DiscardOldestPolicy());
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(Math.max(5, DeviceUtils.getCPUCount()), Math.max(10, DeviceUtils.getCPUCount()), 10L,
+                TimeUnit.SECONDS,
+                new PriorityBlockingQueue<>(),
+                new XThreadFactory(),
+                new ThreadPoolExecutor.DiscardOldestPolicy());
         executor.allowCoreThreadTimeOut(true);
-        executorService = executor;
+        fastExecutorService = executor;
+
+        slowExecutorService = new ThreadPoolExecutor(1, Integer.MAX_VALUE, 5L, TimeUnit.SECONDS,
+                new SynchronousQueue<>(),
+                new XThreadFactory(), new ThreadPoolExecutor.DiscardOldestPolicy());
         handler = new Handler(Looper.getMainLooper());
     }
 
@@ -61,7 +85,7 @@ public class ThreadExecutor {
      * @param runnable
      */
     public static void runOnUiThread(Runnable runnable) {
-        get().handler.post(runnable);
+        runOnUiThread(runnable, 0);
     }
 
     /**
@@ -71,7 +95,15 @@ public class ThreadExecutor {
      * @param delay    延迟
      */
     public static void runOnUiThread(Runnable runnable, long delay) {
-        handler.postDelayed(runnable, delay);
+        if (delay <= 0) {
+            if (isUIThread()) {
+                runnable.run();
+            } else {
+                handler.post(runnable);
+            }
+        } else {
+            handler.postDelayed(runnable, delay);
+        }
     }
 
     /**
@@ -80,7 +112,42 @@ public class ThreadExecutor {
      * @param runnable
      */
     public static void runOnBackgroundThread(Runnable runnable) {
-        executorService.execute(runnable);
+        fastExecutorService.execute(runnable);
+    }
+
+    /**
+     * 同步执行在子线程
+     *
+     * @param runnable
+     */
+    public static void runOnBackgroundThreadSync(Runnable runnable) {
+        if (isUIThread()) {
+            fastExecutorService.execute(runnable);
+        } else {
+            runnable.run();
+        }
+    }
+
+    /**
+     * 执行在慢销线程
+     *
+     * @param runnable
+     */
+    public static void runOnSlowBackgroundThread(Runnable runnable) {
+        slowExecutorService.execute(runnable);
+    }
+
+    /**
+     * 同步执行在子线程
+     *
+     * @param runnable
+     */
+    public static void runOnSlowBackgroundThreadSync(Runnable runnable) {
+        if (isUIThread()) {
+            slowExecutorService.execute(runnable);
+        } else {
+            runnable.run();
+        }
     }
 
     /**
@@ -93,6 +160,23 @@ public class ThreadExecutor {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 执行在UI线程闲置阶段
+     *
+     * @param runnable
+     */
+    public static void runOnIdleTiming(Runnable runnable) {
+        if (runnable != null) {
+            runOnUiThread(() -> {
+                if (idleHandler == null) {
+                    idleHandler = new XIdleTimingHandler();
+                    Looper.myQueue().addIdleHandler(idleHandler);
+                }
+                idleHandler.getIdleQueue().add(runnable);
+            });
+        }
     }
 
 }
