@@ -16,10 +16,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import me.csxiong.library.base.BaseActivity;
+import me.csxiong.library.integration.http.ResponseListener;
+import me.csxiong.library.integration.http.XHttp;
 import me.csxiong.library.integration.process.DelegateFragment;
 import me.csxiong.library.integration.process.DelegateProcess;
 import me.csxiong.library.integration.process.XProcesser;
 import me.csxiong.library.utils.ImmersiveModeUtil;
+import me.csxiong.library.utils.ThreadExecutor;
 import me.csxiong.library.utils.XToast;
 
 /**
@@ -45,10 +48,14 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     }
 
     public void change1(View v) {
-//        XToast.error("失败");
-//        ARouter.getInstance().build("/main/second")
-//                .navigation(this);
-        startLoading("开始下载...");
+        ThreadExecutor.runOnBackgroundThread(new Runnable() {
+            @Override
+            public void run() {
+                ThreadExecutor.runOnUiThread(()->{
+                    startLoading("开始下载...");
+                });
+            }
+        });
     }
 
     public void change2(View v) {

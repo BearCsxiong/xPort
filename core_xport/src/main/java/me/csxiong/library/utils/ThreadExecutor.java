@@ -20,11 +20,6 @@ import me.csxiong.library.integration.scheduler.XThreadFactory;
 public class ThreadExecutor {
 
     /**
-     * 线程池
-     */
-    private static ThreadExecutor executor;
-
-    /**
      * 静态handler,UIThread的Looper,提供简单的线程切换服务
      */
     private static Handler handler;
@@ -50,21 +45,7 @@ public class ThreadExecutor {
      *
      * @return
      */
-    public static ThreadExecutor get() {
-        if (executor == null) {
-            synchronized (ThreadExecutor.class) {
-                if (executor == null) {
-                    executor = new ThreadExecutor();
-                }
-            }
-        }
-        return executor;
-    }
-
-    /**
-     * 默认构造 提供简单的注入获取XPort的线程池
-     */
-    private ThreadExecutor() {
+    static {
         ThreadPoolExecutor executor = new ThreadPoolExecutor(Math.max(5, DeviceUtils.getCPUCount()), Math.max(10, DeviceUtils.getCPUCount()), 10L,
                 TimeUnit.SECONDS,
                 new PriorityBlockingQueue<>(),
@@ -77,6 +58,10 @@ public class ThreadExecutor {
                 new SynchronousQueue<>(),
                 new XThreadFactory(), new ThreadPoolExecutor.DiscardOldestPolicy());
         handler = new Handler(Looper.getMainLooper());
+    }
+
+    private ThreadExecutor() {
+
     }
 
     /**

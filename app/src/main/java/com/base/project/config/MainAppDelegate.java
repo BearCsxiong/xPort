@@ -36,7 +36,8 @@ public class MainAppDelegate implements IAppDelegate {
         BaseActivity.config = new ActivityImmersiveConfig() {
             @Override
             public void beforeContentView(Activity activity) {
-                ImmersiveModeUtil.setStatusBarTransparent(activity);
+//                ImmersiveModeUtil.setStatusBarTransparent(activity);
+                ImmersiveModeUtil.setStatusBarBgColor(activity,0xff2C77EC);
             }
 
             @Override

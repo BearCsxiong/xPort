@@ -22,6 +22,8 @@ import me.csxiong.library.R;
  */
 public class XTitleBar extends FrameLayout {
 
+    private static XTitleBarConfig config;
+
     private String title = "";
 
     private boolean isDivideLine;
@@ -83,23 +85,25 @@ public class XTitleBar extends FrameLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        //直接在内部适配TitleBar
-//        if (StudioSizeUtils.isFullDisplay()) {
-//            StatusBarUtil.adjustStatusView(this);
-//        }
-//        //设置高度
-//        getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-//            @Override
-//            public boolean onPreDraw() {
-//                getViewTreeObserver().removeOnPreDrawListener(this);
-//                if (StudioSizeUtils.isFullDisplay()) {
-//                    ViewUtils.setHeight(XTitleBar.this, StatusBarUtil.getStatusBarHeight(PomeloApplication.getApplication()) + DeviceUtils.dip2px(48));
-//                } else {
-//                    ViewUtils.setHeight(XTitleBar.this, DeviceUtils.dip2px(48));
-//                }
-//                return false;
-//            }
-//        });
+        if (config != null) {
+            config.onFinishInflate(this);
+        }
+    }
+
+    public TextView getmTvTitle() {
+        return mTvTitle;
+    }
+
+    public void setmTvTitle(TextView mTvTitle) {
+        this.mTvTitle = mTvTitle;
+    }
+
+    public View getmVDivideLine() {
+        return mVDivideLine;
+    }
+
+    public void setmVDivideLine(View mVDivideLine) {
+        this.mVDivideLine = mVDivideLine;
     }
 
     /**

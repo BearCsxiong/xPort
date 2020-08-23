@@ -15,6 +15,7 @@
             android:layout_height="match_parent"></FrameLayout>
 
         <LinearLayout
+            android:layout_below="@+id/xtb"
             android:layout_width="match_parent"
             android:orientation="horizontal"
             android:layout_height="50dp">
@@ -55,6 +56,12 @@
                 android:layout_height="50dp" />
 
         </LinearLayout>
+
+        <me.csxiong.library.widget.title.XTitleBar
+            android:id="@+id/xtb"
+            app:xtb_title="Main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
     </RelativeLayout>
 </layout>
