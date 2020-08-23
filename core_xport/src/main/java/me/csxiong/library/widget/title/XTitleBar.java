@@ -22,7 +22,7 @@ import me.csxiong.library.R;
  */
 public class XTitleBar extends FrameLayout {
 
-    private static XTitleBarConfig config;
+    public static XTitleBarConfig config;
 
     private String title = "";
 

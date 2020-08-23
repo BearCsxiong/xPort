@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.ViewUtils;
 import androidx.multidex.MultiDex;
 
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -14,6 +15,8 @@ import me.csxiong.library.base.ActivityImmersiveConfig;
 import me.csxiong.library.base.BaseActivity;
 import me.csxiong.library.base.IAppDelegate;
 import me.csxiong.library.utils.ImmersiveModeUtil;
+import me.csxiong.library.widget.title.XTitleBar;
+import me.csxiong.library.widget.title.XTitleBarConfig;
 
 /**
  * @Desc : Application Main代理
@@ -32,6 +35,12 @@ public class MainAppDelegate implements IAppDelegate {
             ARouter.openDebug();
         }
         ARouter.init(application);
+
+        XTitleBar.config = new XTitleBarConfig() {
+            @Override
+            public void onFinishInflate(XTitleBar xTitleBar) {
+            }
+        };
 
         BaseActivity.config = new ActivityImmersiveConfig() {
             @Override
