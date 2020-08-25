@@ -2,6 +2,7 @@ package me.csxiong.library.integration.http;
 
 import java.util.Map;
 
+import me.csxiong.library.utils.GsonUtils;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;

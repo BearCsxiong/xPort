@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import me.csxiong.library.BuildConfig;
+import me.csxiong.library.utils.GsonUtils;
 import me.csxiong.library.utils.ThreadExecutor;
 import okhttp3.Headers;
 import okhttp3.Request;

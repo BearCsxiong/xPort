@@ -1,9 +1,12 @@
 package me.csxiong.library.utils;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
 import java.lang.reflect.Type;
+
+import me.csxiong.library.integration.GsonTypeAdapterFactory;
 
 /**
  * @Desc : Json工具
@@ -67,7 +70,9 @@ public class GsonUtils {
      */
     private static void checkGson() {
         if (gson == null) {
-            gson = new Gson();
+            gson = new GsonBuilder()
+                    .registerTypeAdapterFactory(new GsonTypeAdapterFactory())
+                    .create();
         }
     }
 
