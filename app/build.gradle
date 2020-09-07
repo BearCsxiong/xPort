@@ -11,13 +11,3 @@ dependencies {
     kapt aroutercompiler
     api project(':core_xport')
 }
-
-android.applicationVariants.all { variant ->
-    variant.outputs.all {
-        if (variant.buildType.debuggable) {
-            outputFileName = "app_csx_debug.apk"
-        } else {
-            outputFileName = "app_csx_release.apk"
-        }
-    }
-}
