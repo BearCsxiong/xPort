@@ -21,13 +21,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import me.csxiong.library.R;
+import me.csxiong.library.integration.sys.NoLeakDialog;
 import me.csxiong.library.utils.XDisplayUtil;
 
 /**
  * @Desc : 可定制的提示框
  * @Author : csxiong create on 2019/7/17
  */
-public class XTipDialog extends Dialog {
+public class XTipDialog extends NoLeakDialog {
 
     public XTipDialog(Context context) {
         this(context, R.style.BaseDialog);

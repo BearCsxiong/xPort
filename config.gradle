@@ -2,7 +2,6 @@ apply from: versions
 
 if (isIndependent()) {
     apply plugin: 'com.android.application'
-
     android.applicationVariants.all { variant ->
         variant.outputs.all {
             if (variant.buildType.debuggable) {
@@ -153,7 +152,6 @@ android {
     dependencies {
         api kotlin.kotlinVersion
     }
-
 }
 
 configurations.all {
