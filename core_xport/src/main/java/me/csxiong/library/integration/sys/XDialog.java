@@ -20,10 +20,6 @@ public class XDialog extends BaseDialog<DialogXBinding> {
 
     public static int ELEVATOR = XDisplayUtil.dpToPxInt(1f);
 
-    public static int MARIN_LEFT = XDisplayUtil.dpToPxInt(10f);
-
-    public static int MARIN_RIGHT = XDisplayUtil.dpToPxInt(10f);
-
     private Builder data;
 
     @Override
@@ -104,10 +100,6 @@ public class XDialog extends BaseDialog<DialogXBinding> {
         private int appMainColor = APP_MAIN_COLOR;
 
         private int elevator = ELEVATOR;
-
-        private int marginLeft = MARIN_LEFT;
-
-        private int marginRight = MARIN_RIGHT;
 
         public Builder() {
 
@@ -218,22 +210,6 @@ public class XDialog extends BaseDialog<DialogXBinding> {
 
         public void setElevator(int elevator) {
             this.elevator = elevator;
-        }
-
-        public int getMarginLeft() {
-            return marginLeft;
-        }
-
-        public void setMarginLeft(int marginLeft) {
-            this.marginLeft = marginLeft;
-        }
-
-        public int getMarginRight() {
-            return marginRight;
-        }
-
-        public void setMarginRight(int marginRight) {
-            this.marginRight = marginRight;
         }
 
         public XDialog build() {
