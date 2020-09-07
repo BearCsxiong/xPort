@@ -14,6 +14,7 @@ import com.base.project.BuildConfig;
 import me.csxiong.library.base.ActivityImmersiveConfig;
 import me.csxiong.library.base.BaseActivity;
 import me.csxiong.library.base.IAppDelegate;
+import me.csxiong.library.integration.sys.XDialog;
 import me.csxiong.library.utils.ImmersiveModeUtil;
 import me.csxiong.library.widget.title.XTitleBar;
 import me.csxiong.library.widget.title.XTitleBarConfig;
@@ -54,6 +55,9 @@ public class MainAppDelegate implements IAppDelegate {
 
             }
         };
+
+        XDialog.APP_MAIN_COLOR = 0xffff0000;
+        XDialog.ELEVATOR = 0;
     }
 
     @Override

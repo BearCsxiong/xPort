@@ -11,6 +11,11 @@
         <item name="android:actionMenuTextColor">@color/colorPrimary</item>
     </style>
 
+    <style name="XDialog" parent="@android:style/Animation.Dialog">
+        <item name="android:windowEnterAnimation">@anim/x_dialog_in</item>
+        <item name="android:windowExitAnimation">@anim/x_dialog_out</item>
+    </style>
+
     <style name="BaseDialog" parent="android:Theme.Dialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowNoTitle">true</item>

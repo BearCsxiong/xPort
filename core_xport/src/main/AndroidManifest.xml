@@ -2,5 +2,10 @@
     package="me.csxiong.library">
 
     <application>
+
+        <meta-data
+            android:name="me.csxiong.library.integration.config.XPortGlobalConfig"
+            android:value="@string/GlobalConfig" />
+
     </application>
 </manifest>

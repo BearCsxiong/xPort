@@ -21,6 +21,7 @@ import me.csxiong.library.integration.http.XHttp;
 import me.csxiong.library.integration.process.DelegateFragment;
 import me.csxiong.library.integration.process.DelegateProcess;
 import me.csxiong.library.integration.process.XProcesser;
+import me.csxiong.library.integration.sys.XDialog;
 import me.csxiong.library.utils.ImmersiveModeUtil;
 import me.csxiong.library.utils.ThreadExecutor;
 import me.csxiong.library.utils.XToast;
@@ -48,14 +49,13 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     }
 
     public void change1(View v) {
-        ThreadExecutor.runOnBackgroundThread(new Runnable() {
-            @Override
-            public void run() {
-                ThreadExecutor.runOnUiThread(()->{
-                    startLoading("开始下载...");
-                });
-            }
-        });
+        new XDialog.Builder()
+                .setContent("测试")
+                .setTitle("哈哈哈哈")
+                .setPositiveText("确认")
+                .setNegativeText("取消")
+                .build()
+                .show();
     }
 
     public void change2(View v) {

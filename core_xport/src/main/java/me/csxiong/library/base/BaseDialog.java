@@ -27,7 +27,7 @@ import me.csxiong.library.utils.ActivityUtils;
  * @Desc : 基础的Dialog
  * @Author : Bear - 2020/9/7
  */
-public abstract class BaseDialog<T extends ViewDataBinding> extends BaseDialogFragment {
+public abstract class BaseDialog<T extends ViewDataBinding> extends BaseDialogFragment implements IPage {
 
     protected T mViewBinding;
 
@@ -66,12 +66,9 @@ public abstract class BaseDialog<T extends ViewDataBinding> extends BaseDialogFr
         if (view.getTag(R.id.dataBinding) != null || (view.getTag() != null && view.getTag() instanceof String)) {
             mViewBinding = DataBindingUtil.bind(view);
         }
-        bindView();
+        initView();
+        initData();
     }
-
-    protected abstract int getLayoutId();
-
-    protected abstract void bindView();
 
     public int getDialogStyle() {
         return R.style.BaseDialog;

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:id="@+id/rl_common_dialog_a_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/rl_common_dialog_a_content"
+            radius="@{10}"
+            solid="@{0xffffffff}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="@{data.marginLeft}"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="@{data.marginRight}"
+            android:layout_marginBottom="5dp"
+            android:elevation="@{data.elevator}"
+            android:paddingTop="8dp">
+
+            <TextView
+                android:id="@+id/tv_common_dialog_a_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="24dp"
+                android:text="@{data.title}"
+                android:textColor="#000000"
+                android:textSize="20dp"
+                android:visibility="@{data.title==null?View.GONE:View.VISIBLE}"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_goneMarginTop="16dp" />
+
+            <TextView
+                android:id="@+id/tv_common_dialog_a_content"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="24dp"
+                android:text="@{data.content}"
+                android:textColor="#000000"
+                android:textSize="14dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_common_dialog_a_title" />
+
+            <me.csxiong.library.widget.PressTextView
+                android:id="@+id/tv_common_dialog_a_positive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="19dp"
+                android:layout_marginRight="19dp"
+                android:layout_marginBottom="19dp"
+                android:padding="5dp"
+                android:text="@{data.positiveText}"
+                android:textColor="@{data.appMainColor}"
+                android:textSize="13dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_common_dialog_a_content" />
+
+            <me.csxiong.library.widget.PressTextView
+                android:id="@+id/tv_common_dialog_a_negative"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="19dp"
+                android:padding="5dp"
+                android:text="@{data.negativeText}"
+                android:textColor="#999999"
+                android:textSize="13dp"
+                android:visibility="@{data.negativeText==null?View.GONE:View.VISIBLE}"
+                app:layout_constraintRight_toLeftOf="@+id/tv_common_dialog_a_positive"
+                app:layout_constraintTop_toTopOf="@+id/tv_common_dialog_a_positive" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </RelativeLayout>
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="data"
+            type="me.csxiong.library.integration.sys.XDialog.Builder" />
+
+    </data>
+</layout>

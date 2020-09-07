@@ -15,6 +15,8 @@ public class ActivityUtils {
 
     private static Stack<Activity> activityStack;
 
+    private static ActivityLifcyclerForActivityUtils activityLifcyclerForActivityUtils;
+
     private ActivityUtils() {
     }
 
@@ -68,7 +70,10 @@ public class ActivityUtils {
     }
 
     public static void init(Application application) {
-        application.registerActivityLifecycleCallbacks(new ActivityLifcyclerForActivityUtils());
+        if (activityLifcyclerForActivityUtils == null) {
+            activityLifcyclerForActivityUtils = new ActivityLifcyclerForActivityUtils();
+            application.registerActivityLifecycleCallbacks(activityLifcyclerForActivityUtils);
+        }
     }
 
     public static Activity getTopActivity() {
