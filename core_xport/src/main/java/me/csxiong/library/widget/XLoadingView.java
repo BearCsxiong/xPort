@@ -42,7 +42,6 @@ public class XLoadingView extends View {
             .setAnimationListener(new XAnimator.XAnimationListener() {
                 @Override
                 public void onAnimationUpdate(float fraction, float value) {
-                    Log.e("csx", "onAnimationUpdate");
                     curLineCount = (int) value;
                     invalidate();
                 }
