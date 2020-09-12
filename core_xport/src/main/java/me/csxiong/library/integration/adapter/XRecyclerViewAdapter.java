@@ -465,4 +465,11 @@ public class XRecyclerViewAdapter extends RecyclerView.Adapter<XViewHolder> {
     public OnItemChildLongClickListener getOnItemChildLongClickListener() {
         return onItemChildLongClickListener;
     }
+
+    public XItem<?> getItemEntityByAdapterPosition(int position) {
+        if (CollectionUtils.inRange(mItems, position)) {
+            return mItems.get(position);
+        }
+        return null;
+    }
 }
