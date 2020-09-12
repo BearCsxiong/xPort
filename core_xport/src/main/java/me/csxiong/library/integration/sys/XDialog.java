@@ -20,6 +20,8 @@ public class XDialog extends BaseDialog<DialogXBinding> {
 
     public static int ELEVATOR = XDisplayUtil.dpToPxInt(1f);
 
+    public static int RADIUS = 3;
+
     private Builder data;
 
     @Override
@@ -101,6 +103,8 @@ public class XDialog extends BaseDialog<DialogXBinding> {
 
         private int elevator = ELEVATOR;
 
+        private int radius = RADIUS;
+
         public Builder() {
 
         }
@@ -166,6 +170,14 @@ public class XDialog extends BaseDialog<DialogXBinding> {
         public Builder setNegativeClick(NegativeClickListener negativeClick) {
             this.negativeClick = negativeClick;
             return this;
+        }
+
+        public int getRadius() {
+            return radius;
+        }
+
+        public void setRadius(int radius) {
+            this.radius = radius;
         }
 
         public DismissListener getDismissListener() {

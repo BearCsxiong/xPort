@@ -15,6 +15,8 @@ public class ActivityUtils {
 
     private static Stack<Activity> activityStack;
 
+    private static Activity currentActivity;
+
     private static ActivityLifcyclerForActivityUtils activityLifcyclerForActivityUtils;
 
     private ActivityUtils() {
@@ -24,6 +26,7 @@ public class ActivityUtils {
 
         @Override
         public void onActivityCreated(Activity activity, Bundle bundle) {
+            currentActivity = activity;
             get().addActivity(activity);
         }
 
@@ -34,7 +37,7 @@ public class ActivityUtils {
 
         @Override
         public void onActivityResumed(Activity activity) {
-
+            currentActivity = activity;
         }
 
         @Override
@@ -77,7 +80,15 @@ public class ActivityUtils {
     }
 
     public static Activity getTopActivity() {
-        return get()._getTopActivity();
+        return currentActivity;
+    }
+
+    public static boolean isTopActivityAlive() {
+        return isActivityAlive(getTopActivity());
+    }
+
+    public static boolean isActivityAlive(Activity activity) {
+        return activity != null && !activity.isDestroyed() && !activity.isFinishing();
     }
 
     /**

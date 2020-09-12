@@ -9,7 +9,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/rl_common_dialog_a_content"
-            radius="@{10}"
+            radius="@{data.radius}"
             solid="@{0xffffffff}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

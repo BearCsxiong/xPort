@@ -3,6 +3,7 @@ package me.csxiong.library.integration.adapter;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 import me.csxiong.library.utils.CollectionUtils;
 
@@ -117,5 +118,22 @@ public class AdapterDataBuilder {
 
     public List<XItem> build() {
         return mItemList;
+    }
+
+    /**
+     * 唯一性校验是否一致
+     *
+     * @param entity
+     * @return
+     */
+    public boolean hasSame(Object entity) {
+        if (mItemList != null) {
+            for (XItem item : mItemList) {
+                if (Objects.equals(item.entity, entity)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
