@@ -63,7 +63,12 @@ public class XRecyclerViewAdapter extends RecyclerView.Adapter<XViewHolder> {
         mContext = context;
     }
 
+    @Deprecated
     public <T> void setOnEntityClickListener(OnEntityClickListener<T> listener, Class<T> tClass) {
+        mClickListenerMap.put(tClass, listener);
+    }
+
+    public <T> void setOnEntityClickListener(Class<T> tClass, OnEntityClickListener<T> listener) {
         mClickListenerMap.put(tClass, listener);
     }
 

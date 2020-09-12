@@ -29,7 +29,7 @@ import me.csxiong.library.utils.ActivityUtils;
  */
 public abstract class BaseDialog<T extends ViewDataBinding> extends BaseDialogFragment implements IPage {
 
-    protected T mViewBinding;
+    public T mViewBinding;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
