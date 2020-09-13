@@ -315,12 +315,17 @@ public abstract class AbsRequest {
                 return;
             }
             String jsonString = response.body().string();
-            Logger.json(jsonString);
+            if (XHttp.getInstance().getConfig() != null && XHttp.getInstance().getConfig().isLogFullPath()) {
+                Logger.json(jsonString);
+            }
             if (String.class.equals(typeT)) {
                 onParseData(jsonString);
             } else {
-                Object o = GsonUtils.fromJson(jsonString, typeT);
-                onParseData(o);
+                if (XHttp.getInstance().getConfig() != null && XHttp.getInstance().getConfig().getParseDataAdapter() != null) {
+                    onParseData(XHttp.getInstance().getConfig().getParseDataAdapter().onParseData(jsonString, typeT));
+                } else {
+                    onParseData(GsonUtils.fromJson(jsonString, typeT));
+                }
             }
         } catch (Exception e) {
             onParseError(e);

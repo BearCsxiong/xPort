@@ -2,9 +2,11 @@ package me.csxiong.library.integration.http;
 
 import android.annotation.SuppressLint;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import me.csxiong.library.utils.GsonUtils;
 import okhttp3.Cache;
 import okhttp3.Call;
 import okhttp3.Interceptor;
@@ -150,6 +152,11 @@ public class XHttp {
 
         private Cache cache;
 
+        /**
+         * 数据解析适配器
+         */
+        private ParseDataAdapter parseDataAdapter;
+
         public Config() {
             mOkBuilder = new OkHttpClient.Builder();
         }
@@ -179,6 +186,11 @@ public class XHttp {
             return this;
         }
 
+        public Config registerParseDataAdapter(ParseDataAdapter parseDataAdapter) {
+            this.parseDataAdapter = parseDataAdapter;
+            return this;
+        }
+
         public Config connectTimeout(long seconds) {
             mOkBuilder.connectTimeout(seconds, TimeUnit.SECONDS);
             return this;
@@ -198,6 +210,14 @@ public class XHttp {
 
         public String getMainHost() {
             return mainHost;
+        }
+
+        public ParseDataAdapter getParseDataAdapter() {
+            return parseDataAdapter;
+        }
+
+        public void setParseDataAdapter(ParseDataAdapter parseDataAdapter) {
+            this.parseDataAdapter = parseDataAdapter;
         }
 
         public Config apply() {
