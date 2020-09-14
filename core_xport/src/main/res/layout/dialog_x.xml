@@ -51,14 +51,18 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_common_dialog_a_title" />
 
-            <me.csxiong.library.widget.PressTextView
+            <TextView
                 android:id="@+id/tv_common_dialog_a_positive"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="19dp"
                 android:layout_marginRight="19dp"
                 android:layout_marginBottom="19dp"
-                android:padding="5dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:paddingLeft="10dp"
+                android:paddingTop="5dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="5dp"
                 android:text="@{data.positiveText}"
                 android:textColor="@{data.appMainColor}"
                 android:textSize="13dp"
@@ -66,14 +70,18 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_common_dialog_a_content" />
 
-            <me.csxiong.library.widget.PressTextView
+            <TextView
                 android:id="@+id/tv_common_dialog_a_negative"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="19dp"
-                android:padding="5dp"
+                android:background="?android:attr/selectableItemBackground"
                 android:text="@{data.negativeText}"
                 android:textColor="#999999"
+                android:paddingLeft="10dp"
+                android:paddingTop="5dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="5dp"
                 android:textSize="13dp"
                 android:visibility="@{data.negativeText==null?View.GONE:View.VISIBLE}"
                 app:layout_constraintRight_toLeftOf="@+id/tv_common_dialog_a_positive"
