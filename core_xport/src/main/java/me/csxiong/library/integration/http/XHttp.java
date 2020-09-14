@@ -6,6 +6,8 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import me.csxiong.library.integration.http.file.DownloadProgressRequest;
+import me.csxiong.library.integration.http.file.UploadProgressRequest;
 import me.csxiong.library.utils.GsonUtils;
 import okhttp3.Cache;
 import okhttp3.Call;
@@ -82,6 +84,51 @@ public class XHttp {
     public PostRequest post(String requestMapping) {
         checkInit();
         return new PostRequest(requestMapping);
+    }
+
+    /**
+     * 下载
+     *
+     * @param requestMapping
+     * @param savePath
+     * @return
+     */
+    public DownloadProgressRequest download(String method, String requestMapping, String savePath) {
+        checkInit();
+        return new DownloadProgressRequest(method, requestMapping).addSavePath(savePath);
+    }
+
+    /**
+     * 上传
+     *
+     * @param method
+     * @param requestMapping
+     * @return
+     */
+    public UploadProgressRequest upload(String method, String requestMapping) {
+        checkInit();
+        return new UploadProgressRequest(method, requestMapping);
+    }
+
+    /**
+     * 下载
+     *
+     * @param requestMapping
+     * @param savePath
+     * @return
+     */
+    public DownloadProgressRequest postDownload(String requestMapping, String savePath) {
+        return download("post", requestMapping, savePath);
+    }
+
+    /**
+     * 上传
+     *
+     * @param requestMapping
+     * @return
+     */
+    public UploadProgressRequest postUpload(String requestMapping) {
+        return upload("post", requestMapping);
     }
 
     /**
