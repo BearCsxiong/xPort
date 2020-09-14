@@ -8,4 +8,8 @@
         <attr name="xtb_divide_enable" format="boolean" />
     </declare-styleable>
 
+    <declare-styleable name="BoldTextView">
+        <attr name="boldTextWidth" format="float" />
+    </declare-styleable>
+
 </resources>

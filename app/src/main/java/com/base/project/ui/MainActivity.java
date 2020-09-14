@@ -50,10 +50,10 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
     public void change1(View v) {
         new XDialog.Builder()
-                .setContent("测试")
-                .setTitle("哈哈哈哈")
-                .setPositiveText("确认")
-                .setNegativeText("取消")
+                .setContent("SDLFJSDLFJLSDJF")
+                .setTitle("DLSFJLSDJFLDS")
+                .setPositiveText("OK")
+                .setNegativeText("CANCEL")
                 .build()
                 .show();
     }

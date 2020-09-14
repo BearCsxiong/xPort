@@ -20,7 +20,7 @@ public class XDialog extends BaseDialog<DialogXBinding> {
 
     public static int ELEVATOR = XDisplayUtil.dpToPxInt(1f);
 
-    public static int RADIUS = 3;
+    public static int RADIUS = 5;
 
     private Builder data;
 

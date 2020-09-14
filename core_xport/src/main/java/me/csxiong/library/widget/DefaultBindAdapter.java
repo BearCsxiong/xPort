@@ -1,14 +1,16 @@
 package me.csxiong.library.widget;
 
-import androidx.databinding.BindingAdapter;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.StateListDrawable;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.databinding.BindingAdapter;
 
 import me.csxiong.library.base.APP;
 
@@ -30,23 +32,35 @@ public class DefaultBindAdapter {
      * @param view
      * @param solid
      */
-    @BindingAdapter(value = {"shape", "solid", "strokeWidth", "strokeColor", "radius", "radiusLeftTop",
-        "radiusLeftBottom", "radiusRightTop", "radiusRightBottom"}, requireAll = false)
-    public static void gradientDrawable(View view, int shape, int solid, float strokeWidth, int strokeColor,
+    @BindingAdapter(value = {"shape", "solid", "solidPress", "strokeWidth", "strokeColor", "strokeColorPress", "radius", "radiusLeftTop",
+            "radiusLeftBottom", "radiusRightTop", "radiusRightBottom"}, requireAll = false)
+    public static void gradientDrawable(View view, int shape, int solid, int solidPress, float strokeWidth, int strokeColor, int strokeColorPress,
                                         float radius, float radiusLeftTop, float radiusLeftBottom, float radiusRightTop, float radiusRightBottom) {
+        StateListDrawable listDrawable = new StateListDrawable();
         float[] floats;
         if (radius > 0) {
-            floats = new float[] {dip2px(radius)};
+            floats = new float[]{dip2px(radius)};
         } else {
-            floats = new float[] {dip2px(radiusLeftTop), dip2px(radiusLeftTop), dip2px(radiusRightTop),
-                dip2px(radiusRightTop), dip2px(radiusRightBottom), dip2px(radiusRightBottom), dip2px(radiusLeftBottom),
-                dip2px(radiusLeftBottom)};
+            floats = new float[]{dip2px(radiusLeftTop), dip2px(radiusLeftTop), dip2px(radiusRightTop),
+                    dip2px(radiusRightTop), dip2px(radiusRightBottom), dip2px(radiusRightBottom), dip2px(radiusLeftBottom),
+                    dip2px(radiusLeftBottom)};
         }
-        view.setBackground(GradientDrawableFactory.createDrawable(shape, solid, strokeWidth, strokeColor, floats));
+        GradientDrawable drawable = GradientDrawableFactory.createDrawable(shape, solid, strokeWidth, strokeColor, floats);
+        boolean isEnablePress = solidPress != 0 || strokeColorPress != 0;
+        if (isEnablePress) {
+            GradientDrawable pressDrawable = GradientDrawableFactory.createDrawable(shape, solidPress, strokeWidth, strokeColorPress, floats);
+            listDrawable.addState(new int[]{android.R.attr.state_pressed}, pressDrawable);
+            listDrawable.addState(new int[]{android.R.attr.state_checked}, pressDrawable);
+            listDrawable.addState(new int[]{android.R.attr.state_focused}, pressDrawable);
+            listDrawable.addState(new int[]{android.R.attr.state_selected}, pressDrawable);
+        }
+        listDrawable.addState(new int[]{}, drawable);
+        view.setBackground(listDrawable);
     }
 
     /**
-     *  需要press 状态的背景
+     * 需要press 状态的背景
+     *
      * @param view
      * @param unPressDrawable
      * @param pressDrawable
@@ -57,7 +71,8 @@ public class DefaultBindAdapter {
     }
 
     /**
-     *  需要press 状态的背景
+     * 需要press 状态的背景
+     *
      * @param view
      * @param unPressDrawable
      * @param pressDrawable
@@ -68,7 +83,8 @@ public class DefaultBindAdapter {
     }
 
     /**
-     *  类似checkbox 场景
+     * 类似checkbox 场景
+     *
      * @param view
      * @param unCheckDrawable
      * @param checkDrawable
@@ -79,7 +95,8 @@ public class DefaultBindAdapter {
     }
 
     /**
-     *  类似checkbox 场景
+     * 类似checkbox 场景
+     *
      * @param view
      * @param unCheckDrawable
      * @param checkDrawable
@@ -91,6 +108,7 @@ public class DefaultBindAdapter {
 
     /**
      * 背景选中状态
+     *
      * @param view
      * @param unSelectDrawable
      * @param selectDrawable
@@ -102,6 +120,7 @@ public class DefaultBindAdapter {
 
     /**
      * 背景选中状态
+     *
      * @param view
      * @param unSelectDrawable
      * @param selectDrawable
@@ -128,6 +147,7 @@ public class DefaultBindAdapter {
 
     /**
      * text 设置下划线
+     *
      * @param view
      */
     @BindingAdapter("underLine")
@@ -142,6 +162,7 @@ public class DefaultBindAdapter {
 
     /**
      * 密度转换像素
+     *
      * @param dipValue dp值
      * @return 像素
      */
@@ -152,6 +173,7 @@ public class DefaultBindAdapter {
 
     /**
      * 重新View设置宽度方法。
+     *
      * @param view
      * @param width
      */
@@ -164,6 +186,7 @@ public class DefaultBindAdapter {
 
     /**
      * 重新View设置高度方法。
+     *
      * @param view
      * @param height
      */

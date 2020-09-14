@@ -21,7 +21,7 @@
             android:elevation="@{data.elevator}"
             android:paddingTop="8dp">
 
-            <TextView
+            <me.csxiong.library.widget.BoldTextView
                 android:id="@+id/tv_common_dialog_a_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -31,6 +31,7 @@
                 android:text="@{data.title}"
                 android:textColor="#000000"
                 android:textSize="20dp"
+                app:boldTextWidth="1.2"
                 android:visibility="@{data.title==null?View.GONE:View.VISIBLE}"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -45,45 +46,44 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="24dp"
                 android:text="@{data.content}"
-                android:textColor="#000000"
+                android:textColor="#333333"
                 android:textSize="14dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_common_dialog_a_title" />
 
-            <TextView
+            <me.csxiong.library.widget.BoldTextView
                 android:id="@+id/tv_common_dialog_a_positive"
-                android:layout_width="wrap_content"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="19dp"
-                android:layout_marginRight="19dp"
+                android:layout_marginRight="24dp"
                 android:layout_marginBottom="19dp"
                 android:background="?android:attr/selectableItemBackground"
-                android:paddingLeft="10dp"
-                android:paddingTop="5dp"
-                android:paddingRight="10dp"
-                android:paddingBottom="5dp"
+                android:gravity="center"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 android:text="@{data.positiveText}"
                 android:textColor="@{data.appMainColor}"
-                android:textSize="13dp"
+                android:textSize="14dp"
+                app:boldTextWidth="1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_common_dialog_a_content" />
 
-            <TextView
+            <me.csxiong.library.widget.BoldTextView
                 android:id="@+id/tv_common_dialog_a_negative"
-                android:layout_width="wrap_content"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="19dp"
                 android:background="?android:attr/selectableItemBackground"
+                android:gravity="center"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 android:text="@{data.negativeText}"
-                android:textColor="#999999"
-                android:paddingLeft="10dp"
-                android:paddingTop="5dp"
-                android:paddingRight="10dp"
-                android:paddingBottom="5dp"
-                android:textSize="13dp"
+                android:textColor="#acacac"
+                android:textSize="14dp"
                 android:visibility="@{data.negativeText==null?View.GONE:View.VISIBLE}"
+                app:boldTextWidth="1"
                 app:layout_constraintRight_toLeftOf="@+id/tv_common_dialog_a_positive"
                 app:layout_constraintTop_toTopOf="@+id/tv_common_dialog_a_positive" />
 
