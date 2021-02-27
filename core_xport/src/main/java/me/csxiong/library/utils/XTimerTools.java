@@ -1,8 +1,7 @@
 package me.csxiong.library.utils;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ValueAnimator;
+import android.os.Handler;
+import android.os.Looper;
 
 /**
  * @Desc : 时间工具
@@ -14,8 +13,8 @@ public class XTimerTools {
         return new XTimer(stopInFutureMillis, false, runnable);
     }
 
-    public static XTimer infinite(Runnable runnable, long intervalMillis) {
-        return new XTimer(intervalMillis, true, runnable);
+    public static XTimer infinite(Runnable runnable, long space) {
+        return new XTimer(space, true, runnable);
     }
 
     /**
@@ -24,56 +23,31 @@ public class XTimerTools {
      */
     public static class XTimer {
 
-        private ValueAnimator timer = ValueAnimator.ofInt(0);
+        private final Handler uiHandler = new Handler(Looper.getMainLooper());
 
         private boolean isInfinite;
 
-        private Runnable mRunnable;
+        private long space;
 
-        public XTimer(long millisInFuture, boolean isInfinite, Runnable runnable) {
-            this.isInfinite = isInfinite;
-            this.mRunnable = runnable;
-            timer.addListener(new AnimatorListenerAdapter() {
+        private Runnable targetTask;
 
-                @Override
-                public void onAnimationRepeat(Animator animation) {
-                    super.onAnimationRepeat(animation);
-                    if (XTimer.this.isInfinite) {
-                        if (mRunnable != null) {
-                            mRunnable.run();
-                        }
-                    }
-                }
-
-                @Override
-                public void onAnimationStart(Animator animation) {
-                    super.onAnimationStart(animation);
-                    if (mRunnable != null) {
-                        mRunnable.run();
-                    }
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    super.onAnimationEnd(animation);
-                    if (!isInfinite && mRunnable != null) {
-                        mRunnable.run();
-                    }
-                }
-            });
-            if (this.isInfinite) {
-                timer.setRepeatCount(ValueAnimator.INFINITE);
-                timer.setRepeatMode(ValueAnimator.RESTART);
-            } else {
-                timer.setRepeatCount(1);
+        private final Runnable executeRunnable = ()->{
+            if (targetTask != null) {
+                targetTask.run();
             }
-            timer.setDuration(millisInFuture);
+            if (isInfinite) {
+                startDelay(space);
+            }
+        };
+
+        public XTimer(long space, boolean isInfinite, Runnable targetTask) {
+            this.space = space;
+            this.isInfinite = isInfinite;
+            this.targetTask = targetTask;
         }
 
         public void cancel() {
-            if (timer != null) {
-                timer.cancel();
-            }
+            uiHandler.removeCallbacksAndMessages(executeRunnable);
         }
 
         public void start() {
@@ -81,17 +55,9 @@ public class XTimerTools {
         }
 
         public void startDelay(long delayMillis) {
-            if (timer != null) {
-                timer.setStartDelay(delayMillis);
-                timer.start();
+            if (targetTask != null) {
+                uiHandler.postDelayed(executeRunnable, delayMillis);
             }
-        }
-
-        public boolean isRunning() {
-            if (timer != null) {
-                return timer.isRunning();
-            }
-            return false;
         }
     }
 

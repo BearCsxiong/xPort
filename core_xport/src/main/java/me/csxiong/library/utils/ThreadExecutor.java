@@ -24,6 +24,9 @@ public class ThreadExecutor {
      */
     private static Handler handler;
 
+    /**
+     * 闲置线程
+     */
     private volatile static XIdleTimingHandler idleHandler;
 
     /**

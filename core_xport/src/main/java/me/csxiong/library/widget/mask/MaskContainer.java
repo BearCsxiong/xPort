@@ -13,6 +13,9 @@ import java.util.Map;
 /**
  * @Desc : 数据蒙版
  * @Author : csxiong - 2020-02-13
+ *
+ * 目的是添加众多数据表面的蒙板
+ * 多种状态的包装和分发
  */
 public class MaskContainer extends RelativeLayout {
 

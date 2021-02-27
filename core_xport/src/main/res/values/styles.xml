@@ -11,7 +11,7 @@
         <item name="android:actionMenuTextColor">@color/colorPrimary</item>
     </style>
 
-    <style name="XDialog" parent="@android:style/Animation.Dialog">
+    <style name="XDialog" parent="BaseDialog">
         <item name="android:windowEnterAnimation">@anim/x_dialog_in</item>
         <item name="android:windowExitAnimation">@anim/x_dialog_out</item>
     </style>

@@ -8,8 +8,6 @@ import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.RelativeLayout;
 
-import me.csxiong.library.utils.XAnimator;
-
 /**
  * @Desc : 一个缩放的包装控件
  * @Author : Bear - 2020/8/18

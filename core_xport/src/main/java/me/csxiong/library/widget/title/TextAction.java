@@ -35,7 +35,7 @@ public abstract class TextAction extends Action<TextView> {
             tv.setBackground(typedArray.getDrawable(0));
             tv.setPadding(XDisplayUtil.dpToPxInt(16), XDisplayUtil.dpToPxInt(3), XDisplayUtil.dpToPxInt(16), XDisplayUtil.dpToPxInt(3));
 //            tv.setTypeface(Typeface.DEFAULT_BOLD);
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         }
         return tv;
     }

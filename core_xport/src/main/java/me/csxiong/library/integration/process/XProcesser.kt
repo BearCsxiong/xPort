@@ -1,5 +1,6 @@
 package me.csxiong.library.integration.process
 
+import android.Manifest
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
@@ -51,6 +52,10 @@ class XProcesser {
         wFg?.get()?.let {
             it.execute(delegateProcess)
         }
+    }
+
+    fun executePermission(manifest: Array<Manifest.permission>) {
+
     }
 
 }
