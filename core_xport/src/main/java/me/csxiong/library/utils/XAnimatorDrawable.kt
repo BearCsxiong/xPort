@@ -5,7 +5,6 @@ import android.graphics.Rect
 import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.Drawable
 import androidx.annotation.IdRes
-import com.commsource.util.ResourcesUtils
 
 /**
  * @Desc : 包装动画图片的一个计算类
@@ -16,7 +15,7 @@ import com.commsource.util.ResourcesUtils
 class XAnimatorDrawable {
 
     constructor(drawableId: Int) {
-        targetDrawable = ResourcesUtils.getDrawable(drawableId)
+        targetDrawable = XResUtils.getDrawable(drawableId)
     }
 
     constructor(drawable: Drawable?) {
@@ -31,32 +30,32 @@ class XAnimatorDrawable {
     /**
      * 缩放Valuer
      */
-    val zoomValuer = XAnimatorCaculateValuer(1f)
+    val zoomValuer = XAnimatorCalculateValuer(1f)
 
     /**
      * 位移XValuer
      */
-    val translationXValuer = XAnimatorCaculateValuer(0f)
+    val translationXValuer = XAnimatorCalculateValuer(0f)
 
     /**
      * 位移YValuer
      */
-    val translationYValuer = XAnimatorCaculateValuer(0f)
+    val translationYValuer = XAnimatorCalculateValuer(0f)
 
     /**
      * 透明度valuer
      */
-    val alphaValuer = XAnimatorCaculateValuer(1f)
+    val alphaValuer = XAnimatorCalculateValuer(1f)
 
     /**
      * 宽度值
      */
-    val widthValuer = XAnimatorCaculateValuer(0f)
+    val widthValuer = XAnimatorCalculateValuer(0f)
 
     /**
      * 高度值
      */
-    val heightValuer = XAnimatorCaculateValuer(0f)
+    val heightValuer = XAnimatorCalculateValuer(0f)
 
     fun width(width: Float): XAnimatorDrawable {
         widthValuer.value = width
@@ -121,7 +120,7 @@ class XAnimatorDrawable {
         val translationX = translationXValuer.caculateValue(fraction).toInt()
         val translationY = translationYValuer.caculateValue(fraction).toInt()
         val alpha = alphaValuer.caculateValue(fraction)
-        targetDrawable?.alpha = (XAnimatorCaculateValuer.limit(255 * alpha, 0f, 255f)).toInt()
+        targetDrawable?.alpha = (XAnimatorCalculateValuer.limit(255 * alpha, 0f, 255f)).toInt()
         targetDrawable?.setBounds(-halfWidth, -halfHeight, halfWidth, halfHeight)
         targetDrawable?.bounds?.offset(translationX, translationY)
     }
